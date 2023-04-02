@@ -2,7 +2,7 @@
 
 namespace SemanticXamlPrint.Demo.SystemDrawing
 {
-    public class ComponentDrawingFontFormatting
+    public class ComponentDrawingFormatting
     {
         public Font Font { get; set; }
         public StringFormat StringFormat { get; set; }

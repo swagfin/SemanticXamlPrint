@@ -1,10 +1,9 @@
-﻿using SemanticXamlPrint.Components.CommonProperties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class TemplateComponent : TextFormattingProperties, IXamlComponent
+    public class TemplateComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
@@ -15,7 +14,7 @@ namespace SemanticXamlPrint.Components
         {
             try
             {
-                if (base.SetStylingProperties(propertyName, value)) return true;
+                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     default:

@@ -13,14 +13,14 @@ namespace SemanticXamlPrint.Demo
         private readonly int DefaultPaperWidth = 270;
         private readonly int DefaultLineHeight = 14;
         private int CurrentLinePosition { get; set; } = 20;
-        public ComponentDrawingFontFormatting TemplateFormatting { get; set; }
+        public ComponentDrawingFormatting TemplateFormatting { get; set; }
 
         public void Print(IXamlComponent xamlComponent, string printerName = null)
         {
             if (xamlComponent == null) return;
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
             this.Template = (TemplateComponent)xamlComponent;
-            this.TemplateFormatting = this.Template.GetTextFormattingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
+            this.TemplateFormatting = this.Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             //Print Config
             this.printDocument = new PrintDocument();
             printDocument.PrintPage += PrintTemplatePage;
@@ -41,7 +41,7 @@ namespace SemanticXamlPrint.Demo
         private void DrawComponent(IXamlComponent component, PrintPageEventArgs e)
         {
             //Get Styling for Component
-            ComponentDrawingFontFormatting fmt = component.GetTextFormattingProperties(this.TemplateFormatting);
+            ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
             if (component.Type == typeof(LineComponent))
             {
                 e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);

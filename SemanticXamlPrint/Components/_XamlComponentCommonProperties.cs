@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace SemanticXamlPrint.Components.CommonProperties
+namespace SemanticXamlPrint.Components
 {
-    public abstract class TextFormattingProperties
+    public abstract class XamlComponentCommonProperties
     {
         public string Font { get; set; } = null;
         public string FontStyle { get; set; } = null;
         public int FontSize { get; set; } = 0;
         public string Align { get; set; } = null;
 
-        public bool SetStylingProperties(string propertyName, string value)
+        public bool SetCommonProperties(string propertyName, string value)
         {
             try
             {

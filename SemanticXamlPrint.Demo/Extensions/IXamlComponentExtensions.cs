@@ -1,5 +1,4 @@
 ﻿using SemanticXamlPrint.Components;
-using SemanticXamlPrint.Components.CommonProperties;
 using SemanticXamlPrint.Demo.SystemDrawing;
 using System.Drawing;
 
@@ -7,13 +6,13 @@ namespace SemanticXamlPrint.Demo
 {
     public static class IXamlComponentExtensions
     {
-        public static ComponentDrawingFontFormatting GetTextFormattingProperties(this IXamlComponent component, ComponentDrawingFontFormatting parentFormatting)
+        public static ComponentDrawingFormatting GetSystemDrawingProperties(this IXamlComponent component, ComponentDrawingFormatting parentFormatting)
         {
 
-            if (!component.Type.IsSubclassOf(typeof(TextFormattingProperties))) return parentFormatting;
-            TextFormattingProperties styleFmt = (TextFormattingProperties)component;
+            if (!component.Type.IsSubclassOf(typeof(XamlComponentCommonProperties))) return parentFormatting;
+            XamlComponentCommonProperties styleFmt = (XamlComponentCommonProperties)component;
             //Return Custom
-            return new ComponentDrawingFontFormatting
+            return new ComponentDrawingFormatting
             {
                 Font = new Font((string.IsNullOrEmpty(styleFmt.Font) ? parentFormatting.Font.Name : styleFmt.Font),
                                 ((styleFmt.FontSize <= 0) ? parentFormatting.Font.Size : styleFmt.FontSize),

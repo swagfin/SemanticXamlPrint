@@ -5,7 +5,7 @@ namespace SemanticXamlPrint.Demo
 {
     public static class Defaults
     {
-        public static ComponentDrawingFontFormatting Formatting = new ComponentDrawingFontFormatting
+        public static ComponentDrawingFormatting Formatting = new ComponentDrawingFormatting
         {
             Font = new Font("Calibri", 12, FontStyle.Regular),
             StringFormat = new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near },

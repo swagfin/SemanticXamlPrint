@@ -1,38 +1,46 @@
-﻿<template font="Calibri" FontSize="10" LineSpacing="4" MaxWidth="290" MarginTop="20">
+﻿<Template font="Calibri" FontSize="10" LineSpacing="4" MaxWidth="290" MarginTop="20">
 
-	<data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
+	<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
 		CRUDSOFT TECHNOLOGIES
-	</data>
+	</Data>
 
-	<data TextWrap ="True" Align="Center">
+	<Data TextWrap ="True" Align="Center">
 		sales@crudsofttechnologies.com
-	</data>
+	</Data>
 
-	<data TextWrap ="True" Align="Center">
+	<Data TextWrap ="True" Align="Center">
 		Cigma BLD, Mburu Gichua Rd, 3rd Floor, Rom 3G
-	</data>
+	</Data>
 
-	<data TextWrap ="True" Align="Center">
+	<Data TextWrap ="True" Align="Center">
 		+254705418696
-	</data>
+	</Data>
 
-	<data FontStyle="Bold" FontSize="12">
+	<Data FontStyle="Bold" FontSize="12">
 		CASH SALE: 30
-	</data>
+	</Data>
 
 	<br/>
 
-	<data>
+	<Data>
 		CUSTOMER: Walk-In Customer
-	</data>
+	</Data>
 
-	<data>
+	<Data>
 		DATE: 01-Apr-2023 9:39 pm OA: Express Order
-	</data>
+	</Data>
 
-	<line/>
-	<data FontStyle="Bold">
-		QTY     ITEM DESC.    AMOUNT
-	</data>
-	<line/>
-</template>
+	<Line/>
+	<Grid Columns="3">
+		<Data FontStyle="Bold" Grid.Column="0">
+			QTY
+		</Data>
+		<Data FontStyle="Bold" Grid.Column="1">
+			ITEM
+		</Data>
+		<Data FontStyle="Bold" Grid.Column="2">
+			AMOUNT
+		</Data>
+	</Grid>
+	<Line/>
+</Template>

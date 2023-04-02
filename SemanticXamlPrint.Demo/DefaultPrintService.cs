@@ -60,20 +60,55 @@ namespace SemanticXamlPrint.Demo
             }
             else if (component.Type == typeof(DataComponent))
             {
-                DataComponent dataTemplate = (DataComponent)component;
-                if (dataTemplate.TextWrap && (int)e.Graphics.MeasureString(dataTemplate.Text, fmt.Font).Width > this.Template.MaxWidth)
+                DataComponent dataComponent = (DataComponent)component;
+                if (dataComponent.TextWrap && (int)e.Graphics.MeasureString(dataComponent.Text, fmt.Font).Width > this.Template.MaxWidth)
                 {
-                    SizeF size = e.Graphics.MeasureString(dataTemplate.Text, fmt.Font, this.Template.MaxWidth);
+                    SizeF size = e.Graphics.MeasureString(dataComponent.Text, fmt.Font, this.Template.MaxWidth);
                     RectangleF layoutF = new RectangleF(new PointF(0, CurrentLinePosition), size);
-                    e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
+                    e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
                     CurrentLinePosition += (int)layoutF.Height;
                 }
                 else
                 {
                     Rectangle layout = new Rectangle(0, CurrentLinePosition, this.Template.MaxWidth, (int)fmt.Font.Size + this.Template.LineSpacing);
-                    e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
+                    e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
                     CurrentLinePosition += layout.Height + this.Template.LineSpacing;
                 }
+            }
+            else if (component.Type == typeof(DataRowComponent))
+            {
+                DataRowComponent dataRowComponent = (DataRowComponent)component;
+                //Get all Children of DataRowCells
+                List<DataRowCellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(DataRowCellComponent))
+                                                                               .Select(validElement => (DataRowCellComponent)validElement)
+                                                                               .ToList();
+                int additionalHeight = 0;
+                foreach (DataRowCellComponent cell in dataRowCells)
+                {
+                    ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(fmt);
+                    //Set RowCell Location
+                    float x = (cell.X <= 0) ? 0f : cell.X;
+                    float y = (cell.Y <= 0) ? CurrentLinePosition : cell.Y;
+                    float z = (cell.Z <= 0) ? this.Template.MaxWidth : cell.Z;
+                    //Determine Wrap
+                    //# e.Graphics.DrawString("Item Description", font2, Brushes.Black, 0f, (float)currentLinePosition);
+                    if (cell.TextWrap && (int)e.Graphics.MeasureString(cell.Text, cellFmt.Font).Width > z)
+                    {
+                        SizeF size = e.Graphics.MeasureString(cell.Text, cellFmt.Font, (int)z);
+                        RectangleF layoutF = new RectangleF(new PointF(x, y), size);
+                        e.Graphics.DrawString(cell.Text, cellFmt.Font, cellFmt.Brush, layoutF, cellFmt.StringFormat);
+                        additionalHeight = ((int)layoutF.Height > additionalHeight) ? (int)layoutF.Height : additionalHeight;
+                    }
+                    else
+                    {
+                        Rectangle layout = new Rectangle((int)x, (int)y, (int)z, (int)cellFmt.Font.Size + this.Template.LineSpacing);
+                        e.Graphics.DrawString(cell.Text, cellFmt.Font, cellFmt.Brush, layout, cellFmt.StringFormat);
+                        additionalHeight = ((layout.Height + this.Template.LineSpacing) > additionalHeight) ? (layout.Height + this.Template.LineSpacing) : additionalHeight;
+                    }
+                }
+                //Add Line Height
+                CurrentLinePosition += additionalHeight + this.Template.LineSpacing;
+
             }
             else if (component.Type == typeof(UniformDataGridComponent))
             {
@@ -94,7 +129,7 @@ namespace SemanticXamlPrint.Demo
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
                     foreach (DataComponent columnChild in columnChildrens)
                     {
-                        ComponentDrawingFormatting childFmt = columnChild.GetSystemDrawingProperties(this.TemplateFormatting);
+                        ComponentDrawingFormatting childFmt = columnChild.GetSystemDrawingProperties(fmt);
                         Rectangle layout = new Rectangle((int)x, currentGridLineNo, (int)columnWidth, (int)childFmt.Font.Size + this.Template.LineSpacing);
                         e.Graphics.DrawString(columnChild.Text, childFmt.Font, childFmt.Brush, layout, childFmt.StringFormat);
                         currentGridLineNo += layout.Height + this.Template.LineSpacing;

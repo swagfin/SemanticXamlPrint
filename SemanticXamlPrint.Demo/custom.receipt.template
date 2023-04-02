@@ -33,13 +33,13 @@
 	<Line/>
 	<UniformDataGrid Columns="3">
 		<Data FontStyle="Bold" Grid.Column="0">
-			QTY
+			Column 1
 		</Data>
 		<Data FontStyle="Bold" Grid.Column="1">
-			ITEM
+			Column 2
 		</Data>
 		<Data FontStyle="Bold" Grid.Column="2">
-			AMOUNT
+			Column 3
 		</Data>
 	</UniformDataGrid>
 	<Line/>

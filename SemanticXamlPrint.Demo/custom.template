@@ -1,0 +1,8 @@
+﻿<template FontSize="12">
+	<grid columns="3" rows="3">
+		<data font="Calibri" font-weight="bold">
+			Hello World
+		</data>
+		<data Text="Hi, I am John Doe"/>
+	</grid>
+</template>

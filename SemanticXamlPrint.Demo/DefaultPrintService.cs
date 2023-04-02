@@ -19,11 +19,10 @@ namespace SemanticXamlPrint.Demo
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
             this.Template = (TemplateComponent)xamlComponent;
             this.TemplateFormatting = this.Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
-            if (this.Template.MaxWidth <= 0) this.Template.MaxWidth = 300;
-            if (this.Template.LineSpacing <= 0) this.Template.LineSpacing = 2;
-            if (this.Template.MarginTop <= 0) this.Template.MarginTop = 2;
+            if (this.Template.MaxWidth <= 50) this.Template.MaxWidth = 290;//Default Thermal Size
+            if (this.Template.LineSpacing < 0) this.Template.LineSpacing = 2;
+            if (this.Template.MarginTop < 0) this.Template.MarginTop = 20;
             //Set Star
-            //Print Config
             this.printDocument = new PrintDocument();
             printDocument.PrintPage += PrintTemplatePage;
             if (!string.IsNullOrWhiteSpace(printerName))

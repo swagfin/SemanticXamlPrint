@@ -1,4 +1,4 @@
-﻿<template font="Calibri" FontSize="10" LineSpacing="2" MaxWidth="290" MarginTop="20">
+﻿<template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="20">
 
 	<data  FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
 		CRUDSOFT TECHNOLOGIES

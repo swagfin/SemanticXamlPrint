@@ -1,24 +1,26 @@
 ﻿using SemanticXamlPrint.Components;
+using SemanticXamlPrint.Demo.SystemDrawing;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
 namespace SemanticXamlPrint.Demo
 {
-    public class DefaultPrintService
+    public class DefaultThermalPrintService
     {
         private TemplateComponent Template;
         private PrintDocument printDocument;
         private readonly int DefaultPaperWidth = 270;
         private readonly int DefaultLineHeight = 14;
-
-        public Font DefaultFont { get; private set; }
         private int CurrentLinePosition { get; set; } = 20;
+        public ComponentDrawingFontFormatting TemplateFormatting { get; set; }
 
         public void Print(IXamlComponent xamlComponent, string printerName = null)
         {
             if (xamlComponent == null) return;
-            if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(Components.TemplateComponent)}] but currently is: [{Template.Name}]");
+            if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
             this.Template = (TemplateComponent)xamlComponent;
+            this.TemplateFormatting = this.Template.GetTextFormattingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             //Print Config
             this.printDocument = new PrintDocument();
             printDocument.PrintPage += PrintTemplatePage;
@@ -29,19 +31,20 @@ namespace SemanticXamlPrint.Demo
 
         private void PrintTemplatePage(object sender, PrintPageEventArgs e)
         {
-            this.DefaultFont = new Font(Template.Font, Template.FontSize, FontStyle.Bold);
-            this.CurrentLinePosition = 20;
-            foreach (IXamlComponent template in Template?.Children)
+            List<IXamlComponent> templateComponents = Template?.Children;
+            for (int i = 0; i < templateComponents.Count; i++)
             {
-                DrawComponent(template, e);
+                DrawComponent(templateComponents[i], e);
             }
         }
 
         private void DrawComponent(IXamlComponent component, PrintPageEventArgs e)
         {
+            //Get Styling for Component
+            ComponentDrawingFontFormatting fmt = component.GetTextFormattingProperties(this.TemplateFormatting);
             if (component.Type == typeof(LineComponent))
             {
-                e.Graphics.DrawString("---------------------------------------------------------", DefaultFont, Brushes.Black, 0f, CurrentLinePosition);
+                e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 CurrentLinePosition += DefaultLineHeight;
             }
             else if (component.Type == typeof(DataComponent))
@@ -49,15 +52,15 @@ namespace SemanticXamlPrint.Demo
                 DataComponent dataTemplate = (DataComponent)component;
 
                 Rectangle r = new Rectangle(0, CurrentLinePosition, DefaultPaperWidth, DefaultLineHeight);
-                e.Graphics.DrawString(dataTemplate.Text, DefaultFont, Brushes.Black, r, StringAlign.Center);
+                e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, r, fmt.StringFormat);
                 CurrentLinePosition += DefaultLineHeight;
             }
-
             //#Eventually Also Children
-            foreach (IXamlComponent template in component?.Children)
+            for (int i = 0; i < component?.Children?.Count; i++)
             {
-                DrawComponent(template, e);
+                DrawComponent(component.Children[i], e);
             }
         }
+
     }
 }

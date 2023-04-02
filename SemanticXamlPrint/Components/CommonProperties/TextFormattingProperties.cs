@@ -4,9 +4,10 @@ namespace SemanticXamlPrint.Components.CommonProperties
 {
     public abstract class TextFormattingProperties
     {
-        public string Font { get; set; } = "Calibri";
-        public string FontStyle { get; set; } = "Regular";
-        public int FontSize { get; set; } = 12;
+        public string Font { get; set; } = null;
+        public string FontStyle { get; set; } = null;
+        public int FontSize { get; set; } = 0;
+        public string Align { get; set; } = null;
 
         public bool SetStylingProperties(string propertyName, string value)
         {
@@ -22,6 +23,9 @@ namespace SemanticXamlPrint.Components.CommonProperties
                         break;
                     case "fontsize":
                         FontSize = Convert.ToInt32(value);
+                        break;
+                    case "align":
+                        Align = value;
                         break;
                     default:
                         return false;

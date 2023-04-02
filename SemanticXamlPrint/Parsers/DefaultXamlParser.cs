@@ -25,6 +25,12 @@ namespace SemanticXamlPrint.Parsers
                 case "uniformdatagrid":
                     component = new UniformDataGridComponent();
                     break;
+                case "datarow":
+                    component = new DataRowComponent();
+                    break;
+                case "datarowcell":
+                    component = new DataRowCellComponent();
+                    break;
                 case "data":
                     component = new DataComponent();
                     break;

@@ -10,17 +10,30 @@ namespace SemanticXamlPrint.Demo
         static void Main(string[] args)
         {
             Console.WriteLine("TESTING XAML PRINT");
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.ForegroundColor = ConsoleColor.White;
+            try
+            {
+                DefaultXamlParser parser = new DefaultXamlParser();
+                IXamlComponent rootObject = parser.Parse("custom.receipt.v2.template");
 
-            DefaultXamlParser parser = new DefaultXamlParser();
-            IXamlComponent rootObject = parser.Parse("custom.receipt.template");
+                string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
 
-            string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
-
-            Console.WriteLine(jsonResponse);
+                Console.WriteLine(jsonResponse);
 
 
-            DefaultPrintService printService = new DefaultPrintService();
-            printService.Print(rootObject, "POS-80");
+                DefaultPrintService printService = new DefaultPrintService();
+                printService.Print(rootObject, "POS-80");
+            }
+            catch (Exception ex)
+            {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(ex.Message.ToString());
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
             Console.ReadLine();
         }
     }

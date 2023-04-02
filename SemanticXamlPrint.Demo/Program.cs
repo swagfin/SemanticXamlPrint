@@ -12,7 +12,7 @@ namespace SemanticXamlPrint.Demo
             Console.WriteLine("TESTING XAML PRINT");
 
             DefaultXamlParser parser = new DefaultXamlParser();
-            IXamlComponent rootObject = parser.Parse("custom.template");
+            IXamlComponent rootObject = parser.Parse("custom.receipt.template");
 
             string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
 

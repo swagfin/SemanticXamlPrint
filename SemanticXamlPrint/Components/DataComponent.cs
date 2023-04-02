@@ -11,6 +11,7 @@ namespace SemanticXamlPrint.Components
         public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
         //Component Attributes
         public string Text { get; set; }
+        public bool TextWrap { get; set; } = false;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -20,6 +21,9 @@ namespace SemanticXamlPrint.Components
                 {
                     case "text":
                         Text = value;
+                        break;
+                    case "textwrap":
+                        TextWrap = Convert.ToBoolean(value);
                         break;
                     default:
                         if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);

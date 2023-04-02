@@ -10,7 +10,7 @@ namespace SemanticXamlPrint.Demo
     {
         private TemplateComponent Template;
         private PrintDocument printDocument;
-        private readonly int DefaultPaperWidth = 270;
+        private readonly int DefaultMaxPaperWidth = 270;
         private readonly int DefaultLineHeight = 14;
         private int CurrentLinePosition { get; set; } = 20;
         public ComponentDrawingFormatting TemplateFormatting { get; set; }
@@ -50,10 +50,19 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataTemplate = (DataComponent)component;
-
-                Rectangle r = new Rectangle(0, CurrentLinePosition, DefaultPaperWidth, DefaultLineHeight);
-                e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, r, fmt.StringFormat);
-                CurrentLinePosition += DefaultLineHeight;
+                if (dataTemplate.TextWrap && (int)e.Graphics.MeasureString(dataTemplate.Text, fmt.Font).Width > DefaultMaxPaperWidth)
+                {
+                    SizeF size = e.Graphics.MeasureString(dataTemplate.Text, fmt.Font, DefaultMaxPaperWidth);
+                    RectangleF layoutF = new RectangleF(new PointF(0, CurrentLinePosition), size);
+                    e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
+                    CurrentLinePosition += (int)layoutF.Height;
+                }
+                else
+                {
+                    Rectangle layout = new Rectangle(0, CurrentLinePosition, DefaultMaxPaperWidth, DefaultLineHeight);
+                    e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
+                    CurrentLinePosition += DefaultLineHeight;
+                }
             }
             //#Eventually Also Children
             for (int i = 0; i < component?.Children?.Count; i++)

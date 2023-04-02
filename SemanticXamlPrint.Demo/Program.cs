@@ -17,6 +17,10 @@ namespace SemanticXamlPrint.Demo
             string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
 
             Console.WriteLine(jsonResponse);
+
+
+            DefaultPrintService printService = new DefaultPrintService();
+            printService.Print(rootObject, "POS-80");
             Console.ReadLine();
         }
     }

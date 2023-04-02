@@ -3,6 +3,7 @@
 		<data font="Calibri" font-weight="bold">
 			Hello World
 		</data>
+		<line/>
 		<data Text="Hi, I am John Doe"/>
 	</grid>
 </template>

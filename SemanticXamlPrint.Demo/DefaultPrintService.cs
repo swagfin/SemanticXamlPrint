@@ -21,7 +21,7 @@ namespace SemanticXamlPrint.Demo
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
             this.Template = (TemplateComponent)xamlComponent;
             this.TemplateFormatting = this.Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
-            if (this.Template.MaxWidth <= 50) this.Template.MaxWidth = 290;//Default Thermal Size
+            if (this.Template.MaxWidth <= 50) this.Template.MaxWidth = 290;
             if (this.Template.LineSpacing < 0) this.Template.LineSpacing = 2;
             if (this.Template.MarginTop < 0) this.Template.MarginTop = 20;
             //Set Star
@@ -55,22 +55,22 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], this.Template.MaxWidth), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
+                e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)e.Graphics.VisibleClipBounds.Width), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 CurrentLinePosition += (int)(fmt.Font.Size + this.Template.LineSpacing);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
-                if (dataComponent.TextWrap && (int)e.Graphics.MeasureString(dataComponent.Text, fmt.Font).Width > this.Template.MaxWidth)
+                if (dataComponent.TextWrap && (int)e.Graphics.MeasureString(dataComponent.Text, fmt.Font).Width > (int)e.Graphics.VisibleClipBounds.Width)
                 {
-                    SizeF size = e.Graphics.MeasureString(dataComponent.Text, fmt.Font, this.Template.MaxWidth);
+                    SizeF size = e.Graphics.MeasureString(dataComponent.Text, fmt.Font, (int)e.Graphics.VisibleClipBounds.Width);
                     RectangleF layoutF = new RectangleF(new PointF(0, CurrentLinePosition), size);
                     e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
                     CurrentLinePosition += (int)layoutF.Height;
                 }
                 else
                 {
-                    Rectangle layout = new Rectangle(0, CurrentLinePosition, this.Template.MaxWidth, (int)fmt.Font.Size + this.Template.LineSpacing);
+                    Rectangle layout = new Rectangle(0, CurrentLinePosition, (int)e.Graphics.VisibleClipBounds.Width, (int)fmt.Font.Size + this.Template.LineSpacing);
                     e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
                     CurrentLinePosition += layout.Height + this.Template.LineSpacing;
                 }
@@ -89,7 +89,7 @@ namespace SemanticXamlPrint.Demo
                     //Set RowCell Location
                     float x = (cell.X <= 0) ? 0f : cell.X;
                     float y = (cell.Y <= 0) ? CurrentLinePosition : cell.Y;
-                    float z = (cell.Z <= 0) ? this.Template.MaxWidth : cell.Z;
+                    float z = (cell.Z <= 0) ? (int)e.Graphics.VisibleClipBounds.Width : cell.Z;
                     //Determine Wrap
                     //# e.Graphics.DrawString("Item Description", font2, Brushes.Black, 0f, (float)currentLinePosition);
                     if (cell.TextWrap && (int)e.Graphics.MeasureString(cell.Text, cellFmt.Font).Width > z)

@@ -19,7 +19,7 @@ namespace SemanticXamlPrint.Demo
             Console.WriteLine(jsonResponse);
 
 
-            DefaultThermalPrintService printService = new DefaultThermalPrintService();
+            DefaultPrintService printService = new DefaultPrintService();
             printService.Print(rootObject, "POS-80");
             Console.ReadLine();
         }

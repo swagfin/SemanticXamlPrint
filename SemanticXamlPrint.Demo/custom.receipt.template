@@ -1,17 +1,18 @@
-﻿<template FontSize="10">
-	<data font="Calibri" FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
+﻿<template font="Calibri" FontSize="10" LineSpacing="2" MaxWidth="290" MarginTop="20">
+
+	<data  FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
 		CRUDSOFT TECHNOLOGIES
 	</data>
+	<data TextWrap ="True" Align="Center">
+		sales@crudsofttechnologies.com
+	</data>
 
-	<grid columns="3" rows="3">
-		<data font="Calibri" fontStyle="bold">
-			Hello World
-		</data>
-		<line/>
-		<data Text="Hi, I am John Doe"/>
+	<data TextWrap ="True" Align="Center">
+		Cigma BLD, Mburu Gichua Rd, 3rd Floor, Rom 3G
+	</data>
 
-		<data align="center" Text="Centered Text"/>
+	<data TextWrap ="True" Align="Center">
+		+254705418696
+	</data>
 
-		<line/>
-	</grid>
 </template>

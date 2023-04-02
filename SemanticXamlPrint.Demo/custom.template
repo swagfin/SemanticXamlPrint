@@ -1,4 +1,5 @@
-﻿<template FontSize="10">
+﻿<template FontSize="10" Spacing="2">
+
 	<grid columns="3" rows="3">
 		<data font="Calibri" fontStyle="bold">
 			Hello World
@@ -10,4 +11,5 @@
 
 		<line/>
 	</grid>
+
 </template>

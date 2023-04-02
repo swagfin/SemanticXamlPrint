@@ -6,13 +6,11 @@ using System.Drawing;
 using System.Drawing.Printing;
 namespace SemanticXamlPrint.Demo
 {
-    public class DefaultThermalPrintService
+    public class DefaultPrintService
     {
         private TemplateComponent Template;
         private PrintDocument printDocument;
-        private readonly int DefaultMaxPaperWidth = 270;
-        private readonly int DefaultLineHeight = 14;
-        private int CurrentLinePosition { get; set; } = 20;
+        private int CurrentLinePosition { get; set; }
         public ComponentDrawingFormatting TemplateFormatting { get; set; }
 
         public void Print(IXamlComponent xamlComponent, string printerName = null)
@@ -21,6 +19,10 @@ namespace SemanticXamlPrint.Demo
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
             this.Template = (TemplateComponent)xamlComponent;
             this.TemplateFormatting = this.Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
+            if (this.Template.MaxWidth <= 0) this.Template.MaxWidth = 300;
+            if (this.Template.LineSpacing <= 0) this.Template.LineSpacing = 2;
+            if (this.Template.MarginTop <= 0) this.Template.MarginTop = 2;
+            //Set Star
             //Print Config
             this.printDocument = new PrintDocument();
             printDocument.PrintPage += PrintTemplatePage;
@@ -31,6 +33,8 @@ namespace SemanticXamlPrint.Demo
 
         private void PrintTemplatePage(object sender, PrintPageEventArgs e)
         {
+            //Set Starting Poistition
+            CurrentLinePosition = this.Template.MarginTop;
             List<IXamlComponent> templateComponents = Template?.Children;
             for (int i = 0; i < templateComponents.Count; i++)
             {
@@ -45,23 +49,23 @@ namespace SemanticXamlPrint.Demo
             if (component.Type == typeof(LineComponent))
             {
                 e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
-                CurrentLinePosition += DefaultLineHeight;
+                CurrentLinePosition += Template.LineSpacing;
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataTemplate = (DataComponent)component;
-                if (dataTemplate.TextWrap && (int)e.Graphics.MeasureString(dataTemplate.Text, fmt.Font).Width > DefaultMaxPaperWidth)
+                if (dataTemplate.TextWrap && (int)e.Graphics.MeasureString(dataTemplate.Text, fmt.Font).Width > this.Template.MaxWidth)
                 {
-                    SizeF size = e.Graphics.MeasureString(dataTemplate.Text, fmt.Font, DefaultMaxPaperWidth);
+                    SizeF size = e.Graphics.MeasureString(dataTemplate.Text, fmt.Font, this.Template.MaxWidth);
                     RectangleF layoutF = new RectangleF(new PointF(0, CurrentLinePosition), size);
                     e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
                     CurrentLinePosition += (int)layoutF.Height;
                 }
                 else
                 {
-                    Rectangle layout = new Rectangle(0, CurrentLinePosition, DefaultMaxPaperWidth, DefaultLineHeight);
+                    Rectangle layout = new Rectangle(0, CurrentLinePosition, this.Template.MaxWidth, (int)fmt.Font.Size + this.Template.LineSpacing);
                     e.Graphics.DrawString(dataTemplate.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
-                    CurrentLinePosition += DefaultLineHeight;
+                    CurrentLinePosition += layout.Height + this.Template.LineSpacing;
                 }
             }
             //#Eventually Also Children

@@ -19,7 +19,7 @@ namespace SemanticXamlPrint.Demo
                                 (string.IsNullOrEmpty(styleFmt.FontStyle) ? parentFormatting.Font.Style : GetOverridedFontStyle(styleFmt.FontStyle))),
 
                 StringFormat = string.IsNullOrEmpty(styleFmt.Align) ? parentFormatting.StringFormat : GetConvertedStringFormat(styleFmt.Align),
-                Brush = Brushes.Black,
+                Brush = Brushes.Black
             };
         }
 

@@ -48,7 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Defaults.cs" />
-    <Compile Include="DefaultThermalPrintService.cs" />
+    <Compile Include="DefaultPrintService.cs" />
     <Compile Include="Extensions\IXamlComponentExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

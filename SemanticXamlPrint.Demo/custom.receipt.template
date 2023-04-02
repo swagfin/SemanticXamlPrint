@@ -1,8 +1,9 @@
-﻿<template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="20">
+﻿<template font="Calibri" FontSize="10" LineSpacing="4" MaxWidth="290" MarginTop="20">
 
-	<data  FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
+	<data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
 		CRUDSOFT TECHNOLOGIES
 	</data>
+
 	<data TextWrap ="True" Align="Center">
 		sales@crudsofttechnologies.com
 	</data>
@@ -15,4 +16,23 @@
 		+254705418696
 	</data>
 
+	<data FontStyle="Bold" FontSize="12">
+		CASH SALE: 30
+	</data>
+
+	<br/>
+
+	<data>
+		CUSTOMER: Walk-In Customer
+	</data>
+
+	<data>
+		DATE: 01-Apr-2023 9:39 pm OA: Express Order
+	</data>
+
+	<line/>
+	<data FontStyle="Bold">
+		QTY     ITEM DESC.    AMOUNT
+	</data>
+	<line/>
 </template>

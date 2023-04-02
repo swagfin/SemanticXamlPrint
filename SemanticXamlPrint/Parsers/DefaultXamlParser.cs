@@ -17,7 +17,7 @@ namespace SemanticXamlPrint.Parsers
         private IXamlComponent CreateComponentFromXml(XmlNode node)
         {
             IXamlComponent component;
-            switch (node.Name)
+            switch (node.Name?.ToLower()?.Trim())
             {
                 case "template":
                     component = new TemplateComponent();
@@ -30,6 +30,9 @@ namespace SemanticXamlPrint.Parsers
                     break;
                 case "line":
                     component = new LineComponent();
+                    break;
+                case "br":
+                    component = new LineBreakComponent();
                     break;
                 case "#text":
                     component = new TextBlockComponent(node.Value);

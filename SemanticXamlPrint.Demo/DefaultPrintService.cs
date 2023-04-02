@@ -45,10 +45,16 @@ namespace SemanticXamlPrint.Demo
         {
             //Get Styling for Component
             ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
-            if (component.Type == typeof(LineComponent))
+            if (component.Type == typeof(LineBreakComponent))
             {
-                e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 CurrentLinePosition += Template.LineSpacing;
+            }
+            else if (component.Type == typeof(LineComponent))
+            {
+                LineComponent lineComponent = (LineComponent)component;
+                //  e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
+                e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], this.Template.MaxWidth), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
+                CurrentLinePosition += (int)(fmt.Font.Size + this.Template.LineSpacing);
             }
             else if (component.Type == typeof(DataComponent))
             {

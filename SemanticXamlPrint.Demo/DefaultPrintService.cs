@@ -55,7 +55,6 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                //  e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], this.Template.MaxWidth), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 CurrentLinePosition += (int)(fmt.Font.Size + this.Template.LineSpacing);
             }
@@ -76,9 +75,9 @@ namespace SemanticXamlPrint.Demo
                     CurrentLinePosition += layout.Height + this.Template.LineSpacing;
                 }
             }
-            else if (component.Type == typeof(GridComponent))
+            else if (component.Type == typeof(UniformDataGridComponent))
             {
-                GridComponent gridComponent = (GridComponent)component;
+                UniformDataGridComponent gridComponent = (UniformDataGridComponent)component;
                 List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
                                                                                 .Select(validElement => (DataComponent)validElement)
                                                                                 .ToList();
@@ -105,7 +104,6 @@ namespace SemanticXamlPrint.Demo
                     //Update Last Max Height
                 }
                 CurrentLinePosition += additionalHeight + Template.LineSpacing;
-                //  DrawComponents(component.Children, e);
             }
             else
             {

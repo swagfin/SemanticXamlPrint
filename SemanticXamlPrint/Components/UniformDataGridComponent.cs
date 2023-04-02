@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class GridComponent : IXamlComponent
+    public class UniformDataGridComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
@@ -34,6 +34,7 @@ namespace SemanticXamlPrint.Components
         }
         public void AddChild(IXamlComponent child)
         {
+            if (child.Type != typeof(DataComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(DataComponent)}]");
             Children.Add(child);
         }
     }

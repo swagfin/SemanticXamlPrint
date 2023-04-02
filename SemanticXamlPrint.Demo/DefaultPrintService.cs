@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Printing;
+using System.Linq;
+
 namespace SemanticXamlPrint.Demo
 {
     public class DefaultPrintService
@@ -34,13 +36,14 @@ namespace SemanticXamlPrint.Demo
         {
             //Set Starting Poistition
             CurrentLinePosition = this.Template.MarginTop;
-            List<IXamlComponent> templateComponents = Template?.Children;
-            for (int i = 0; i < templateComponents.Count; i++)
-            {
-                DrawComponent(templateComponents[i], e);
-            }
+            //Skip Drawing Template and Instead Draw Template' Childres
+            DrawComponents(Template?.Children, e);
         }
-
+        private void DrawComponents(List<IXamlComponent> components, PrintPageEventArgs e)
+        {
+            for (int i = 0; i < components?.Count; i++)
+                DrawComponent(components[i], e);
+        }
         private void DrawComponent(IXamlComponent component, PrintPageEventArgs e)
         {
             //Get Styling for Component
@@ -52,7 +55,6 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                //  e.Graphics.DrawString("---------------------------------------------------------", fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], this.Template.MaxWidth), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
                 CurrentLinePosition += (int)(fmt.Font.Size + this.Template.LineSpacing);
             }
@@ -73,12 +75,43 @@ namespace SemanticXamlPrint.Demo
                     CurrentLinePosition += layout.Height + this.Template.LineSpacing;
                 }
             }
-            //#Eventually Also Children
-            for (int i = 0; i < component?.Children?.Count; i++)
+            else if (component.Type == typeof(UniformDataGridComponent))
             {
-                DrawComponent(component.Children[i], e);
+                UniformDataGridComponent gridComponent = (UniformDataGridComponent)component;
+                List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
+                                                                                .Select(validElement => (DataComponent)validElement)
+                                                                                .ToList();
+                //Calculate Even Column Width
+                float columnWidth = e.Graphics.VisibleClipBounds.Width / gridComponent.Columns;
+                int additionalHeight = 0;
+                for (int columnIndex = 0; columnIndex < gridComponent.Columns; columnIndex++)
+                {
+                    // Calculate the x-coordinate of the starting point of the column
+                    float x = columnIndex * columnWidth;
+                    //Get All Items on Row
+                    int currentGridLineNo = CurrentLinePosition;
+                    //Get Only Childrens for Column || Object Memory Manipulation
+                    List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
+                    foreach (DataComponent columnChild in columnChildrens)
+                    {
+                        ComponentDrawingFormatting childFmt = columnChild.GetSystemDrawingProperties(this.TemplateFormatting);
+                        Rectangle layout = new Rectangle((int)x, currentGridLineNo, (int)columnWidth, (int)childFmt.Font.Size + this.Template.LineSpacing);
+                        e.Graphics.DrawString(columnChild.Text, childFmt.Font, childFmt.Brush, layout, childFmt.StringFormat);
+                        currentGridLineNo += layout.Height + this.Template.LineSpacing;
+                        //Update
+                        additionalHeight = ((layout.Height + this.Template.LineSpacing) > additionalHeight) ? (layout.Height + this.Template.LineSpacing) : additionalHeight;
+                    }
+                    //Update Last Max Height
+                }
+                CurrentLinePosition += additionalHeight + Template.LineSpacing;
+            }
+            else
+            {
+                return;
             }
         }
+
+
 
     }
 }

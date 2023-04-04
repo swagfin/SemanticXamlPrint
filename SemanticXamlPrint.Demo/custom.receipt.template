@@ -31,7 +31,7 @@
 	</Data>
 
 	<Line/>
-	<UniformDataGrid Columns="3">
+	<DataGrid Columns="3">
 		<Data FontStyle="Bold" Grid.Column="0">
 			Column 1
 		</Data>
@@ -41,6 +41,6 @@
 		<Data FontStyle="Bold" Grid.Column="2">
 			Column 3
 		</Data>
-	</UniformDataGrid>
+	</DataGrid>
 	<Line/>
 </Template>

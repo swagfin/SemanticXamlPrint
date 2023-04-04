@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class UniformDataGridComponent : IXamlComponent
+    public class DataGridComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
@@ -12,6 +12,7 @@ namespace SemanticXamlPrint.Components
         //Component Attributes
         public int Rows { get; set; } = 0;
         public int Columns { get; set; } = 0;
+        public string ColumnWidths { get; set; } = null;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -23,6 +24,9 @@ namespace SemanticXamlPrint.Components
                         break;
                     case "columns":
                         Columns = Convert.ToInt32(value);
+                        break;
+                    case "columnwidths":
+                        ColumnWidths = value.Contains("*") ? value : null;
                         break;
                     default:
                         if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);

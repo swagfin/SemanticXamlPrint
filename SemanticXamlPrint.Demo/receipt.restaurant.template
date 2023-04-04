@@ -32,7 +32,7 @@
 
 -->
 	<Line/>
-	<UniformDataGrid Columns="3">
+	<DataGrid Columns="3" ColumnWidths="1*2*1">
 		<Data FontStyle="Bold" Grid.Column="0">
 			QTY
 		</Data>
@@ -42,7 +42,7 @@
 		<Data FontStyle="Bold" Grid.Column="2">
 			AMOUNT
 		</Data>
-	</UniformDataGrid>
+	</DataGrid>
 	<Line/>
 	<DataRow>
 		<DataRowCell X="0" Z="120" TextWrap="True" >

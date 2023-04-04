@@ -85,28 +85,28 @@ namespace SemanticXamlPrint.Demo
                 //Add Line Height
                 CurrentLineY += additionalHeight + this.Template.LineSpacing;
             }
-            else if (component.Type == typeof(UniformDataGridComponent))
+            else if (component.Type == typeof(DataGridComponent))
             {
-                UniformDataGridComponent gridComponent = (UniformDataGridComponent)component;
+                DataGridComponent gridComponent = (DataGridComponent)component;
                 List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
                                                                                 .Select(validElement => (DataComponent)validElement)
                                                                                 .ToList();
+                //Divide Column Widths
+                List<int> columnWidths = e.Graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, gridComponent.Columns);
                 //Calculate Even Column Width
-                float columnWidth = e.Graphics.VisibleClipBounds.Width / gridComponent.Columns;
                 int additionalHeight = 0;
+                float lastXPosition = 0;
                 for (int columnIndex = 0; columnIndex < gridComponent.Columns; columnIndex++)
                 {
-                    // Calculate the x-coordinate of the starting point of the column
-                    float x = columnIndex * columnWidth;
-                    int currentGridLineNo = CurrentLineY;
                     //Get Only Childrens for Column || Object Memory Manipulation
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
                         ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);
-                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, x, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
                         additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }
+                    lastXPosition += columnWidths[columnIndex];
                 }
                 CurrentLineY += additionalHeight + Template.LineSpacing;
             }

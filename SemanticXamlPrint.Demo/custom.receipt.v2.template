@@ -41,7 +41,7 @@
 		<DataRowCell FontStyle="Bold" X="170">
 			QTY
 		</DataRowCell>
-		<DataRowCell FontStyle="Bold" X="200">
+		<DataRowCell FontStyle="Bold" X="220">
 			AMOUNT
 		</DataRowCell>
 	</DataRow>
@@ -56,7 +56,7 @@
 		<DataRowCell X="170">
 			2
 		</DataRowCell>
-		<DataRowCell X="200">
+		<DataRowCell X="220">
 			1,900
 		</DataRowCell>
 	</DataRow>
@@ -70,7 +70,7 @@
 		<DataRowCell X="170">
 			1
 		</DataRowCell>
-		<DataRowCell X="200">
+		<DataRowCell X="220">
 			650
 		</DataRowCell>
 	</DataRow>
@@ -84,7 +84,7 @@
 		<DataRowCell X="170">
 			1
 		</DataRowCell>
-		<DataRowCell X="200">
+		<DataRowCell X="220">
 			850
 		</DataRowCell>
 	</DataRow>

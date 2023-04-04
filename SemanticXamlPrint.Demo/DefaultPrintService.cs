@@ -1,4 +1,5 @@
 ﻿using SemanticXamlPrint.Components;
+using SemanticXamlPrint.Demo.Extensions;
 using SemanticXamlPrint.Demo.SystemDrawing;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace SemanticXamlPrint.Demo
     {
         private TemplateComponent Template;
         private PrintDocument printDocument;
-        private int CurrentLinePosition { get; set; }
+        private int CurrentLineY { get; set; }
         public ComponentDrawingFormatting TemplateFormatting { get; set; }
 
         public void Print(IXamlComponent xamlComponent, string printerName = null)
@@ -35,7 +36,7 @@ namespace SemanticXamlPrint.Demo
         private void PrintTemplatePage(object sender, PrintPageEventArgs e)
         {
             //Set Starting Poistition
-            CurrentLinePosition = this.Template.MarginTop;
+            CurrentLineY = this.Template.MarginTop;
             //Skip Drawing Template and Instead Draw Template' Childres
             DrawComponents(Template?.Children, e);
         }
@@ -50,30 +51,18 @@ namespace SemanticXamlPrint.Demo
             ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
             if (component.Type == typeof(LineBreakComponent))
             {
-                CurrentLinePosition += Template.LineSpacing;
+                CurrentLineY += Template.LineSpacing;
             }
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                e.Graphics.DrawString(new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)e.Graphics.VisibleClipBounds.Width), fmt.Font, fmt.Brush, 0f, CurrentLinePosition);
-                CurrentLinePosition += (int)(fmt.Font.Size + this.Template.LineSpacing);
+                string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)e.Graphics.VisibleClipBounds.Width);
+                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
-                if (dataComponent.TextWrap && (int)e.Graphics.MeasureString(dataComponent.Text, fmt.Font).Width > (int)e.Graphics.VisibleClipBounds.Width)
-                {
-                    SizeF size = e.Graphics.MeasureString(dataComponent.Text, fmt.Font, (int)e.Graphics.VisibleClipBounds.Width);
-                    RectangleF layoutF = new RectangleF(new PointF(0, CurrentLinePosition), size);
-                    e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layoutF, fmt.StringFormat);
-                    CurrentLinePosition += (int)layoutF.Height;
-                }
-                else
-                {
-                    Rectangle layout = new Rectangle(0, CurrentLinePosition, (int)e.Graphics.VisibleClipBounds.Width, (int)fmt.Font.Size + this.Template.LineSpacing);
-                    e.Graphics.DrawString(dataComponent.Text, fmt.Font, fmt.Brush, layout, fmt.StringFormat);
-                    CurrentLinePosition += layout.Height + this.Template.LineSpacing;
-                }
+                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
             }
             else if (component.Type == typeof(DataRowComponent))
             {
@@ -88,27 +77,14 @@ namespace SemanticXamlPrint.Demo
                     ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(fmt);
                     //Set RowCell Location
                     float x = (cell.X <= 0) ? 0f : cell.X;
-                    float y = (cell.Y <= 0) ? CurrentLinePosition : cell.Y;
+                    float y = (cell.Y <= 0) ? CurrentLineY : cell.Y;
                     float z = (cell.Z <= 0) ? (int)e.Graphics.VisibleClipBounds.Width : cell.Z;
-                    //Determine Wrap
-                    //# e.Graphics.DrawString("Item Description", font2, Brushes.Black, 0f, (float)currentLinePosition);
-                    if (cell.TextWrap && (int)e.Graphics.MeasureString(cell.Text, cellFmt.Font).Width > z)
-                    {
-                        SizeF size = e.Graphics.MeasureString(cell.Text, cellFmt.Font, (int)z);
-                        RectangleF layoutF = new RectangleF(new PointF(x, y), size);
-                        e.Graphics.DrawString(cell.Text, cellFmt.Font, cellFmt.Brush, layoutF, cellFmt.StringFormat);
-                        additionalHeight = ((int)layoutF.Height > additionalHeight) ? (int)layoutF.Height : additionalHeight;
-                    }
-                    else
-                    {
-                        Rectangle layout = new Rectangle((int)x, (int)y, (int)z, (int)cellFmt.Font.Size + this.Template.LineSpacing);
-                        e.Graphics.DrawString(cell.Text, cellFmt.Font, cellFmt.Brush, layout, cellFmt.StringFormat);
-                        additionalHeight = ((layout.Height + this.Template.LineSpacing) > additionalHeight) ? (layout.Height + this.Template.LineSpacing) : additionalHeight;
-                    }
+                    //Write String 
+                    int textHeight = e.Graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z, this.Template.LineSpacing);
+                    additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                 }
                 //Add Line Height
-                CurrentLinePosition += additionalHeight + this.Template.LineSpacing;
-
+                CurrentLineY += additionalHeight + this.Template.LineSpacing;
             }
             else if (component.Type == typeof(UniformDataGridComponent))
             {
@@ -124,7 +100,7 @@ namespace SemanticXamlPrint.Demo
                     // Calculate the x-coordinate of the starting point of the column
                     float x = columnIndex * columnWidth;
                     //Get All Items on Row
-                    int currentGridLineNo = CurrentLinePosition;
+                    int currentGridLineNo = CurrentLineY;
                     //Get Only Childrens for Column || Object Memory Manipulation
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
                     foreach (DataComponent columnChild in columnChildrens)
@@ -138,15 +114,12 @@ namespace SemanticXamlPrint.Demo
                     }
                     //Update Last Max Height
                 }
-                CurrentLinePosition += additionalHeight + Template.LineSpacing;
+                CurrentLineY += additionalHeight + Template.LineSpacing;
             }
             else
             {
                 return;
             }
         }
-
-
-
     }
 }

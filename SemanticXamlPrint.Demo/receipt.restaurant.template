@@ -32,20 +32,17 @@
 
 -->
 	<Line/>
-	<DataRow>
-		<DataRowCell FontStyle="Bold" X="0">
-			ITEM DESC.
-		</DataRowCell>
-		<DataRowCell FontStyle="Bold" X="120">
-			RATE
-		</DataRowCell>
-		<DataRowCell FontStyle="Bold" X="170">
+	<UniformDataGrid Columns="3">
+		<Data FontStyle="Bold" Grid.Column="0">
 			QTY
-		</DataRowCell>
-		<DataRowCell FontStyle="Bold" X="220">
+		</Data>
+		<Data FontStyle="Bold" Grid.Column="1">
+			ITEM DESC.
+		</Data>
+		<Data FontStyle="Bold" Grid.Column="2">
 			AMOUNT
-		</DataRowCell>
-	</DataRow>
+		</Data>
+	</UniformDataGrid>
 	<Line/>
 	<DataRow>
 		<DataRowCell X="0" Z="120" TextWrap="True" >
@@ -59,34 +56,6 @@
 		</DataRowCell>
 		<DataRowCell X="220">
 			1,900
-		</DataRowCell>
-	</DataRow>
-	<DataRow>
-		<DataRowCell X="0" Z="120" TextWrap="True" >
-			Black and White 375ml
-		</DataRowCell>
-		<DataRowCell X="120">
-			650
-		</DataRowCell>
-		<DataRowCell X="170">
-			1
-		</DataRowCell>
-		<DataRowCell X="220">
-			650
-		</DataRowCell>
-	</DataRow>
-	<DataRow>
-		<DataRowCell X="0" Z="120" TextWrap="True" >
-			4th Street Red 750ml
-		</DataRowCell>
-		<DataRowCell X="120">
-			850
-		</DataRowCell>
-		<DataRowCell X="170">
-			1
-		</DataRowCell>
-		<DataRowCell X="220">
-			850
 		</DataRowCell>
 	</DataRow>
 	<Line/>

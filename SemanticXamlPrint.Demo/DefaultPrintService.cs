@@ -103,7 +103,8 @@ namespace SemanticXamlPrint.Demo
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
-                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, x, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                        ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);
+                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, x, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
                         additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }
                 }

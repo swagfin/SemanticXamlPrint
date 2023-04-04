@@ -43,31 +43,25 @@ namespace SemanticXamlPrint.Parsers
                 case "#text":
                     component = new TextBlockComponent(node.Value);
                     break;
+                case "#comment":
+                    return null;
                 default:
                     throw new Exception($"Invalid node name {node.Name}");
             }
-
             // parse attributes
-            var attributes = node.Attributes;
-            if (attributes != null)
-            {
-                foreach (XmlAttribute attribute in attributes)
+            if (node?.Attributes != null)
+                foreach (XmlAttribute attribute in node.Attributes)
                 {
                     _ = component.TrySetProperty(attribute.Name?.ToLower()?.Trim(), attribute.Value);
                 }
-            }
-
             // parse child nodes
-            var childNodes = node.ChildNodes;
-            if (childNodes != null)
-            {
-                foreach (XmlNode childNode in childNodes)
+            if (node?.ChildNodes != null)
+                foreach (XmlNode childNode in node.ChildNodes)
                 {
-                    var childObject = CreateComponentFromXml(childNode);
-                    component.AddChild(childObject);
+                    IXamlComponent childObject = CreateComponentFromXml(childNode);
+                    if (childObject != null)
+                        component.AddChild(childObject);
                 }
-            }
-
             return component;
         }
     }

@@ -3,7 +3,6 @@ using SemanticXamlPrint.Demo.Extensions;
 using SemanticXamlPrint.Demo.SystemDrawing;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Drawing.Printing;
 using System.Linq;
 
@@ -99,20 +98,14 @@ namespace SemanticXamlPrint.Demo
                 {
                     // Calculate the x-coordinate of the starting point of the column
                     float x = columnIndex * columnWidth;
-                    //Get All Items on Row
                     int currentGridLineNo = CurrentLineY;
                     //Get Only Childrens for Column || Object Memory Manipulation
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
-                    foreach (DataComponent columnChild in columnChildrens)
+                    foreach (DataComponent dataComponent in columnChildrens)
                     {
-                        ComponentDrawingFormatting childFmt = columnChild.GetSystemDrawingProperties(fmt);
-                        Rectangle layout = new Rectangle((int)x, currentGridLineNo, (int)columnWidth, (int)childFmt.Font.Size + this.Template.LineSpacing);
-                        e.Graphics.DrawString(columnChild.Text, childFmt.Font, childFmt.Brush, layout, childFmt.StringFormat);
-                        currentGridLineNo += layout.Height + this.Template.LineSpacing;
-                        //Update
-                        additionalHeight = ((layout.Height + this.Template.LineSpacing) > additionalHeight) ? (layout.Height + this.Template.LineSpacing) : additionalHeight;
+                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                        additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }
-                    //Update Last Max Height
                 }
                 CurrentLineY += additionalHeight + Template.LineSpacing;
             }

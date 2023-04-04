@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class DataGridComponent : IXamlComponent
+    public class GridComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();

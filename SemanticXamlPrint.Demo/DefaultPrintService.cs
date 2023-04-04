@@ -85,9 +85,9 @@ namespace SemanticXamlPrint.Demo
                 //Add Line Height
                 CurrentLineY += additionalHeight + this.Template.LineSpacing;
             }
-            else if (component.Type == typeof(DataGridComponent))
+            else if (component.Type == typeof(GridComponent))
             {
-                DataGridComponent gridComponent = (DataGridComponent)component;
+                GridComponent gridComponent = (GridComponent)component;
                 List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
                                                                                 .Select(validElement => (DataComponent)validElement)
                                                                                 .ToList();

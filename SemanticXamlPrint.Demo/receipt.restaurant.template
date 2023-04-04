@@ -1,5 +1,4 @@
 ﻿<Template font="Calibri" FontSize="10" LineSpacing="4" MaxWidth="290" MarginTop="20">
-	<!--
 	<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">
 		CRUDSOFT TECHNOLOGIES
 	</Data>
@@ -9,7 +8,7 @@
 	</Data>
 
 	<Data TextWrap ="True" Align="Center">
-		Cigma BLD, Mburu Gichua Rd, 3rd Floor, Rom 3G
+		Cigma BLD, Mburu G. Rd, 3rd Floor, Rom 3G
 	</Data>
 
 	<Data TextWrap ="True" Align="Center">
@@ -30,9 +29,8 @@
 		DATE: 01-Apr-2023 9:39 pm OA: Express Order
 	</Data>
 
--->
 	<Line/>
-	<DataGrid Columns="3" ColumnWidths="1*2*1">
+	<Grid Columns="3" ColumnWidths="1*4*2">
 		<Data FontStyle="Bold" Grid.Column="0">
 			QTY
 		</Data>
@@ -42,21 +40,43 @@
 		<Data FontStyle="Bold" Grid.Column="2">
 			AMOUNT
 		</Data>
-	</DataGrid>
+	</Grid>
 	<Line/>
-	<DataRow>
-		<DataRowCell X="0" Z="120" TextWrap="True" >
-			4th Street Red 750ml
-		</DataRowCell>
-		<DataRowCell X="120">
-			950
-		</DataRowCell>
-		<DataRowCell X="170">
-			2
-		</DataRowCell>
-		<DataRowCell X="220">
-			1,900
-		</DataRowCell>
-	</DataRow>
+
+	<Grid Columns="3" ColumnWidths="1*4*2">
+		<Data Grid.Column="0">
+			1
+		</Data>
+		<Data Grid.Column="1">
+			GUARANA
+		</Data>
+		<Data Grid.Column="2">
+			250.00
+		</Data>
+	</Grid>
+
+	<Grid Columns="3" ColumnWidths="1*4*2">
+		<Data Grid.Column="0">
+			1
+		</Data>
+		<Data Grid.Column="1">
+			HEINKEN
+		</Data>
+		<Data Grid.Column="2">
+			300.00
+		</Data>
+	</Grid>
+
+	<Grid Columns="3" ColumnWidths="1*4*2">
+		<Data Grid.Column="0">
+			1
+		</Data>
+		<Data Grid.Column="1">
+			PILSNER
+		</Data>
+		<Data Grid.Column="2">
+			250.00
+		</Data>
+	</Grid>
 	<Line/>
 </Template>

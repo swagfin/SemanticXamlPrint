@@ -22,8 +22,8 @@ namespace SemanticXamlPrint.Parsers
                 case "template":
                     component = new TemplateComponent();
                     break;
-                case "datagrid":
-                    component = new DataGridComponent();
+                case "grid":
+                    component = new GridComponent();
                     break;
                 case "datarow":
                     component = new DataRowComponent();

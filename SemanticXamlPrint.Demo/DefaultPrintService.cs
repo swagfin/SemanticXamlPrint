@@ -103,7 +103,7 @@ namespace SemanticXamlPrint.Demo
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
                         ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);
-                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, columnWidths[columnIndex], this.Template.LineSpacing);
                         additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }
                     lastXPosition += columnWidths[columnIndex];

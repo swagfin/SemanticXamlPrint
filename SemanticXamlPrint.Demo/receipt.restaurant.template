@@ -35,13 +35,13 @@
 
 	<Line/>
 	<Grid Columns="3" ColumnWidths="1*4*2">
-		<Data FontStyle="Bold" Grid.Column="0">
+		<Data FontStyle="Bold" Grid.Column="0" Align="Center">
 			QTY
 		</Data>
 		<Data FontStyle="Bold" Grid.Column="1">
 			ITEM DESC.
 		</Data>
-		<Data FontStyle="Bold" Grid.Column="2">
+		<Data FontStyle="Bold" Grid.Column="2" Align="Right">
 			AMOUNT
 		</Data>
 	</Grid>
@@ -49,7 +49,7 @@
 
 	<Grid Columns="3" ColumnWidths="1*4*2">
 		<Data Grid.Column="0" Align="Center">1</Data>
-		<Data Grid.Column="1">GUARANA</Data>
+		<Data Grid.Column="1" TextWrap ="True">GUARANA</Data>
 		<Data Grid.Column="2" Align="Right">250.00</Data>
 	</Grid>
 

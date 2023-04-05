@@ -44,11 +44,11 @@ namespace SemanticXamlPrint.Demo
             switch (alignment?.Trim()?.ToLower())
             {
                 case "center":
-                    return new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+                    return new StringFormat { Alignment = StringAlignment.Center };
                 case "right":
-                    return new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Far };
+                    return new StringFormat { Alignment = StringAlignment.Far };
                 default:
-                    return new StringFormat { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near };
+                    return new StringFormat { Alignment = StringAlignment.Near };
             }
         }
     }

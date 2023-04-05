@@ -3,21 +3,25 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class DataRowComponent : IXamlComponent
+    public class DataRowComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
-        public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
-
         public bool TrySetProperty(string propertyName, string value)
         {
-            if (!CustomProperties.ContainsKey(propertyName))
+            try
             {
-                CustomProperties.Add(propertyName, value);
+                if (base.SetCommonProperties(propertyName, value)) return true;
+                switch (propertyName)
+                {
+                    default:
+                        CustomProperties.AddCustomProperty(propertyName, value);
+                        break;
+                }
                 return true;
             }
-            return false;
+            catch { return false; }
         }
         public void AddChild(IXamlComponent child)
         {

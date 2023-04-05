@@ -3,25 +3,25 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class LineComponent : IXamlComponent
+    public class LineComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
-        public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
         //Component Attributes
         public string Style { get; set; } = null;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
             {
+                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     case "style":
                         Style = value;
                         break;
                     default:
-                        if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);
+                        CustomProperties.AddCustomProperty(propertyName, value);
                         break;
                 }
                 return true;

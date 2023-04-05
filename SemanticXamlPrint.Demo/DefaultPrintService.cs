@@ -55,7 +55,7 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)e.Graphics.VisibleClipBounds.Width);
+                string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)(e.Graphics.VisibleClipBounds.Width / 2));
                 CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
             }
             else if (component.Type == typeof(DataComponent))
@@ -98,8 +98,7 @@ namespace SemanticXamlPrint.Demo
                 float lastXPosition = 0;
                 for (int columnIndex = 0; columnIndex < gridComponent.Columns; columnIndex++)
                 {
-                    //Get Only Childrens for Column || Object Memory Manipulation
-                    List<DataComponent> columnChildrens = gridChildren?.Where(child => ((child.CustomProperties.TryGetValue("grid.column", out string valIndex) && int.TryParse(valIndex, out int setIndex)) ? setIndex : 0) == columnIndex)?.ToList();
+                    List<DataComponent> columnChildrens = gridChildren?.Where(child => child.CustomProperties.IsPropertyExistsWithValue("grid.column", columnIndex.ToString()))?.ToList();
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
                         ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);

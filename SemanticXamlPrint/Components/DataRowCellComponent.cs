@@ -8,7 +8,6 @@ namespace SemanticXamlPrint.Components
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
-        public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
         //Component Attributes
         public string Text { get; set; }
         public bool TextWrap { get; set; } = false;
@@ -38,7 +37,7 @@ namespace SemanticXamlPrint.Components
                         Z = float.Parse(value);
                         break;
                     default:
-                        if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);
+                        CustomProperties.AddCustomProperty(propertyName, value);
                         break;
                 }
                 return true;

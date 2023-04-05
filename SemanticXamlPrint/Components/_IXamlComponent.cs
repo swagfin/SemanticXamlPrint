@@ -10,6 +10,6 @@ namespace SemanticXamlPrint.Components
         bool TrySetProperty(string propertyName, string value);
         void AddChild(IXamlComponent child);
         List<IXamlComponent> Children { get; }
-        Dictionary<string, string> CustomProperties { get; }
+        List<XamlComponentCustomProperty> CustomProperties { get; }
     }
 }

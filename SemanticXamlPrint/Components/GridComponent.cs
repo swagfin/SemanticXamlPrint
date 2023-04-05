@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class GridComponent : IXamlComponent
+    public class GridComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
-        public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
-        //Component Attributes
         public int Rows { get; set; } = 0;
         public int Columns { get; set; } = 0;
         public string ColumnWidths { get; set; } = null;
@@ -17,6 +15,7 @@ namespace SemanticXamlPrint.Components
         {
             try
             {
+                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     case "rows":
@@ -29,7 +28,7 @@ namespace SemanticXamlPrint.Components
                         ColumnWidths = value.Contains("*") ? value : null;
                         break;
                     default:
-                        if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);
+                        CustomProperties.AddCustomProperty(propertyName, value);
                         break;
                 }
                 return true;

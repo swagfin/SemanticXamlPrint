@@ -8,7 +8,6 @@ namespace SemanticXamlPrint.Components
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
-        public Dictionary<string, string> CustomProperties { get; private set; } = new Dictionary<string, string>();
         //Component Attributes
         public int LineSpacing { get; set; } = 0;
         public int MaxWidth { get; set; } = 0;
@@ -30,7 +29,7 @@ namespace SemanticXamlPrint.Components
                         MarginTop = Convert.ToInt32(value);
                         break;
                     default:
-                        if (!CustomProperties.ContainsKey(propertyName)) CustomProperties.Add(propertyName, value);
+                        CustomProperties.AddCustomProperty(propertyName, value);
                         break;
                 }
                 return true;

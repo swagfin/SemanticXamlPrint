@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
@@ -8,6 +9,7 @@ namespace SemanticXamlPrint.Components
         public string FontStyle { get; set; } = null;
         public int FontSize { get; set; } = 0;
         public string Align { get; set; } = null;
+        public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         public bool SetCommonProperties(string propertyName, string value)
         {
             try
@@ -33,5 +35,15 @@ namespace SemanticXamlPrint.Components
             }
             catch { return false; }
         }
+    }
+    public class XamlComponentCustomProperty
+    {
+        public XamlComponentCustomProperty(string key, string value)
+        {
+            Key = key;
+            Value = value;
+        }
+        public string Key { get; }
+        public string Value { get; }
     }
 }

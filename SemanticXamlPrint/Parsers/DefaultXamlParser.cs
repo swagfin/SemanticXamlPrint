@@ -37,7 +37,7 @@ namespace SemanticXamlPrint.Parsers
                 case "line":
                     component = new LineComponent();
                     break;
-                case "br":
+                case "linebreak":
                     component = new LineBreakComponent();
                     break;
                 case "#text":

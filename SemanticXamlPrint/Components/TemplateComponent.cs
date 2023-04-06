@@ -9,7 +9,6 @@ namespace SemanticXamlPrint.Components
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         //Component Attributes
-        public int LineSpacing { get; set; } = 0;
         public int MaxWidth { get; set; } = 0;
         public int MarginTop { get; set; } = 0;
         public bool TrySetProperty(string propertyName, string value)
@@ -19,14 +18,11 @@ namespace SemanticXamlPrint.Components
                 if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
-                    case "linespacing":
-                        LineSpacing = Convert.ToInt32(value);
-                        break;
                     case "maxwidth":
-                        MaxWidth = Convert.ToInt32(value);
+                        MaxWidth = (int.TryParse(value, out int maxWidth) && maxWidth > 0) ? maxWidth : 0;
                         break;
                     case "margintop":
-                        MarginTop = Convert.ToInt32(value);
+                        MarginTop = (int.TryParse(value, out int marginTop) && marginTop > 0) ? marginTop : 0;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

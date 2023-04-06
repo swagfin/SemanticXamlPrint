@@ -25,16 +25,16 @@ namespace SemanticXamlPrint.Components
                         Text = value;
                         break;
                     case "textwrap":
-                        TextWrap = Convert.ToBoolean(value);
+                        TextWrap = bool.TryParse(value, out bool wrap) && wrap;
                         break;
                     case "x":
-                        X = float.Parse(value);
+                        X = (float.TryParse(value, out float x) && x > 0) ? x : 0;
                         break;
                     case "y":
-                        Y = float.Parse(value);
+                        Y = (float.TryParse(value, out float y) && y > 0) ? y : 0; ;
                         break;
                     case "z":
-                        Z = float.Parse(value);
+                        Z = (float.TryParse(value, out float z) && z > 0) ? z : 0; ;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

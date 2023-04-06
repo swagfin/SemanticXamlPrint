@@ -22,7 +22,6 @@ namespace SemanticXamlPrint.Demo
             this.Template = (TemplateComponent)xamlComponent;
             this.TemplateFormatting = this.Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             if (this.Template.MaxWidth <= 50) this.Template.MaxWidth = 290;
-            if (this.Template.LineSpacing < 0) this.Template.LineSpacing = 2;
             if (this.Template.MarginTop < 0) this.Template.MarginTop = 20;
             //Set Star
             this.printDocument = new PrintDocument();
@@ -48,7 +47,7 @@ namespace SemanticXamlPrint.Demo
         {
             if (component.Type == typeof(LineBreakComponent))
             {
-                CurrentLineY += Template.LineSpacing;
+                CurrentLineY += 3;
             }
             else if (component.Type == typeof(LineComponent))
             {

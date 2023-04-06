@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
@@ -23,7 +22,7 @@ namespace SemanticXamlPrint.Components
                         FontStyle = value;
                         break;
                     case "fontsize":
-                        FontSize = Convert.ToInt32(value);
+                        FontSize = int.TryParse(value, out int fontSize) ? fontSize : 0;
                         break;
                     case "align":
                         Align = value;

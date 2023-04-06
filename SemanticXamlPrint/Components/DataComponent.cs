@@ -22,7 +22,7 @@ namespace SemanticXamlPrint.Components
                         Text = value;
                         break;
                     case "textwrap":
-                        TextWrap = Convert.ToBoolean(value);
+                        TextWrap = bool.TryParse(value, out bool wrap) && wrap;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

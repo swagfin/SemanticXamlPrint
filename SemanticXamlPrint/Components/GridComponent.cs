@@ -19,13 +19,13 @@ namespace SemanticXamlPrint.Components
                 switch (propertyName)
                 {
                     case "rows":
-                        Rows = Convert.ToInt32(value);
+                        Rows = (int.TryParse(value, out int rows) && rows > 0) ? rows : 0;
                         break;
                     case "columns":
-                        Columns = Convert.ToInt32(value);
+                        Columns = (int.TryParse(value, out int column) && column > 0) ? column : 0;
                         break;
                     case "columnwidths":
-                        ColumnWidths = value.Contains("*") ? value : null;
+                        ColumnWidths = value.Contains("*") ? value?.Trim() : null;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

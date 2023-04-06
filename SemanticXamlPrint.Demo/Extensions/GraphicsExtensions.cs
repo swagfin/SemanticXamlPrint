@@ -34,7 +34,7 @@ namespace SemanticXamlPrint.Demo.Extensions
             {
                 if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, columnsCount);
                 List<int> columnWidths = new List<int>();
-                int total = pattern.Split('*').Sum(p => Convert.ToInt32(p));
+                int total = pattern.Split(new char[] { '*' }, StringSplitOptions.RemoveEmptyEntries).Sum(p => Convert.ToInt32(p));
                 if (total < columnsCount) return GetDivideColumnWidths(graphics, columnsCount);
                 int remainingWidth = (int)graphics.VisibleClipBounds.Width;
                 foreach (string s in pattern.Split('*'))

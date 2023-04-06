@@ -139,10 +139,17 @@ namespace SemanticXamlPrint.Demo
                     }
                     CurrentLineY += additionalHeight;
                 }
-
                 //#Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
+                {
                     e.Graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), 0, y_before_grid, (int)e.Graphics.VisibleClipBounds.Width, CurrentLineY - y_before_grid);
+                    lastXPosition = 0;
+                    for (int colIndex = 0; colIndex < gridColumnCount; colIndex++)
+                    {
+                        e.Graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), lastXPosition, y_before_grid, columnWidths[colIndex], CurrentLineY - y_before_grid);
+                        lastXPosition += columnWidths[colIndex];
+                    }
+                }
             }
             else
             {

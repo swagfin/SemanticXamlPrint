@@ -56,12 +56,12 @@ namespace SemanticXamlPrint.Demo
             {
                 LineComponent lineComponent = (LineComponent)component;
                 string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)(e.Graphics.VisibleClipBounds.Width / 2));
-                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
-                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, this.Template.LineSpacing);
+                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
             }
             else if (component.Type == typeof(DataRowComponent))
             {
@@ -79,11 +79,11 @@ namespace SemanticXamlPrint.Demo
                     float y = (cell.Y <= 0) ? CurrentLineY : cell.Y;
                     float z = (cell.Z <= 0) ? (int)e.Graphics.VisibleClipBounds.Width : cell.Z;
                     //Write String 
-                    int textHeight = e.Graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z, this.Template.LineSpacing);
+                    int textHeight = e.Graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z);
                     additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                 }
                 //Add Line Height
-                CurrentLineY += additionalHeight + this.Template.LineSpacing;
+                CurrentLineY += additionalHeight;
             }
             else if (component.Type == typeof(GridComponent))
             {
@@ -102,12 +102,12 @@ namespace SemanticXamlPrint.Demo
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
                         ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);
-                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, columnWidths[columnIndex], this.Template.LineSpacing);
+                        int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, columnWidths[columnIndex]);
                         additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }
                     lastXPosition += columnWidths[columnIndex];
                 }
-                CurrentLineY += additionalHeight + Template.LineSpacing;
+                CurrentLineY += additionalHeight;
             }
             else
             {

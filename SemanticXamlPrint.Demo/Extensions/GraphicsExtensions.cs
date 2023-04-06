@@ -8,7 +8,7 @@ namespace SemanticXamlPrint.Demo.Extensions
 {
     public static class GraphicsExtensions
     {
-        public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z, int lineSpacing)
+        public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z)
         {
             if (textWrap && (int)graphics.MeasureString(text, cellFmt.Font).Width > z)
             {
@@ -19,9 +19,10 @@ namespace SemanticXamlPrint.Demo.Extensions
             }
             else
             {
-                Rectangle layout = new Rectangle((int)x, (int)y, (int)z, (int)cellFmt.Font.Size + lineSpacing);
+                SizeF size = graphics.MeasureString(text, cellFmt.Font, (int)z, new StringFormat { FormatFlags = StringFormatFlags.NoWrap });
+                Rectangle layout = new Rectangle((int)x, (int)y, (int)z, (int)size.Height);
                 graphics.DrawString(text, cellFmt.Font, cellFmt.Brush, layout, cellFmt.StringFormat);
-                return layout.Height + lineSpacing;
+                return layout.Height;
             }
         }
 

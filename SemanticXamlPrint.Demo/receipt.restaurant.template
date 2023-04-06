@@ -14,13 +14,14 @@
 
 	<Data>DATE: 01-Apr-2023 9:39 pm OA: Express Order</Data>
 
-	<Line/>
+	<Line Style="Dash" />
+
 	<Grid Columns="3" ColumnWidths="1*4*2">
 		<Data FontStyle="Bold" Grid.Column="0" Align="Center">QTY</Data>
 		<Data FontStyle="Bold" Grid.Column="1">ITEM DESC.</Data>
 		<Data FontStyle="Bold" Grid.Column="2" Align="Right">AMOUNT</Data>
 	</Grid>
-	<Line/>
+	<Line Style="Dash" />
 
 	<Grid Columns="3" ColumnWidths="1*4*2">
 		<Data Grid.Column="0" Align="Center">1</Data>
@@ -38,7 +39,7 @@
 		<Data Grid.Column="2" Align="Right">250.00</Data>
 	</Grid>
 
-	<Line/>
+	<Line Style="Dash" />
 
 	<Grid Columns="2" ColumnWidths="2*1">
 		<Data Grid.Column="0">SUB TOTAL</Data>
@@ -53,11 +54,12 @@
 		<Data Grid.Column="1" Align="Right">110.34</Data>
 	</Grid>
 	<Grid Columns="2" ColumnWidths="2*1">
-		<Data Grid.Column="0" FontStyle="Bold" FontSize="11">GRAND TOTAL</Data>
+		<Data Grid.Column="0" FontStyle="Bold" FontSize="10">GRAND TOTAL</Data>
 		<Data Grid.Column="1" FontStyle="Bold" FontSize="11" Align="Right">800.00</Data>
 	</Grid>
 
-	<Line/>
+	<Line Style="Dash" />
+
 	<Grid Columns="2" ColumnWidths="2*1">
 		<Data Grid.Column="0">PAID</Data>
 		<Data Grid.Column="1" Align="Right">1,000.00</Data>
@@ -66,7 +68,7 @@
 		<Data Grid.Column="0">CHANGE</Data>
 		<Data Grid.Column="1" Align="Right">200.00</Data>
 	</Grid>
-	<Line/>
+	<Line Style="Dash" />
 
 	<LineBreak/>
 

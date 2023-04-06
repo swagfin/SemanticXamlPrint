@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 namespace SemanticXamlPrint.Demo.Extensions
@@ -54,6 +55,15 @@ namespace SemanticXamlPrint.Demo.Extensions
             for (var i = 0; i < columns; i += 1)
                 columnWidths.Add(evenColumnWidth);
             return columnWidths;
+        }
+
+        public static int DrawlLineAndReturnHeight(this Graphics graphics, DashStyle dashStyle, float x, float y, float z)
+        {
+            using (Pen pen = new Pen(Color.Black) { DashStyle = dashStyle })
+            {
+                graphics.DrawLine(pen, x, y, z, y);
+            }
+            return 1;
         }
     }
 }

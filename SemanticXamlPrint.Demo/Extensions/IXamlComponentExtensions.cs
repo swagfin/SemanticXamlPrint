@@ -1,6 +1,7 @@
 ﻿using SemanticXamlPrint.Components;
 using SemanticXamlPrint.Demo.SystemDrawing;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace SemanticXamlPrint.Demo
 {
@@ -49,6 +50,23 @@ namespace SemanticXamlPrint.Demo
                     return new StringFormat { Alignment = StringAlignment.Far };
                 default:
                     return new StringFormat { Alignment = StringAlignment.Near };
+            }
+        }
+
+        public static DashStyle GetLineDashStyle(this LineComponent lineComponent)
+        {
+            switch (lineComponent.Style?.Trim()?.ToLower())
+            {
+                case "dash":
+                    return DashStyle.Dash;
+                case "dot":
+                    return DashStyle.Dot;
+                case "dashdot":
+                    return DashStyle.DashDot;
+                case "dashdotdot":
+                    return DashStyle.DashDotDot;
+                default:
+                    return DashStyle.Solid;
             }
         }
     }

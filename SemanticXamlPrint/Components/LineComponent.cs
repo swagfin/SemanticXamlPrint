@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class LineComponent : XamlComponentCommonProperties, IXamlComponent
+    public class LineComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
+        public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         //Component Attributes
         public string Style { get; set; } = null;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
             {
-                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     case "style":

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class LineBreakComponent : XamlComponentCommonProperties, IXamlComponent
+    public class LineBreakComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
+        public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         public bool TrySetProperty(string propertyName, string value)
         {
             try
             {
-                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     default:

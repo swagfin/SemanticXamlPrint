@@ -46,8 +46,6 @@ namespace SemanticXamlPrint.Demo
         }
         private void DrawComponent(IXamlComponent component, PrintPageEventArgs e)
         {
-            //Get Styling for Component
-            ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
             if (component.Type == typeof(LineBreakComponent))
             {
                 CurrentLineY += Template.LineSpacing;
@@ -55,17 +53,24 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)(e.Graphics.VisibleClipBounds.Width / 2));
-                CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
+                //fmt.Font = new Font(fmt.Font.FontFamily, 8);
+                //string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)(e.Graphics.VisibleClipBounds.Width / 2));
+                //CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
+                CurrentLineY += 3;
+                CurrentLineY += e.Graphics.DrawlLineAndReturnHeight(lineComponent.GetLineDashStyle(), 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
+                CurrentLineY += 3;
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
+                ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
+                //Draw Data Component
                 CurrentLineY += e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
             }
             else if (component.Type == typeof(DataRowComponent))
             {
                 DataRowComponent dataRowComponent = (DataRowComponent)component;
+                ComponentDrawingFormatting rowfmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
                 //Get all Children of DataRowCells
                 List<DataRowCellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(DataRowCellComponent))
                                                                                .Select(validElement => (DataRowCellComponent)validElement)
@@ -73,7 +78,7 @@ namespace SemanticXamlPrint.Demo
                 int additionalHeight = 0;
                 foreach (DataRowCellComponent cell in dataRowCells)
                 {
-                    ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(fmt);
+                    ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(rowfmt);
                     //Set RowCell Location
                     float x = (cell.X <= 0) ? 0f : cell.X;
                     float y = (cell.Y <= 0) ? CurrentLineY : cell.Y;
@@ -88,6 +93,8 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(GridComponent))
             {
                 GridComponent gridComponent = (GridComponent)component;
+                ComponentDrawingFormatting gridfmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
+
                 List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
                                                                                 .Select(validElement => (DataComponent)validElement)
                                                                                 .ToList();
@@ -101,7 +108,7 @@ namespace SemanticXamlPrint.Demo
                     List<DataComponent> columnChildrens = gridChildren?.Where(child => child.CustomProperties.IsPropertyExistsWithValue("grid.column", columnIndex.ToString()))?.ToList();
                     foreach (DataComponent dataComponent in columnChildrens)
                     {
-                        ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(fmt);
+                        ComponentDrawingFormatting childFmt = dataComponent.GetSystemDrawingProperties(gridfmt);
                         int textHeight = e.Graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, columnWidths[columnIndex]);
                         additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                     }

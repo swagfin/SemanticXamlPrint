@@ -15,7 +15,7 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 DefaultXamlParser parser = new DefaultXamlParser();
-                IXamlComponent rootObject = parser.Parse("custom.grid.template");
+                IXamlComponent rootObject = parser.Parse("receipt.restaurant.template");
 
                 string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
 

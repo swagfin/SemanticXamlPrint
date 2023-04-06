@@ -10,7 +10,6 @@ namespace SemanticXamlPrint.Components
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         public string ColumnWidths { get; set; } = null;
         public string BorderStyle { get; set; }
-
         public bool TrySetProperty(string propertyName, string value)
         {
             try

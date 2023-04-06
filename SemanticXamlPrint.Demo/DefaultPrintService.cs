@@ -3,7 +3,9 @@ using SemanticXamlPrint.Demo.Extensions;
 using SemanticXamlPrint.Demo.SystemDrawing;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 
 namespace SemanticXamlPrint.Demo
@@ -52,12 +54,18 @@ namespace SemanticXamlPrint.Demo
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                //fmt.Font = new Font(fmt.Font.FontFamily, 8);
-                //string lineContent = new string(string.IsNullOrEmpty(lineComponent.Style) ? '-' : lineComponent.Style[0], (int)(e.Graphics.VisibleClipBounds.Width / 2));
-                //CurrentLineY += e.Graphics.DrawStringAndReturnHeight(lineContent, false, fmt, 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
                 CurrentLineY += 3;
                 CurrentLineY += e.Graphics.DrawlLineAndReturnHeight(lineComponent.GetLineDashStyle(), 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
                 CurrentLineY += 3;
+            }
+            else if (component.Type == typeof(ImageComponent))
+            {
+                ImageComponent imageComponent = (ImageComponent)component;
+                string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
+                if (File.Exists(imageSource))
+                {
+                    CurrentLineY += e.Graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), 0, CurrentLineY, imageComponent.Width, imageComponent.Height);
+                }
             }
             else if (component.Type == typeof(DataComponent))
             {

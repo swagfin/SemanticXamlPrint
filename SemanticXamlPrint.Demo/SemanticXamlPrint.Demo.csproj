@@ -57,10 +57,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="custom.receipt.v2.template">
+    <Content Include="logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="custom.rowcells.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="receipt.restaurant.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="custom.image.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

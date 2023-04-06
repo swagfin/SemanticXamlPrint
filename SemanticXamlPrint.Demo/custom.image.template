@@ -1,0 +1,5 @@
+﻿<Template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="10">
+
+	<Image Source="logo.png" Width="100" Height="100" />
+	<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">CRUDSOFT TECHNOLOGIES</Data>
+</Template>

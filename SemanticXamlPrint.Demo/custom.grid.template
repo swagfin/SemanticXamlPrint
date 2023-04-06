@@ -1,0 +1,8 @@
+﻿<Template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="10">
+
+	<Grid Columns="3" ColumnWidths="1*4*2">
+		<Data FontStyle="Bold" Grid.Column="0" Align="Center">QTY</Data>
+		<Data FontStyle="Bold" Grid.Column="1">ITEM DESC.</Data>
+		<Data FontStyle="Bold" Grid.Column="2" Align="Right">AMOUNT</Data>
+	</Grid>
+</Template>

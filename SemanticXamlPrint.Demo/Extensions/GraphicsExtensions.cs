@@ -50,6 +50,7 @@ namespace SemanticXamlPrint.Demo.Extensions
         }
         public static List<int> GetDivideColumnWidths(this Graphics graphics, int columns)
         {
+            columns = columns <= 0 ? 1 : columns;
             int evenColumnWidth = (int)graphics.VisibleClipBounds.Width / columns;
             List<int> columnWidths = new List<int>();
             for (var i = 0; i < columns; i += 1)

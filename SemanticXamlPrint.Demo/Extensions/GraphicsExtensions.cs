@@ -65,17 +65,23 @@ namespace SemanticXamlPrint.Demo.Extensions
             }
             return 1;
         }
-
         public static int DrawImageCenteredAndReturnHeight(this Graphics graphics, Image image, float x, float y, float maxWidth = 0, float maxHeight = 0)
         {
 
             float newWidth = Math.Min(image.Height, maxWidth > 0 ? maxWidth : image.Width);
             float newHeight = Math.Min(image.Height, maxHeight > 0 ? maxHeight : image.Height);
-            //Center Image
             float centeredX = x + (graphics.VisibleClipBounds.Width - newWidth) / 2;
-            //Draw Image
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
             return (int)newHeight;
+        }
+        public static int DrawRectangleAndReturnHeight(this Graphics graphics, DashStyle dashStyle, float x, float y, float z, float height)
+        {
+
+            using (Pen pen = new Pen(Color.Black) { DashStyle = dashStyle })
+            {
+                graphics.DrawRectangle(pen, x, y, z, height);
+            }
+            return (int)height;
         }
     }
 }

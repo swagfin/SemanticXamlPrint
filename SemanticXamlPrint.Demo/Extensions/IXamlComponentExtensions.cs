@@ -53,9 +53,9 @@ namespace SemanticXamlPrint.Demo
             }
         }
 
-        public static DashStyle GetLineDashStyle(this LineComponent lineComponent)
+        public static DashStyle ToDashStyle(this string style)
         {
-            switch (lineComponent.Style?.Trim()?.ToLower())
+            switch (style?.Trim()?.ToLower())
             {
                 case "dash":
                     return DashStyle.Dash;

@@ -55,7 +55,7 @@ namespace SemanticXamlPrint.Demo
             {
                 LineComponent lineComponent = (LineComponent)component;
                 CurrentLineY += 3;
-                CurrentLineY += e.Graphics.DrawlLineAndReturnHeight(lineComponent.GetLineDashStyle(), 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
+                CurrentLineY += e.Graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width);
                 CurrentLineY += 3;
             }
             else if (component.Type == typeof(ImageComponent))
@@ -105,6 +105,8 @@ namespace SemanticXamlPrint.Demo
                 List<DataComponent> gridChildren = gridComponent.Children?.Where(element => element.Type == typeof(DataComponent))
                                                                                 .Select(validElement => (DataComponent)validElement)
                                                                                 .ToList();
+                //Draw Border
+
                 //Divide Column Widths
                 List<int> columnWidths = e.Graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, gridComponent.Columns);
                 //Calculate Even Column Width
@@ -121,6 +123,10 @@ namespace SemanticXamlPrint.Demo
                     }
                     lastXPosition += columnWidths[columnIndex];
                 }
+                //Check if Drawing Border
+                if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
+                    e.Graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), 0, CurrentLineY, (int)e.Graphics.VisibleClipBounds.Width, additionalHeight);
+
                 CurrentLineY += additionalHeight;
             }
             else

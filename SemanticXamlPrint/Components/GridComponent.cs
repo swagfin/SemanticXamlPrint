@@ -11,6 +11,8 @@ namespace SemanticXamlPrint.Components
         public int Rows { get; set; } = 0;
         public int Columns { get; set; } = 0;
         public string ColumnWidths { get; set; } = null;
+        public string BorderStyle { get; set; }
+
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -26,6 +28,9 @@ namespace SemanticXamlPrint.Components
                         break;
                     case "columnwidths":
                         ColumnWidths = value.Contains("*") ? value?.Trim() : null;
+                        break;
+                    case "borderstyle":
+                        BorderStyle = value?.Trim();
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

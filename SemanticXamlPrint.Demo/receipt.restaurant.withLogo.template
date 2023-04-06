@@ -1,5 +1,7 @@
 ﻿<Template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="10">
 
+	<Image Source="logo-vance.png" Width="100" Height="100" />
+
 	<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">CRUDSOFT TECHNOLOGIES</Data>
 	<Data TextWrap ="True" Align="Center">sales@crudsofttechnologies.com</Data>
 	<Data TextWrap ="True" Align="Center">Cigma BLD, Mburu G. Rd, 3rd Floor, Rom 3G</Data>

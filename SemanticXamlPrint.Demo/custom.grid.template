@@ -1,0 +1,27 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+
+	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
+		<!--Grid Columns-->
+		<GridColumn FontStyle="Bold" Align="Center">QTY</GridColumn>
+		<GridColumn FontStyle="Bold">ITEM DESC.</GridColumn>
+		<GridColumn FontStyle="Bold" Align="Right">AMOUNT</GridColumn>
+
+		<!--Grid Rows-->
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">Chips with Vegetable Salad at a Discounted Price</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">HEINKEN</Data>
+			<Data Grid.Column="2" Align="Right">300.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">PILSNER</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+	</Grid>
+</Template>

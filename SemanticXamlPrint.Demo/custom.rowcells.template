@@ -1,4 +1,4 @@
-﻿<Template font="Calibri" FontSize="10" LineSpacing="4" MaxWidth="290" MarginTop="20">
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="20">
 
 	<Line/>
 	<DataRow>

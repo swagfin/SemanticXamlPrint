@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SemanticXamlPrint.Components;
+﻿using SemanticXamlPrint.Components;
 using System;
 using System.IO;
 
@@ -14,16 +13,14 @@ namespace SemanticXamlPrint.Demo
             Console.ForegroundColor = ConsoleColor.White;
             try
             {
-                string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "custom.grid.template");
-                if (!File.Exists(templatePath)) throw new Exception($"template could not be found: {templatePath}");
-                byte[] xamlFileBytes = File.ReadAllBytes(templatePath);
-                //Proceed
+                //Get Template Contents
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
+
+                //Use Default Parser
                 DefaultXamlParser parser = new DefaultXamlParser();
                 IXamlComponent rootObject = parser.Parse(xamlFileBytes);
-                //We have Xaml Objects
-                string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
-                Console.WriteLine(jsonResponse);
 
+                //Use Print Service to Print 
                 DefaultPrintService printService = new DefaultPrintService();
                 printService.Print(rootObject, "POS-80");
             }

@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>SemanticXamlPrint</id>
-		<version>1.0.2</version>
+		<version>1.2.1</version>
 		<title>SemanticXamlPrint</title>
 		<authors>Crudsoft Technologies</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>

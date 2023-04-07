@@ -23,4 +23,4 @@ jobs:
     - name: Pack nugets
       run: nuget pack SemanticXamlPrint/SemanticXamlPrint.nuspec
     - name: Push to NuGet
-      run: nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json      
+      run: nuget push "*.nupkg" -ApiKey ${{secrets.nuget_api_key}} -Source https://api.nuget.org/v3/index.json      

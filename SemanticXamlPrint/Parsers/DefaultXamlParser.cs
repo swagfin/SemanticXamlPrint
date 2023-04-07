@@ -28,9 +28,6 @@ namespace SemanticXamlPrint.Parsers
                 case "grid":
                     component = new GridComponent();
                     break;
-                case "gridcolumn":
-                    component = new GridColumnComponent();
-                    break;
                 case "gridrow":
                     component = new GridRowComponent();
                     break;

@@ -1,4 +1,4 @@
-﻿<Template font="Calibri" FontSize="10" LineSpacing="3" MaxWidth="290" MarginTop="10">
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
 
 	<Image Source="logo-vance.png" Width="100" Height="100" />
 
@@ -17,11 +17,15 @@
 
 	<Line Style="Dash" />
 	<Grid ColumnWidths="1*4*2">
-		<!--Grid Columns-->
-		<GridColumn FontStyle="Bold" Align="Center">QTY</GridColumn>
-		<GridColumn FontStyle="Bold">ITEM DESC.</GridColumn>
-		<GridColumn FontStyle="Bold" Align="Right">AMOUNT</GridColumn>
-		<!--Grid Rows-->
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" Align="Center">QTY</Data>
+			<Data Grid.Column="1" FontStyle="Bold">ITEM DESC.</Data>
+			<Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
+		</GridRow>
+	</Grid>
+
+	<Line Style="Dash" />
+	<Grid ColumnWidths="1*4*2">
 		<GridRow>
 			<Data Grid.Column="0" Align="Center">1</Data>
 			<Data Grid.Column="1" TextWrap ="True">GUARANA</Data>
@@ -38,9 +42,8 @@
 			<Data Grid.Column="2" Align="Right">250.00</Data>
 		</GridRow>
 	</Grid>
+
 	<Line Style="Dash" />
-
-
 	<Grid ColumnWidths="2*1">
 		<GridRow>
 			<Data Grid.Column="0">SUB TOTAL</Data>

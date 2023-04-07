@@ -1,12 +1,14 @@
 ﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
 
 	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
-		<!--Grid Columns-->
-		<GridColumn FontStyle="Bold" Align="Center">QTY</GridColumn>
-		<GridColumn FontStyle="Bold">ITEM DESC.</GridColumn>
-		<GridColumn FontStyle="Bold" Align="Right">AMOUNT</GridColumn>
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" Align="Center">QTY</Data>
+			<Data Grid.Column="1" FontStyle="Bold">ITEM DESC.</Data>
+			<Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
+		</GridRow>
+	</Grid>
 
-		<!--Grid Rows-->
+	<Grid ColumnWidths="1*4*2">
 		<GridRow>
 			<Data Grid.Column="0" Align="Center">1</Data>
 			<Data Grid.Column="1" TextWrap ="True">Chips with Vegetable Salad at a Discounted Price</Data>

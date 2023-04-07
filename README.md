@@ -78,6 +78,3 @@ https://nuget.org/packages/SemanticXamlPrint
 	</Grid>
 </Template>
 ```
-
-## Check out more examples on the Demo Project
-[SemanticXamlPrint.Demo](https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.Demo)

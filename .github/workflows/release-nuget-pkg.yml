@@ -1,0 +1,26 @@
+name: Release to NuGet
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup MSBuild.exe path
+      uses: microsoft/setup-msbuild@v1.3.1
+
+    - name: Restore NuGet packages
+      run: nuget restore SemanticXamlPrint/SemanticXamlPrint.csproj
+
+    - name: Build
+      run: msbuild SemanticXamlPrint/SemanticXamlPrint.csproj /p:Configuration=Release
+
+    - name: Pack nugets
+      run: nuget pack SemanticXamlPrint/SemanticXamlPrint.nuspec
+    - name: Push to NuGet
+      run: nuget push "*.nupkg" -ApiKey ${{secrets.nuget_api_key}} -Source https://api.nuget.org/v3/index.json      

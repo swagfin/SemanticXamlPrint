@@ -8,16 +8,18 @@ on:
 
 jobs:
   build:
-    runs-on: windows-2019
+
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.3.1
-
-    - name: Restore NuGet packages
-      run: nuget restore SemanticXamlPrint/SemanticXamlPrint.csproj
-
-    - name: Build
-      run: msbuild SemanticXamlPrint/SemanticXamlPrint.csproj /p:Configuration=Release
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.x
+    - name: Restore Nuget Packages
+      run: dotnet restore SemanticXamlPrint/SemanticXamlPrint.csproj
+    - name: Build Project
+      run: dotnet build SemanticXamlPrint/SemanticXamlPrint.csproj --no-restore
+    - name: Test
+      run: dotnet test SemanticXamlPrint/SemanticXamlPrint.csproj --no-build --verbosity normal

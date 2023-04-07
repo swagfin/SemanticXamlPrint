@@ -3,24 +3,21 @@ name: Release to NuGet
 on:
   release:
     types: [published]
-
+    
 jobs:
   build:
-    runs-on: windows-2019
-
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Setup MSBuild.exe path
-      uses: microsoft/setup-msbuild@v1.3.1
-
-    - name: Restore NuGet packages
-      run: nuget restore SemanticXamlPrint/SemanticXamlPrint.csproj
-
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
     - name: Build
-      run: msbuild SemanticXamlPrint/SemanticXamlPrint.csproj /p:Configuration=Release
-
+      run: dotnet build SemanticXamlPrint/SemanticXamlPrint.csproj -c Release
+    - name: Test
+      run: dotnet test SemanticXamlPrint/SemanticXamlPrint.csproj -c Release --no-build
     - name: Pack nugets
-      run: nuget pack SemanticXamlPrint/SemanticXamlPrint.nuspec
+      run: dotnet pack SemanticXamlPrint/SemanticXamlPrint.csproj -c Release --no-build --output .
     - name: Push to NuGet
-      run: nuget push "*.nupkg" -ApiKey ${{secrets.nuget_api_key}} -Source https://api.nuget.org/v3/index.json      
+      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json    

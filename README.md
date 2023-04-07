@@ -6,7 +6,6 @@ Simple Library to help you with creating receipts using simple Xaml like syntax.
 
 * Generate a receipt i.e. Thermal 80mm receipt or A4 receipt
 * Uses Xaml like Syntax to generate a receipt template
-* Note, this library targets .Net Framework 4.5
 
 ## Install 
 

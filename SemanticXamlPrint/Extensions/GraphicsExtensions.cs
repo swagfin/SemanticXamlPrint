@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SemanticXamlPrint
 {
-    public static class GraphicsExtensions
+    internal static class GraphicsExtensions
     {
         public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z)
         {

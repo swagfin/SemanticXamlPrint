@@ -1,8 +1,8 @@
 name: Release to NuGet
 
 on:
-  push:
-    branches: [ master ]
+  release:
+    types: [published]
 
 jobs:
   build:

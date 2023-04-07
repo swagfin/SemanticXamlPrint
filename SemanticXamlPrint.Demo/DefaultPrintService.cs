@@ -99,23 +99,10 @@ namespace SemanticXamlPrint.Demo
             {
                 GridComponent gridComponent = (GridComponent)component;
                 ComponentDrawingFormatting gridfmt = component.GetSystemDrawingProperties(this.TemplateFormatting);
-                //Get Grid Rows
-                List<GridColumnComponent> gridColumns = gridComponent.Children?.Where(element => element.Type == typeof(GridColumnComponent)).Select(validElement => (GridColumnComponent)validElement).ToList();
-                List<int> columnWidths = e.Graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, gridColumns.Count);
+                List<int> columnWidths = e.Graphics.GetDivideColumnWidths(gridComponent.ColumnWidths);
                 int y_before_grid = CurrentLineY;
-                //Calculate Even Column Width
                 int additionalHeight = 0;
                 float lastXPosition = 0;
-                for (int columnIndex = 0; columnIndex < gridColumns.Count; columnIndex++)
-                {
-                    //Display Column
-                    GridColumnComponent columnComponent = gridColumns[columnIndex];
-                    ComponentDrawingFormatting childFmt = columnComponent.GetSystemDrawingProperties(gridfmt);
-                    int textHeight = e.Graphics.DrawStringAndReturnHeight(columnComponent.Text, columnComponent.TextWrap, childFmt, lastXPosition, CurrentLineY, columnWidths[columnIndex]);
-                    additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
-                    lastXPosition += columnWidths[columnIndex];
-                }
-                CurrentLineY += additionalHeight;
                 //Get Grid Rows
                 List<GridRowComponent> gridRows = gridComponent.Children?.Where(element => element.Type == typeof(GridRowComponent)).Select(validElement => (GridRowComponent)validElement).ToList();
                 foreach (GridRowComponent row in gridRows)
@@ -142,7 +129,7 @@ namespace SemanticXamlPrint.Demo
                 {
                     e.Graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), 0, y_before_grid, (int)e.Graphics.VisibleClipBounds.Width, CurrentLineY - y_before_grid);
                     lastXPosition = 0;
-                    for (int colIndex = 0; colIndex < gridColumns.Count; colIndex++)
+                    for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
                         e.Graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), lastXPosition, y_before_grid, columnWidths[colIndex], CurrentLineY - y_before_grid);
                         lastXPosition += columnWidths[colIndex];

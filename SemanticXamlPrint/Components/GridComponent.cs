@@ -33,7 +33,7 @@ namespace SemanticXamlPrint.Components
         }
         public void AddChild(IXamlComponent child)
         {
-            if (child.Type != typeof(GridColumnComponent) && child.Type != typeof(GridRowComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(GridColumnComponent)}] or [{nameof(GridRowComponent)}]");
+            if (child.Type != typeof(GridRowComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(GridRowComponent)}]");
             Children.Add(child);
         }
     }

@@ -28,14 +28,14 @@ namespace SemanticXamlPrint.Demo.Extensions
         }
 
 
-        public static List<int> GetDivideColumnWidths(this Graphics graphics, string pattern, int columnsCount = 0)
+        public static List<int> GetDivideColumnWidths(this Graphics graphics, string pattern)
         {
             try
             {
-                if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, columnsCount);
+                if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, 1);
                 List<int> columnWidths = new List<int>();
                 int total = pattern.Split(new char[] { '*' }, StringSplitOptions.RemoveEmptyEntries).Sum(p => Convert.ToInt32(p));
-                if (total < columnsCount) return GetDivideColumnWidths(graphics, columnsCount);
+                if (total < 1) return GetDivideColumnWidths(graphics, 1);
                 int remainingWidth = (int)graphics.VisibleClipBounds.Width;
                 foreach (string s in pattern.Split('*'))
                 {
@@ -46,7 +46,7 @@ namespace SemanticXamlPrint.Demo.Extensions
                 }
                 return columnWidths;
             }
-            catch { return GetDivideColumnWidths(graphics, columnsCount); }
+            catch { return GetDivideColumnWidths(graphics, 1); }
         }
         public static List<int> GetDivideColumnWidths(this Graphics graphics, int columns)
         {

@@ -1,0 +1,87 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+
+	<Image Source="logo.png" Width="100" Height="100" />
+
+	<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">CRUDSOFT TECHNOLOGIES</Data>
+	<Data TextWrap ="True" Align="Center">sales@crudsofttechnologies.com</Data>
+	<Data TextWrap ="True" Align="Center">Cigma BLD, Mburu G. Rd, 3rd Floor, Rom 3G</Data>
+	<Data TextWrap ="True" Align="Center">+254705418696</Data>
+
+	<LineBreak/>
+	<Data FontStyle="Bold" FontSize="12">CASH SALE:  30</Data>
+
+	<LineBreak/>
+
+	<Data>CUSTOMER: Walk-In Customer</Data>
+	<Data>DATE: 01-Apr-2023 9:39 pm OA: Express Order</Data>
+
+	<Line Style="Dash" />
+	<Grid ColumnWidths="1*4*2">
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" Align="Center">QTY</Data>
+			<Data Grid.Column="1" FontStyle="Bold">ITEM DESC.</Data>
+			<Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
+		</GridRow>
+	</Grid>
+
+	<Line Style="Dash" />
+	<Grid ColumnWidths="1*4*2">
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">GUARANA</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">HEINKEN</Data>
+			<Data Grid.Column="2" Align="Right">300.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">PILSNER</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+	</Grid>
+
+	<Line Style="Dash" />
+	<Grid ColumnWidths="2*1">
+		<GridRow>
+			<Data Grid.Column="0">SUB TOTAL</Data>
+			<Data Grid.Column="1" Align="Right">673.66</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0">Catering Levy (2%)</Data>
+			<Data Grid.Column="1" Align="Right">16.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0">Tax (0%)</Data>
+			<Data Grid.Column="1" Align="Right">110.34</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" FontSize="10">GRAND TOTAL</Data>
+			<Data Grid.Column="1" FontStyle="Bold" FontSize="11" Align="Right">800.00</Data>
+		</GridRow>
+	</Grid>
+	<Line Style="Dash" />
+
+	<Grid ColumnWidths="2*1">
+		<GridRow>
+			<Data Grid.Column="0">PAID</Data>
+			<Data Grid.Column="1" Align="Right">1,000.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0">CHANGE</Data>
+			<Data Grid.Column="1" Align="Right">200.00</Data>
+		</GridRow>
+	</Grid>
+	<Line Style="Dash" />
+	<LineBreak/>
+
+	<Data>Served by: George Systems</Data>
+	<LineBreak/>
+
+	<Data  Align="Center">! Thank you and come Again !</Data>
+	<LineBreak/>
+	<LineBreak/>
+	<Data  Align="Center"  FontSize="8">Powered By Semantic Point of Sales | +254705 418 696</Data>
+</Template>

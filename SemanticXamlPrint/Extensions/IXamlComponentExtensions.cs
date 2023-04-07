@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace SemanticXamlPrint
 {
-    public static class IXamlComponentExtensions
+    internal static class IXamlComponentExtensions
     {
         public static ComponentDrawingFormatting GetSystemDrawingProperties(this IXamlComponent component, ComponentDrawingFormatting parentFormatting)
         {

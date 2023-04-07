@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package >
 	<metadata>
-		<id>b4082a1b-7b3c-4d23-a031-47e400c7fcfc</id>
+		<id>SemanticXamlPrint</id>
 		<version>1.0.1</version>
 		<title>SemanticXamlPrint</title>
 		<authors>Crudsoft Technologies</authors>

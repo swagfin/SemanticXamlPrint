@@ -1,0 +1,62 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="20">
+
+	<Line/>
+	<DataRow>
+		<DataRowCell FontStyle="Bold" X="0">
+			ITEM DESC.
+		</DataRowCell>
+		<DataRowCell FontStyle="Bold" X="120">
+			RATE
+		</DataRowCell>
+		<DataRowCell FontStyle="Bold" X="170">
+			QTY
+		</DataRowCell>
+		<DataRowCell FontStyle="Bold" X="220">
+			AMOUNT
+		</DataRowCell>
+	</DataRow>
+	<Line/>
+	<DataRow>
+		<DataRowCell X="0" Z="120" TextWrap="True" >
+			4th Street Red 750ml
+		</DataRowCell>
+		<DataRowCell X="120">
+			950
+		</DataRowCell>
+		<DataRowCell X="170">
+			2
+		</DataRowCell>
+		<DataRowCell X="220">
+			1,900
+		</DataRowCell>
+	</DataRow>
+	<DataRow>
+		<DataRowCell X="0" Z="120" TextWrap="True" >
+			Black and White 375ml
+		</DataRowCell>
+		<DataRowCell X="120">
+			650
+		</DataRowCell>
+		<DataRowCell X="170">
+			1
+		</DataRowCell>
+		<DataRowCell X="220">
+			650
+		</DataRowCell>
+	</DataRow>
+	<DataRow>
+		<DataRowCell X="0" Z="120" TextWrap="True" >
+			4th Street Red 750ml
+		</DataRowCell>
+		<DataRowCell X="120">
+			850
+		</DataRowCell>
+		<DataRowCell X="170">
+			1
+		</DataRowCell>
+		<DataRowCell X="220">
+			850
+		</DataRowCell>
+	</DataRow>
+	<Line/>
+</Template>

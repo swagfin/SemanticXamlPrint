@@ -13,7 +13,7 @@ namespace SemanticXamlPrint
         private static int CurrentLineY { get; set; }
         public static ComponentDrawingFormatting TemplateFormatting { get; set; }
 
-        public static void Draw(this Graphics graphics, IXamlComponent xamlComponent)
+        public static void DrawXamlComponent(this Graphics graphics, IXamlComponent xamlComponent)
         {
             if (xamlComponent == null) return;
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{Template.Name}]");
@@ -21,17 +21,10 @@ namespace SemanticXamlPrint
             TemplateFormatting = Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             if (Template.MaxWidth <= 50) Template.MaxWidth = 290;
             if (Template.MarginTop < 0) Template.MarginTop = 20;
-        }
-
-        private static void PrintTemplatePage(object sender, Graphics graphics)
-        {
             CurrentLineY = Template.MarginTop;
-            DrawComponents(Template?.Children, graphics);
-        }
-        private static void DrawComponents(List<IXamlComponent> components, Graphics graphics)
-        {
-            for (int i = 0; i < components?.Count; i++)
-                DrawComponent(components[i], graphics);
+            //Draw Root Component Children
+            for (int i = 0; i < Template?.Children?.Count; i++)
+                DrawComponent(Template?.Children[i], graphics);
         }
         private static void DrawComponent(IXamlComponent component, Graphics graphics)
         {

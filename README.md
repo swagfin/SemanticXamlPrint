@@ -26,14 +26,19 @@ https://nuget.org/packages/SemanticXamlPrint
 
             //Get Template Contents
             byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
-
+            
             //Use Default Parser
             DefaultXamlParser parser = new DefaultXamlParser();
             IXamlComponent rootObject = parser.Parse(xamlFileBytes);
-
-            //Use Print Service to Print 
-            DefaultPrintService printService = new DefaultPrintService();
-            printService.Print(rootObject, "POS-80");
+            
+            PrintDocument printDocument = new PrintDocument();
+            printDocument.PrintPage += (obj, eventAgs) =>
+            {
+                //Use Xaml Draw Extension to Print
+                eventAgs.Graphics.DrawXamlComponent(rootObject);
+            };
+            printDocument.PrinterSettings.PrinterName = "POS-80";
+            printDocument.Print();
 
             Console.ReadLine();
             Environment.Exit(0);
@@ -78,3 +83,6 @@ https://nuget.org/packages/SemanticXamlPrint
 	</Grid>
 </Template>
 ```
+
+## Check out more examples on the Demo Project
+[SemanticXamlPrint.Demo](https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.Demo)

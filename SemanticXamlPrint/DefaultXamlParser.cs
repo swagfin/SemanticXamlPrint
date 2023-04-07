@@ -1,17 +1,21 @@
 ﻿using SemanticXamlPrint.Components;
 using System;
+using System.IO;
 using System.Xml;
 
 namespace SemanticXamlPrint
 {
     public class DefaultXamlParser
     {
-        public IXamlComponent Parse(string xamlFilePath)
+        public IXamlComponent Parse(byte[] xamlFileBytes)
         {
-            var xmlDocument = new XmlDocument();
-            xmlDocument.Load(xamlFilePath);
-            var rootNode = xmlDocument.DocumentElement;
-            return CreateComponentFromXml(rootNode);
+            using (MemoryStream stream = new MemoryStream(xamlFileBytes))
+            {
+                var xmlDocument = new XmlDocument();
+                xmlDocument.Load(stream);
+                var rootNode = xmlDocument.DocumentElement;
+                return CreateComponentFromXml(rootNode);
+            }
         }
 
         private IXamlComponent CreateComponentFromXml(XmlNode node)

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using SemanticXamlPrint.Components;
 using System;
+using System.IO;
 
 namespace SemanticXamlPrint.Demo
 {
@@ -13,12 +14,16 @@ namespace SemanticXamlPrint.Demo
             Console.ForegroundColor = ConsoleColor.White;
             try
             {
+                string templatePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "custom.grid.template");
+                if (!File.Exists(templatePath)) throw new Exception($"template could not be found: {templatePath}");
+                byte[] xamlFileBytes = File.ReadAllBytes(templatePath);
+                //Proceed
                 DefaultXamlParser parser = new DefaultXamlParser();
-                IXamlComponent rootObject = parser.Parse("receipt.restaurant.withLogo.template");
+                IXamlComponent rootObject = parser.Parse(xamlFileBytes);
+                //We have Xaml Objects
                 string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
-
-
                 Console.WriteLine(jsonResponse);
+
                 DefaultPrintService printService = new DefaultPrintService();
                 printService.Print(rootObject, "POS-80");
             }

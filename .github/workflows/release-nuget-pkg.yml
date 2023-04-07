@@ -1,4 +1,4 @@
-name: .NET Ensure Build
+name: Release to NuGet
 
 on:
   push:

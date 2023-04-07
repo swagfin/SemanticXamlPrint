@@ -47,13 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Defaults.cs" />
-    <Compile Include="DefaultPrintService.cs" />
-    <Compile Include="Extensions\GraphicsExtensions.cs" />
-    <Compile Include="Extensions\IXamlComponentExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemDrawing\ComponentDrawingFontFormatting.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -82,10 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SemanticXamlPrint\SemanticXamlPrint.csproj">
-      <Project>{334cb0b4-3d11-43f6-bac6-0f7fc8601e20}</Project>
+      <Project>{b4082a1b-7b3c-4d23-a031-47e400c7fcfc}</Project>
       <Name>SemanticXamlPrint</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

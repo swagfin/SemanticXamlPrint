@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using SemanticXamlPrint.Components;
-using SemanticXamlPrint.Parsers;
 using System;
 
 namespace SemanticXamlPrint.Demo
@@ -16,12 +15,10 @@ namespace SemanticXamlPrint.Demo
             {
                 DefaultXamlParser parser = new DefaultXamlParser();
                 IXamlComponent rootObject = parser.Parse("receipt.restaurant.withLogo.template");
-
                 string jsonResponse = JsonConvert.SerializeObject(rootObject, Formatting.Indented);
 
+
                 Console.WriteLine(jsonResponse);
-
-
                 DefaultPrintService printService = new DefaultPrintService();
                 printService.Print(rootObject, "POS-80");
             }

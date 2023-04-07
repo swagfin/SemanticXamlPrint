@@ -2,7 +2,7 @@
 using System;
 using System.Xml;
 
-namespace SemanticXamlPrint.Parsers
+namespace SemanticXamlPrint
 {
     public class DefaultXamlParser
     {

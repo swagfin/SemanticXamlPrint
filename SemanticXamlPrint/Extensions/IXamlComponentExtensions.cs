@@ -1,9 +1,8 @@
 ﻿using SemanticXamlPrint.Components;
-using SemanticXamlPrint.Demo.SystemDrawing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace SemanticXamlPrint.Demo
+namespace SemanticXamlPrint
 {
     public static class IXamlComponentExtensions
     {
@@ -69,5 +68,11 @@ namespace SemanticXamlPrint.Demo
                     return DashStyle.Solid;
             }
         }
+    }
+    public class ComponentDrawingFormatting
+    {
+        public Font Font { get; set; }
+        public StringFormat StringFormat { get; set; }
+        public Brush Brush { get; set; }
     }
 }

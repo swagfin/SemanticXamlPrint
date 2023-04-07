@@ -1,6 +1,4 @@
 ﻿using SemanticXamlPrint.Components;
-using SemanticXamlPrint.Demo.Extensions;
-using SemanticXamlPrint.Demo.SystemDrawing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +6,7 @@ using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 
-namespace SemanticXamlPrint.Demo
+namespace SemanticXamlPrint
 {
     public class DefaultPrintService
     {
@@ -35,9 +33,7 @@ namespace SemanticXamlPrint.Demo
 
         private void PrintTemplatePage(object sender, PrintPageEventArgs e)
         {
-            //Set Starting Poistition
             CurrentLineY = this.Template.MarginTop;
-            //Skip Drawing Template and Instead Draw Template' Childres
             DrawComponents(Template?.Children, e);
         }
         private void DrawComponents(List<IXamlComponent> components, PrintPageEventArgs e)

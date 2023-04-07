@@ -1,7 +1,6 @@
-﻿using SemanticXamlPrint.Demo.SystemDrawing;
-using System.Drawing;
+﻿using System.Drawing;
 
-namespace SemanticXamlPrint.Demo
+namespace SemanticXamlPrint
 {
     public static class Defaults
     {

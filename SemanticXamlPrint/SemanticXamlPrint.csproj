@@ -70,7 +70,7 @@
     <None Include="SemanticXamlPrint.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon-full.jpg" />
+    <Content Include="icon.jpg" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

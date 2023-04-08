@@ -1,36 +1,49 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>2.0.1.1</AssemblyVersion>
-    <FileVersion>2.0.1.1</FileVersion>
-    <Version>2.0.1</Version>
-    <ApplicationIcon>SemanticXamlPrint.ico</ApplicationIcon>
-    <PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyVersion>2.0.2.1</AssemblyVersion>
+		<FileVersion>2.0.2.1</FileVersion>
+		<Version>2.0.2</Version>
+		<ApplicationIcon>SemanticXamlPrint.ico</ApplicationIcon>
+		<PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="SemanticXamlPrint.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="QRCoder.dll" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="SemanticXamlPrint.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="QRCoder.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="SemanticXamlPrint.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="SemanticXamlPrint.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="SemanticXamlPrint.jpg">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="QRCoder">
+			<HintPath>QRCoder.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="SemanticXamlPrint.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
 </Project>

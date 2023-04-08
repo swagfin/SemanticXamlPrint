@@ -1,0 +1,6 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+
+	<Data>This is a QR Code</Data>
+
+	<QRCode Text="Hi, I am QR Code" Height="100" Width="100"/>
+</Template>

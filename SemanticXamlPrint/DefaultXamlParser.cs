@@ -41,6 +41,9 @@ namespace SemanticXamlPrint
                 case "datarowcell":
                     component = new DataRowCellComponent();
                     break;
+                case "qrcode":
+                    component = new QRCodeComponent();
+                    break;
                 case "data":
                     component = new DataComponent();
                     break;

@@ -48,6 +48,11 @@ namespace SemanticXamlPrint
                     CurrentLineY += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), 0, CurrentLineY, imageComponent.Width, imageComponent.Height);
                 }
             }
+            else if (component.Type == typeof(QRCodeComponent))
+            {
+                QRCodeComponent qRCodeComponent = (QRCodeComponent)component;
+                CurrentLineY += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, 0, CurrentLineY, qRCodeComponent.Width, qRCodeComponent.Height);
+            }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;

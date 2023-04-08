@@ -15,7 +15,7 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 //Get Template Contents
-                byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.qrcode.template");
 
                 //Use Default Parser
                 DefaultXamlParser parser = new DefaultXamlParser();

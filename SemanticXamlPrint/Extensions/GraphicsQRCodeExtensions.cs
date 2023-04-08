@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace SemanticXamlPrint
 {
-    public static class GraphicsQRCodeExtensions
+    internal static class GraphicsQRCodeExtensions
     {
         public static int DrawQRCodeCenteredAndReturnHeight(this Graphics graphics, string text, float x, float y, float maxWidth = 0, float maxHeight = 0)
         {

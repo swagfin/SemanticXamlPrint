@@ -2,22 +2,16 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyVersion>2.0.2.1</AssemblyVersion>
-		<FileVersion>2.0.2.1</FileVersion>
-		<Version>2.0.2</Version>
+		<AssemblyVersion>2.0.3.1</AssemblyVersion>
+		<FileVersion>2.0.3.1</FileVersion>
+		<Version>2.0.3</Version>
 		<ApplicationIcon>SemanticXamlPrint.ico</ApplicationIcon>
 		<PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="QRCoder.dll" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="QRCoder.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</Content>
 		<Content Include="SemanticXamlPrint.ico" />
 	</ItemGroup>
 
@@ -30,6 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="QRCoder" Version="1.4.3" />
 		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
 	</ItemGroup>
 
@@ -45,5 +40,4 @@
 			<PackagePath>\</PackagePath>
 		</None>
 	</ItemGroup>
-
 </Project>

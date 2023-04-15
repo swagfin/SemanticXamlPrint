@@ -24,17 +24,15 @@ https://nuget.org/packages/SemanticXamlPrint
         {
 
             //Get Template Contents
-            byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
-            
-            //Use Default Parser
-            DefaultXamlParser parser = new DefaultXamlParser();
-            IXamlComponent rootObject = parser.Parse(xamlFileBytes);
-            
+            byte[] xamlFileBytes = File.ReadAllBytes("custom.qrcode.template");
+            //Use SemanticXamlPrint Parser 
+            IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
+
             PrintDocument printDocument = new PrintDocument();
             printDocument.PrintPage += (obj, eventAgs) =>
             {
-                //Use Xaml Draw Extension to Print
-                eventAgs.Graphics.DrawXamlComponent(rootObject);
+                //Use SemanticXamlPrint Draw Extension 
+                eventAgs.Graphics.DrawXamlComponent(xamlComponent);
             };
             printDocument.PrinterSettings.PrinterName = "POS-80";
             printDocument.Print();

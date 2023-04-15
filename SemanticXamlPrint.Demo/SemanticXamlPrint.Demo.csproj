@@ -75,7 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SemanticXamlPrint\SemanticXamlPrint.csproj">
-      <Project>{b4082a1b-7b3c-4d23-a031-47e400c7fcfc}</Project>
+      <Project>{272d7c67-96f4-4781-b57e-8dd1b7543d52}</Project>
       <Name>SemanticXamlPrint</Name>
     </ProjectReference>
   </ItemGroup>

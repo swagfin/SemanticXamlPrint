@@ -24,7 +24,7 @@ https://nuget.org/packages/SemanticXamlPrint
         {
 
             //Get Template Contents
-            byte[] xamlFileBytes = File.ReadAllBytes("custom.qrcode.template");
+            byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
             //Use SemanticXamlPrint Parser 
             IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
 

@@ -2,7 +2,6 @@
 using System;
 using System.Drawing.Printing;
 using System.IO;
-
 namespace SemanticXamlPrint.Demo
 {
     internal class Program
@@ -15,17 +14,15 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 //Get Template Contents
-                byte[] xamlFileBytes = File.ReadAllBytes("custom.qrcode.template");
-
-                //Use Default Parser
-                DefaultXamlParser parser = new DefaultXamlParser();
-                IXamlComponent rootObject = parser.Parse(xamlFileBytes);
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
+                //Use Default Parser 
+                IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
 
                 PrintDocument printDocument = new PrintDocument();
                 printDocument.PrintPage += (obj, eventAgs) =>
                 {
                     //Use Xaml Draw Extension to Print
-                    eventAgs.Graphics.DrawXamlComponent(rootObject);
+                    eventAgs.Graphics.DrawXamlComponent(xamlComponent);
                 };
                 printDocument.PrinterSettings.PrinterName = "POS-80";
                 printDocument.Print();

@@ -85,12 +85,10 @@ namespace SemanticXamlPrint
                     ComponentDrawingFormatting rowFmt = row.GetSystemDrawingProperties(gridfmt);
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        List<IXamlComponent> componentsUnderColumn = row.Children?.Where(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString())).ToList();
-                        //Loop through Grid Components
-                        for (int i = 0; i < componentsUnderColumn?.Count; i++)
+                        IXamlComponent componentUnderColumn = row.Children?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
+                        if (componentUnderColumn != null)
                         {
-                            float contentHeight = graphics.DrawComponent(componentsUnderColumn[i], TemplateFormatting, lastXPosition, added_draw_y, columnWidths[colIndex]);
-                            //column may have more hight that the rest of columns
+                            float contentHeight = graphics.DrawComponent(componentUnderColumn, rowFmt, lastXPosition, added_draw_y, columnWidths[colIndex]);
                             additionalHeight = (contentHeight > additionalHeight) ? contentHeight : additionalHeight;
                             //Next Column Starting X co-ordinates
                             lastXPosition += columnWidths[colIndex];

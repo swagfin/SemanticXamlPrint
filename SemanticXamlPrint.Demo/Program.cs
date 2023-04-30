@@ -24,9 +24,7 @@ namespace SemanticXamlPrint.Demo
                     //Use Xaml Draw Extension to Print
                     eventAgs.Graphics.DrawXamlComponent(xamlComponent);
                 };
-                //  printDocument.PrinterSettings.PrinterName = "POS-80";
                 printDocument.Print();
-
             }
             catch (Exception ex)
             {

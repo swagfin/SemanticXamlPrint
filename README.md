@@ -34,7 +34,6 @@ https://nuget.org/packages/SemanticXamlPrint
                 //Use SemanticXamlPrint Draw Extension 
                 eventAgs.Graphics.DrawXamlComponent(xamlComponent);
             };
-            printDocument.PrinterSettings.PrinterName = "POS-80";
             printDocument.Print();
 
             Console.ReadLine();

@@ -13,18 +13,17 @@ namespace SemanticXamlPrint
         public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting TemplateFormatting, float currentX, float currentY, float maxLayoutWidth)
         {
             maxLayoutWidth = maxLayoutWidth == 0 ? graphics.VisibleClipBounds.Width : maxLayoutWidth;
-            float added_draw_y = currentY;
             //Draw
             if (component.Type == typeof(LineBreakComponent))
             {
-                added_draw_y += 3;
+                currentY += 3;
             }
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                added_draw_y += 3;
-                added_draw_y += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, added_draw_y, (int)maxLayoutWidth);
-                added_draw_y += 3;
+                currentY += 3;
+                currentY += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, currentY, (int)maxLayoutWidth);
+                currentY += 3;
             }
             else if (component.Type == typeof(ImageComponent))
             {
@@ -32,20 +31,20 @@ namespace SemanticXamlPrint
                 string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
                 if (File.Exists(imageSource))
                 {
-                    added_draw_y += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), currentX, added_draw_y, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    currentY += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
                 }
             }
             else if (component.Type == typeof(QRCodeComponent))
             {
                 QRCodeComponent qRCodeComponent = (QRCodeComponent)component;
-                added_draw_y += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, currentX, added_draw_y, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
+                currentY += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, currentX, currentY, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
                 ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 //Draw Data Component
-                added_draw_y += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, currentX, added_draw_y, (int)maxLayoutWidth);
+                currentY += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, currentX, currentY, (int)maxLayoutWidth);
             }
             else if (component.Type == typeof(CellsComponent))
             {
@@ -59,52 +58,52 @@ namespace SemanticXamlPrint
                     ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(rowfmt);
                     //Set RowCell Location
                     float x = (cell.X <= 0) ? 0f : cell.X;
-                    float y = (cell.Y <= 0) ? added_draw_y : cell.Y;
+                    float y = (cell.Y <= 0) ? currentY : cell.Y;
                     float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
                     //Write String 
                     int textHeight = graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z);
                     additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                 }
                 //Add Line Height
-                added_draw_y += additionalHeight;
+                currentY += additionalHeight;
             }
             else if (component.Type == typeof(GridComponent))
             {
                 GridComponent gridComponent = (GridComponent)component;
                 ComponentDrawingFormatting gridfmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 List<int> columnWidths = graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, maxLayoutWidth);
-                float y_before_grid = added_draw_y;
-                float additionalHeight = 0;
-                float lastXPosition = currentX;
+                float y_before_grid = currentY;
+                float longest_column_y = currentY;
                 //Get Grid Rows
                 List<GridRowComponent> gridRows = gridComponent.Children?.Where(element => element.Type == typeof(GridRowComponent)).Select(validElement => (GridRowComponent)validElement).ToList();
                 foreach (GridRowComponent row in gridRows)
                 {
-                    additionalHeight = 0;
-                    lastXPosition = currentX;
+                    float current_y = longest_column_y;
+                    float current_x = currentX;
                     ComponentDrawingFormatting rowFmt = row.GetSystemDrawingProperties(gridfmt);
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
                         IXamlComponent componentUnderColumn = row.Children?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
                         if (componentUnderColumn != null)
                         {
-                            float contentHeight = graphics.DrawComponent(componentUnderColumn, rowFmt, lastXPosition, added_draw_y, columnWidths[colIndex]);
-                            additionalHeight = (contentHeight > additionalHeight) ? contentHeight : additionalHeight;
+                            float new_y = graphics.DrawComponent(componentUnderColumn, rowFmt, current_x, current_y, columnWidths[colIndex]);
+                            longest_column_y = (new_y > longest_column_y) ? new_y : longest_column_y;
                             //Next Column Starting X co-ordinates
-                            lastXPosition += columnWidths[colIndex];
+                            current_x += columnWidths[colIndex];
                         }
                     }
-                    added_draw_y += additionalHeight;
                 }
-                //#Check if Drawing Border
+                //set Highest Column Height
+                currentY = longest_column_y;
+                //# Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
                 {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, added_draw_y - y_before_grid);
-                    lastXPosition = 0;
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, currentY - y_before_grid);
+                    float current_x = currentX;
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), lastXPosition, y_before_grid, columnWidths[colIndex], added_draw_y - y_before_grid);
-                        lastXPosition += columnWidths[colIndex];
+                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], currentY - y_before_grid);
+                        current_x += columnWidths[colIndex];
                     }
                 }
             }
@@ -112,7 +111,7 @@ namespace SemanticXamlPrint
             {
                 //unknown Component
             }
-            return added_draw_y;
+            return currentY;
         }
 
         public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z)

@@ -63,7 +63,10 @@ namespace SemanticXamlPrint
                 {
                     IXamlComponent childObject = childNode.CreateComponentFromXml();
                     if (childObject != null)
+                    {
+                        if (childObject.Type == typeof(TemplateComponent)) throw new Exception($"{nameof(TemplateComponent)} can NOT be a child class");
                         component.AddChild(childObject);
+                    }
                 }
             return component;
         }

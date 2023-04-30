@@ -1,4 +1,4 @@
-﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+﻿<Template font="Calibri" FontSize="10" MarginTop="10">
 
 	<Data>This is a QR Code</Data>
 

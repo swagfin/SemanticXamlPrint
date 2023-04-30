@@ -59,7 +59,7 @@
     <Content Include="logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="custom.rowcells.template">
+    <Content Include="custom.cells.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="custom.image.template">

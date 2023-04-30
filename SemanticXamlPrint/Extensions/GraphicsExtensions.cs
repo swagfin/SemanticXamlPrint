@@ -10,10 +10,10 @@ namespace SemanticXamlPrint
 {
     internal static class GraphicsExtensions
     {
-        public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting TemplateFormatting, float maxLayoutWidth)
+        public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting TemplateFormatting, float currentX, float currentY, float maxLayoutWidth)
         {
             maxLayoutWidth = maxLayoutWidth == 0 ? graphics.VisibleClipBounds.Width : maxLayoutWidth;
-            float added_draw_y = 0;
+            float added_draw_y = currentY;
             //Draw
             if (component.Type == typeof(LineBreakComponent))
             {
@@ -23,7 +23,7 @@ namespace SemanticXamlPrint
             {
                 LineComponent lineComponent = (LineComponent)component;
                 added_draw_y += 3;
-                added_draw_y += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), 0, added_draw_y, (int)maxLayoutWidth);
+                added_draw_y += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, added_draw_y, (int)maxLayoutWidth);
                 added_draw_y += 3;
             }
             else if (component.Type == typeof(ImageComponent))
@@ -32,29 +32,29 @@ namespace SemanticXamlPrint
                 string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
                 if (File.Exists(imageSource))
                 {
-                    added_draw_y += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), 0, added_draw_y, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    added_draw_y += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), currentX, added_draw_y, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
                 }
             }
             else if (component.Type == typeof(QRCodeComponent))
             {
                 QRCodeComponent qRCodeComponent = (QRCodeComponent)component;
-                added_draw_y += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, 0, added_draw_y, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
+                added_draw_y += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, currentX, added_draw_y, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
                 ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 //Draw Data Component
-                added_draw_y += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, added_draw_y, (int)maxLayoutWidth);
+                added_draw_y += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, currentX, added_draw_y, (int)maxLayoutWidth);
             }
-            else if (component.Type == typeof(DataRowComponent))
+            else if (component.Type == typeof(CellsComponent))
             {
-                DataRowComponent dataRowComponent = (DataRowComponent)component;
+                CellsComponent dataRowComponent = (CellsComponent)component;
                 ComponentDrawingFormatting rowfmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 //Get all Children of DataRowCells
-                List<DataRowCellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(DataRowCellComponent)).Select(validElement => (DataRowCellComponent)validElement).ToList();
+                List<CellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(CellComponent)).Select(validElement => (CellComponent)validElement).ToList();
                 int additionalHeight = 0;
-                foreach (DataRowCellComponent cell in dataRowCells)
+                foreach (CellComponent cell in dataRowCells)
                 {
                     ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(rowfmt);
                     //Set RowCell Location
@@ -74,24 +74,25 @@ namespace SemanticXamlPrint
                 ComponentDrawingFormatting gridfmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 List<int> columnWidths = graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, maxLayoutWidth);
                 float y_before_grid = added_draw_y;
-                int additionalHeight = 0;
-                float lastXPosition = 0;
+                float additionalHeight = 0;
+                float lastXPosition = currentX;
                 //Get Grid Rows
                 List<GridRowComponent> gridRows = gridComponent.Children?.Where(element => element.Type == typeof(GridRowComponent)).Select(validElement => (GridRowComponent)validElement).ToList();
                 foreach (GridRowComponent row in gridRows)
                 {
                     additionalHeight = 0;
-                    lastXPosition = 0;
+                    lastXPosition = currentX;
                     ComponentDrawingFormatting rowFmt = row.GetSystemDrawingProperties(gridfmt);
-                    List<DataComponent> rowChildren = row.Children?.Where(element => element.Type == typeof(DataComponent)).Select(validElement => (DataComponent)validElement).ToList();
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        DataComponent columnComponent = rowChildren?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
-                        if (columnComponent != null)
+                        List<IXamlComponent> componentsUnderColumn = row.Children?.Where(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString())).ToList();
+                        //Loop through Grid Components
+                        for (int i = 0; i < componentsUnderColumn?.Count; i++)
                         {
-                            ComponentDrawingFormatting childFmt = columnComponent.GetSystemDrawingProperties(rowFmt);
-                            int textHeight = graphics.DrawStringAndReturnHeight(columnComponent.Text, columnComponent.TextWrap, childFmt, lastXPosition, added_draw_y, columnWidths[colIndex]);
-                            additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
+                            float contentHeight = graphics.DrawComponent(componentsUnderColumn[i], TemplateFormatting, lastXPosition, added_draw_y, columnWidths[colIndex]);
+                            //column may have more hight that the rest of columns
+                            additionalHeight = (contentHeight > additionalHeight) ? contentHeight : additionalHeight;
+                            //Next Column Starting X co-ordinates
                             lastXPosition += columnWidths[colIndex];
                         }
                     }
@@ -100,7 +101,7 @@ namespace SemanticXamlPrint
                 //#Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
                 {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), 0, y_before_grid, (int)maxLayoutWidth, added_draw_y - y_before_grid);
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, added_draw_y - y_before_grid);
                     lastXPosition = 0;
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {

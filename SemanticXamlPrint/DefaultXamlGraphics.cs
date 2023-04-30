@@ -17,7 +17,7 @@ namespace SemanticXamlPrint
             float _currentLineY = Template.MarginTop;
             //Draw Root Component Children
             for (int i = 0; i < Template?.Children?.Count; i++)
-                _currentLineY += graphics.DrawComponent(Template?.Children[i], TemplateFormatting, graphics.VisibleClipBounds.Width);
+                _currentLineY += graphics.DrawComponent(Template?.Children[i], TemplateFormatting, 0, _currentLineY, graphics.VisibleClipBounds.Width);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class DataRowCellComponent : XamlComponentCommonProperties, IXamlComponent
+    public class CellComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();

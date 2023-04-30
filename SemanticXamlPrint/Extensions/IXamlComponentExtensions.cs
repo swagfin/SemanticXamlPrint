@@ -25,11 +25,11 @@ namespace SemanticXamlPrint
                 case "gridrow":
                     component = new GridRowComponent();
                     break;
-                case "datarow":
-                    component = new DataRowComponent();
+                case "cells":
+                    component = new CellsComponent();
                     break;
-                case "datarowcell":
-                    component = new DataRowCellComponent();
+                case "cell":
+                    component = new CellComponent();
                     break;
                 case "qrcode":
                     component = new QRCodeComponent();

@@ -10,18 +10,20 @@ namespace SemanticXamlPrint
 {
     internal static class GraphicsExtensions
     {
-        public static void DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting TemplateFormatting, ref float currentLineY)
+        public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting TemplateFormatting, float currentX, float currentY, float maxLayoutWidth)
         {
+            maxLayoutWidth = maxLayoutWidth == 0 ? graphics.VisibleClipBounds.Width : maxLayoutWidth;
+            //Draw
             if (component.Type == typeof(LineBreakComponent))
             {
-                currentLineY += 3;
+                currentY += 3;
             }
             else if (component.Type == typeof(LineComponent))
             {
                 LineComponent lineComponent = (LineComponent)component;
-                currentLineY += 3;
-                currentLineY += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), 0, currentLineY, (int)graphics.VisibleClipBounds.Width);
-                currentLineY += 3;
+                currentY += 3;
+                currentY += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, currentY, (int)maxLayoutWidth);
+                currentY += 3;
             }
             else if (component.Type == typeof(ImageComponent))
             {
@@ -29,87 +31,87 @@ namespace SemanticXamlPrint
                 string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
                 if (File.Exists(imageSource))
                 {
-                    currentLineY += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), 0, currentLineY, imageComponent.Width, imageComponent.Height);
+                    currentY += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
                 }
             }
             else if (component.Type == typeof(QRCodeComponent))
             {
                 QRCodeComponent qRCodeComponent = (QRCodeComponent)component;
-                currentLineY += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, 0, currentLineY, qRCodeComponent.Width, qRCodeComponent.Height);
+                currentY += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, currentX, currentY, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
             }
             else if (component.Type == typeof(DataComponent))
             {
                 DataComponent dataComponent = (DataComponent)component;
                 ComponentDrawingFormatting fmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 //Draw Data Component
-                currentLineY += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, 0, currentLineY, (int)graphics.VisibleClipBounds.Width);
+                currentY += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, currentX, currentY, (int)maxLayoutWidth);
             }
-            else if (component.Type == typeof(DataRowComponent))
+            else if (component.Type == typeof(CellsComponent))
             {
-                DataRowComponent dataRowComponent = (DataRowComponent)component;
+                CellsComponent dataRowComponent = (CellsComponent)component;
                 ComponentDrawingFormatting rowfmt = component.GetSystemDrawingProperties(TemplateFormatting);
                 //Get all Children of DataRowCells
-                List<DataRowCellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(DataRowCellComponent)).Select(validElement => (DataRowCellComponent)validElement).ToList();
+                List<CellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(CellComponent)).Select(validElement => (CellComponent)validElement).ToList();
                 int additionalHeight = 0;
-                foreach (DataRowCellComponent cell in dataRowCells)
+                foreach (CellComponent cell in dataRowCells)
                 {
                     ComponentDrawingFormatting cellFmt = cell.GetSystemDrawingProperties(rowfmt);
                     //Set RowCell Location
                     float x = (cell.X <= 0) ? 0f : cell.X;
-                    float y = (cell.Y <= 0) ? currentLineY : cell.Y;
-                    float z = (cell.Z <= 0) ? (int)graphics.VisibleClipBounds.Width : cell.Z;
+                    float y = (cell.Y <= 0) ? currentY : cell.Y;
+                    float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
                     //Write String 
                     int textHeight = graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z);
                     additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
                 }
                 //Add Line Height
-                currentLineY += additionalHeight;
+                currentY += additionalHeight;
             }
             else if (component.Type == typeof(GridComponent))
             {
                 GridComponent gridComponent = (GridComponent)component;
                 ComponentDrawingFormatting gridfmt = component.GetSystemDrawingProperties(TemplateFormatting);
-                List<int> columnWidths = graphics.GetDivideColumnWidths(gridComponent.ColumnWidths);
-                float y_before_grid = currentLineY;
-                int additionalHeight = 0;
-                float lastXPosition = 0;
+                List<int> columnWidths = graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, maxLayoutWidth);
+                float y_before_grid = currentY;
+                float longest_column_y = currentY;
                 //Get Grid Rows
                 List<GridRowComponent> gridRows = gridComponent.Children?.Where(element => element.Type == typeof(GridRowComponent)).Select(validElement => (GridRowComponent)validElement).ToList();
                 foreach (GridRowComponent row in gridRows)
                 {
-                    additionalHeight = 0;
-                    lastXPosition = 0;
+                    float current_y = longest_column_y;
+                    float current_x = currentX;
                     ComponentDrawingFormatting rowFmt = row.GetSystemDrawingProperties(gridfmt);
-                    List<DataComponent> rowChildren = row.Children?.Where(element => element.Type == typeof(DataComponent)).Select(validElement => (DataComponent)validElement).ToList();
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        DataComponent columnComponent = rowChildren?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
-                        if (columnComponent != null)
+                        IXamlComponent componentUnderColumn = row.Children?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
+                        if (componentUnderColumn != null)
                         {
-                            ComponentDrawingFormatting childFmt = columnComponent.GetSystemDrawingProperties(rowFmt);
-                            int textHeight = graphics.DrawStringAndReturnHeight(columnComponent.Text, columnComponent.TextWrap, childFmt, lastXPosition, currentLineY, columnWidths[colIndex]);
-                            additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
-                            lastXPosition += columnWidths[colIndex];
+                            float new_y = graphics.DrawComponent(componentUnderColumn, rowFmt, current_x, current_y, columnWidths[colIndex]);
+                            longest_column_y = (new_y > longest_column_y) ? new_y : longest_column_y;
+                            //Next Column Starting X co-ordinates
+                            current_x += columnWidths[colIndex];
                         }
                     }
-                    currentLineY += additionalHeight;
                 }
-                //#Check if Drawing Border
+                //set Highest Column Height
+                currentY = longest_column_y;
+                //# Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
                 {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), 0, y_before_grid, (int)graphics.VisibleClipBounds.Width, currentLineY - y_before_grid);
-                    lastXPosition = 0;
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, currentY - y_before_grid);
+                    float current_x = currentX;
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), lastXPosition, y_before_grid, columnWidths[colIndex], currentLineY - y_before_grid);
-                        lastXPosition += columnWidths[colIndex];
+                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], currentY - y_before_grid);
+                        current_x += columnWidths[colIndex];
                     }
                 }
             }
             else
             {
-                return;
+                //unknown Component
             }
+            return currentY;
         }
 
         public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z)
@@ -131,15 +133,15 @@ namespace SemanticXamlPrint
         }
 
 
-        public static List<int> GetDivideColumnWidths(this Graphics graphics, string pattern)
+        public static List<int> GetDivideColumnWidths(this Graphics graphics, string pattern, float maxLayoutWith)
         {
             try
             {
-                if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, 1);
+                if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, 1, maxLayoutWith);
                 List<int> columnWidths = new List<int>();
                 int total = pattern.Split(new char[] { '*' }, StringSplitOptions.RemoveEmptyEntries).Sum(p => Convert.ToInt32(p));
-                if (total < 1) return GetDivideColumnWidths(graphics, 1);
-                int remainingWidth = (int)graphics.VisibleClipBounds.Width;
+                if (total < 1) return GetDivideColumnWidths(graphics, 1, maxLayoutWith);
+                int remainingWidth = (int)maxLayoutWith;
                 foreach (string s in pattern.Split('*'))
                 {
                     int w = (int)Math.Round((double)remainingWidth / total * Convert.ToInt32(s));
@@ -149,12 +151,12 @@ namespace SemanticXamlPrint
                 }
                 return columnWidths;
             }
-            catch { return GetDivideColumnWidths(graphics, 1); }
+            catch { return GetDivideColumnWidths(graphics, 1, maxLayoutWith); }
         }
-        public static List<int> GetDivideColumnWidths(this Graphics graphics, int columns)
+        public static List<int> GetDivideColumnWidths(this Graphics graphics, int columns, float maxLayoutWith)
         {
             columns = columns <= 0 ? 1 : columns;
-            int evenColumnWidth = (int)graphics.VisibleClipBounds.Width / columns;
+            int evenColumnWidth = (int)maxLayoutWith / columns;
             List<int> columnWidths = new List<int>();
             for (var i = 0; i < columns; i += 1)
                 columnWidths.Add(evenColumnWidth);
@@ -169,12 +171,12 @@ namespace SemanticXamlPrint
             }
             return 1;
         }
-        public static int DrawImageCenteredAndReturnHeight(this Graphics graphics, Image image, float x, float y, float maxWidth = 0, float maxHeight = 0)
+        public static int DrawImageCenteredAndReturnHeight(this Graphics graphics, Image image, float x, float y, float maxWidth, float maxHeight, float maxLayoutWith)
         {
 
             float newWidth = Math.Min(image.Height, maxWidth > 0 ? maxWidth : image.Width);
             float newHeight = Math.Min(image.Height, maxHeight > 0 ? maxHeight : image.Height);
-            float centeredX = x + (graphics.VisibleClipBounds.Width - newWidth) / 2;
+            float centeredX = x + (maxLayoutWith - newWidth) / 2;
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
             return (int)newHeight;
         }

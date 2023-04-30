@@ -1,0 +1,13 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+
+	<Data FontStyle="Bold" FontSize="12" TextWrap ="True" Align="Center">Test Header</Data>
+	<Data TextWrap ="True" Align="Center">Test Content</Data>
+	<Data TextWrap ="True" Align="Center" Text="Test Text"/>
+
+	<LineBreak/>
+	<LineBreak/>
+	<LineBreak/>
+	<Data TextWrap ="True" Align="Center">Text After Line Break 1</Data>
+	<Data TextWrap ="True" FontStyle="Bold" Align="Center">Text After Line Break Bold 1</Data>
+
+</Template>

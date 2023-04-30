@@ -1,0 +1,62 @@
+﻿<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="20">
+
+	<Line/>
+	<Cells>
+		<Cell FontStyle="Bold" X="0">
+			ITEM DESC.
+		</Cell>
+		<Cell FontStyle="Bold" X="120">
+			RATE
+		</Cell>
+		<Cell FontStyle="Bold" X="170">
+			QTY
+		</Cell>
+		<Cell FontStyle="Bold" X="220">
+			AMOUNT
+		</Cell>
+	</Cells>
+	<Line/>
+	<Cells>
+		<Cell X="0" Z="120" TextWrap="True" >
+			4th Street Red 750ml
+		</Cell>
+		<Cell X="120">
+			950
+		</Cell>
+		<Cell X="170">
+			2
+		</Cell>
+		<Cell X="220">
+			1,900
+		</Cell>
+	</Cells>
+	<Cells>
+		<Cell X="0" Z="120" TextWrap="True" >
+			Black and White 375ml
+		</Cell>
+		<Cell X="120">
+			650
+		</Cell>
+		<Cell X="170">
+			1
+		</Cell>
+		<Cell X="220">
+			650
+		</Cell>
+	</Cells>
+	<Cells>
+		<Cell X="0" Z="120" TextWrap="True" >
+			4th Street Red 750ml
+		</Cell>
+		<Cell X="120">
+			850
+		</Cell>
+		<Cell X="170">
+			1
+		</Cell>
+		<Cell X="220">
+			850
+		</Cell>
+	</Cells>
+	<Line/>
+</Template>

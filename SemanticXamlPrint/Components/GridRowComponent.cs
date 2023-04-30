@@ -25,7 +25,6 @@ namespace SemanticXamlPrint.Components
         }
         public void AddChild(IXamlComponent child)
         {
-            if (child.Type != typeof(DataComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(DataComponent)}]");
             Children.Add(child);
         }
     }

@@ -25,11 +25,11 @@ namespace SemanticXamlPrint
                 case "gridrow":
                     component = new GridRowComponent();
                     break;
-                case "datarow":
-                    component = new DataRowComponent();
+                case "cells":
+                    component = new CellsComponent();
                     break;
-                case "datarowcell":
-                    component = new DataRowCellComponent();
+                case "cell":
+                    component = new CellComponent();
                     break;
                 case "qrcode":
                     component = new QRCodeComponent();
@@ -63,7 +63,10 @@ namespace SemanticXamlPrint
                 {
                     IXamlComponent childObject = childNode.CreateComponentFromXml();
                     if (childObject != null)
+                    {
+                        if (childObject.Type == typeof(TemplateComponent)) throw new Exception($"{nameof(TemplateComponent)} can NOT be a child class");
                         component.AddChild(childObject);
+                    }
                 }
             return component;
         }

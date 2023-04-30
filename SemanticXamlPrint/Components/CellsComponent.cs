@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SemanticXamlPrint.Components
 {
-    public class DataRowComponent : XamlComponentCommonProperties, IXamlComponent
+    public class CellsComponent : XamlComponentCommonProperties, IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
@@ -25,7 +25,7 @@ namespace SemanticXamlPrint.Components
         }
         public void AddChild(IXamlComponent child)
         {
-            if (child.Type != typeof(DataRowCellComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(DataRowCellComponent)}]");
+            if (child.Type != typeof(CellComponent)) throw new Exception($"[{Name}] can only contain child elements of type: [{nameof(CellComponent)}]");
             Children.Add(child);
         }
     }

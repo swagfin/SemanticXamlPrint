@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SemanticXamlPrint
 {
-    internal static class XamlComponentCustomPropertyExtensions
+    public static class XamlComponentCustomPropertyExtensions
     {
         private static XamlComponentCustomProperty GetProperty(this List<XamlComponentCustomProperty> customProperties, string property) => customProperties?.FirstOrDefault(x => x.Key?.ToLower() == property?.ToLower());
 

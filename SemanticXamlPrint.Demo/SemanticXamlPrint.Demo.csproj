@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PdfSharp.netstandard, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PdfSharp.netstandard.1.3.2\lib\netstandard2.0\PdfSharp.netstandard.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -77,6 +80,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj">
+      <Project>{edd4f357-04ad-4110-9735-bab7ba480185}</Project>
+      <Name>SemanticXamlPrint.PDF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SemanticXamlPrint\SemanticXamlPrint.csproj">
       <Project>{272d7c67-96f4-4781-b57e-8dd1b7543d52}</Project>
       <Name>SemanticXamlPrint</Name>

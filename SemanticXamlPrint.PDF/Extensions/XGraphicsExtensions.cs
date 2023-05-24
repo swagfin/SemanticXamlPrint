@@ -1,9 +1,11 @@
 ﻿using PdfSharp.Drawing;
+using PdfSharp.Drawing.Layout;
 using SemanticXamlPrint.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SemanticXamlPrint.PDF
 {
@@ -118,18 +120,23 @@ namespace SemanticXamlPrint.PDF
             XFont font = cellFmt.Font;
             XStringFormat stringFormat = cellFmt.StringFormat;
             XBrush brush = cellFmt.Brush;
-
+            //Check wrap
             if (textWrap && gfx.MeasureString(text, font).Width > z)
             {
-                XSize size = gfx.MeasureString(text, font, cellFmt.StringFormat);
-                XRect layoutRect = new XRect(x, y, z, size.Height);
-                gfx.DrawString(text, font, brush, layoutRect, stringFormat);
-                return (int)layoutRect.Height;
+                string[] lines = SplitTextIntoLines(gfx, text, font, z);
+                double lineHeight = font.GetHeight();
+                double totalHeight = lines.Length * lineHeight;
+                XTextFormatter textFormatter = new XTextFormatter(gfx);
+                foreach (string line in lines)
+                {
+                    textFormatter.DrawString(line, font, brush, new XRect(x + 2, y, z, totalHeight), stringFormat);
+                    y += lineHeight;
+                }
+                return (int)totalHeight;
             }
             else
             {
-                XSize size = gfx.MeasureString(text, font);
-                XRect layoutRect = new XRect(x, y, size.Width, size.Height);
+                XRect layoutRect = new XRect(x + 2, y, z, gfx.MeasureString(text, font).Height);
                 gfx.DrawString(text, font, brush, layoutRect, stringFormat);
                 return (int)layoutRect.Height;
             }
@@ -191,6 +198,32 @@ namespace SemanticXamlPrint.PDF
             };
             gfx.DrawRectangle(pen, x, y, width, height);
             return (int)height;
+        }
+
+
+        private static string[] SplitTextIntoLines(XGraphics gfx, string text, XFont font, double maxWidth)
+        {
+            string[] words = text?.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> lines = new List<string>();
+            StringBuilder currentLine = new StringBuilder();
+            foreach (string word in words)
+            {
+                if (gfx.MeasureString(string.Format("{0}{1} ", currentLine, word), font).Width <= maxWidth)
+                {
+                    currentLine.Append(string.Format("{0} ", word));
+                }
+                else
+                {
+                    lines.Add(currentLine.ToString().TrimEnd());
+                    currentLine.Clear();
+                    currentLine.Append(string.Format("{0} ", word));
+                }
+            }
+            if (currentLine.Length > 0)
+            {
+                lines.Add(currentLine.ToString().TrimEnd());
+            }
+            return lines.ToArray();
         }
     }
 }

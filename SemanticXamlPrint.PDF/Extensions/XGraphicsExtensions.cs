@@ -129,14 +129,14 @@ namespace SemanticXamlPrint.PDF
                 XTextFormatter textFormatter = new XTextFormatter(gfx);
                 foreach (string line in lines)
                 {
-                    textFormatter.DrawString(line, font, brush, new XRect(x + 2, y, z, totalHeight), stringFormat);
+                    textFormatter.DrawString(line, font, brush, new XRect(x + 2, y, (z - 2), totalHeight), stringFormat);
                     y += lineHeight;
                 }
                 return (int)totalHeight;
             }
             else
             {
-                XRect layoutRect = new XRect(x + 2, y, z, gfx.MeasureString(text, font).Height);
+                XRect layoutRect = new XRect(x + 2, y, (z - 4), gfx.MeasureString(text, font).Height);
                 gfx.DrawString(text, font, brush, layoutRect, stringFormat);
                 return (int)layoutRect.Height;
             }

@@ -41,7 +41,6 @@ namespace SemanticXamlPrint.Demo
                     XGraphics xgraphics = XGraphics.FromPdfPage(page);
                     //Use Xaml Draw Extension to Generate PDF
                     xgraphics.DrawXamlComponent(xamlComponent);
-
                     // Save the PDF document to a file
                     document.Save("output.pdf");
                 }

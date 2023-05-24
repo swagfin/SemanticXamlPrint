@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint", "Semant
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.Demo", "SemanticXamlPrint.Demo\SemanticXamlPrint.Demo.csproj", "{9794C3B4-6C4D-43BF-99A4-06FFF32C8157}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.PDF", "SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj", "{EDD4F357-04AD-4110-9735-BAB7BA480185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.PDF.Demo", "SemanticXamlPrint.PDF.Demo\SemanticXamlPrint.PDF.Demo.csproj", "{05A62ED2-5C6A-4789-AD1F-607655E327E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{9794C3B4-6C4D-43BF-99A4-06FFF32C8157}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9794C3B4-6C4D-43BF-99A4-06FFF32C8157}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9794C3B4-6C4D-43BF-99A4-06FFF32C8157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05A62ED2-5C6A-4789-AD1F-607655E327E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05A62ED2-5C6A-4789-AD1F-607655E327E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05A62ED2-5C6A-4789-AD1F-607655E327E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05A62ED2-5C6A-4789-AD1F-607655E327E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

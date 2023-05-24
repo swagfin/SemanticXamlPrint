@@ -27,6 +27,9 @@ namespace SemanticXamlPrint.Components
                     case "align":
                         Align = value;
                         break;
+                    case "textalign":
+                        Align = value;
+                        break;
                     default:
                         return false;
                 }

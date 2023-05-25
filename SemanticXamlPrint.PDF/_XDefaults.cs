@@ -2,7 +2,7 @@
 
 namespace SemanticXamlPrint.PDF
 {
-    public static class Defaults
+    public static class XDefaults
     {
         public static ComponentXDrawingFormatting Formatting = new ComponentXDrawingFormatting
         {

@@ -1,13 +1,14 @@
-﻿using SemanticXamlPrint.Components;
+﻿using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Extensions;
 using System.IO;
 using System.Xml;
 
-namespace SemanticXamlPrint
+namespace SemanticXamlPrint.Parser
 {
     public static class DefaultXamlParser
     {
         /// <summary>
-        /// SemanticXamlPrint Extension Method Pass File Bytes to an IXamlComponent
+        /// DefaultXamlParser Function that will transform File Bytes to an IXamlComponent
         /// </summary>
         /// <param name="xamlFileBytes"></param>
         /// <returns></returns>

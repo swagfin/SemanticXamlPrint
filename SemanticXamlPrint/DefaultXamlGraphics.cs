@@ -1,4 +1,4 @@
-﻿using SemanticXamlPrint.Components;
+﻿using SemanticXamlPrint.Parser.Components;
 using System;
 using System.Drawing;
 

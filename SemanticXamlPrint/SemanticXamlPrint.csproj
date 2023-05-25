@@ -29,6 +29,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Reference Include="QRCoder">
 			<HintPath>QRCoder.dll</HintPath>
 		</Reference>

@@ -1,6 +1,6 @@
 ﻿using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
-using SemanticXamlPrint.Components;
+using SemanticXamlPrint.Parser.Components;
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -1,6 +1,7 @@
 ﻿using PdfSharp.Drawing;
 using PdfSharp.Pdf;
-using SemanticXamlPrint.Components;
+using SemanticXamlPrint.Parser;
+using SemanticXamlPrint.Parser.Components;
 using SemanticXamlPrint.PDF;
 using System;
 using System.Drawing.Printing;

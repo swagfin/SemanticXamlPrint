@@ -1,10 +1,10 @@
 ﻿using PdfSharp.Drawing;
-using SemanticXamlPrint.Components;
+using SemanticXamlPrint.Parser.Components;
 using System;
 
 namespace SemanticXamlPrint.PDF
 {
-    internal static class IXamlComponentExtensions
+    internal static class XamlComponentFormattingExtensions
     {
         public static ComponentXDrawingFormatting GetPdfXDrawingProperties(this IXamlComponent component, ComponentXDrawingFormatting parentFormatting)
         {

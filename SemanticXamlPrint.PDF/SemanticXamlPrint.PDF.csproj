@@ -18,11 +18,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
+	  <PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
+	  <PackageReference Include="QRCoder" Version="1.4.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SemanticXamlPrint\SemanticXamlPrint.csproj" />
+	  <ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

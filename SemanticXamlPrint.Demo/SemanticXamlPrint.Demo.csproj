@@ -80,6 +80,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj">
+      <Project>{92D0F46F-32F7-46C0-847E-150B0508E10D}</Project>
+      <Name>SemanticXamlPrint.Parser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj">
       <Project>{edd4f357-04ad-4110-9735-bab7ba480185}</Project>
       <Name>SemanticXamlPrint.PDF</Name>

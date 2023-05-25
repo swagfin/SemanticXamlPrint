@@ -1,5 +1,6 @@
 ﻿using PdfSharp.Drawing;
 using SemanticXamlPrint.Components;
+using System;
 
 namespace SemanticXamlPrint.PDF
 {
@@ -18,7 +19,7 @@ namespace SemanticXamlPrint.PDF
                                 (string.IsNullOrEmpty(styleFmt.FontStyle) ? parentFormatting.Font.Style : GetOverridedFontStyle(styleFmt.FontStyle))),
 
                 StringFormat = string.IsNullOrEmpty(styleFmt.Align) ? parentFormatting.StringFormat : GetConvertedStringFormat(styleFmt.Align),
-                Brush = XBrushes.Black
+                Brush = string.IsNullOrEmpty(styleFmt.Color) ? parentFormatting.Brush : GetXSolidBrushFromColorString(styleFmt.Color)
             };
         }
 
@@ -66,6 +67,11 @@ namespace SemanticXamlPrint.PDF
                 default:
                     return XDashStyle.Solid;
             }
+        }
+        public static XSolidBrush GetXSolidBrushFromColorString(string colorString)
+        {
+            if (string.IsNullOrEmpty(colorString)) return XBrushes.Black;
+            return Enum.TryParse(colorString?.Trim(), true, out XKnownColor xKnownColor) ? new XSolidBrush(XColor.FromKnownColor(xKnownColor)) : XBrushes.Black;
         }
     }
     public class ComponentXDrawingFormatting

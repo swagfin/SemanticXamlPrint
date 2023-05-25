@@ -84,7 +84,7 @@ namespace SemanticXamlPrint
                                 (string.IsNullOrEmpty(styleFmt.FontStyle) ? parentFormatting.Font.Style : GetOverridedFontStyle(styleFmt.FontStyle))),
 
                 StringFormat = string.IsNullOrEmpty(styleFmt.Align) ? parentFormatting.StringFormat : GetConvertedStringFormat(styleFmt.Align),
-                Brush = Brushes.Black
+                Brush = string.IsNullOrEmpty(styleFmt.Color) ? parentFormatting.Brush : GetSolidBrushFromColorString(styleFmt.Color)
             };
         }
 
@@ -131,6 +131,42 @@ namespace SemanticXamlPrint
                     return DashStyle.DashDotDot;
                 default:
                     return DashStyle.Solid;
+            }
+        }
+        public static Brush GetSolidBrushFromColorString(string colorString)
+        {
+            if (string.IsNullOrEmpty(colorString)) return Brushes.Black;
+            switch (colorString.ToLower().Trim())
+            {
+                case "red":
+                    return new SolidBrush(Color.Red);
+                case "green":
+                    return new SolidBrush(Color.Green);
+                case "blue":
+                    return new SolidBrush(Color.Blue);
+                case "yellow":
+                    return new SolidBrush(Color.Yellow);
+                case "orange":
+                    return new SolidBrush(Color.Orange);
+                case "purple":
+                    return new SolidBrush(Color.Purple);
+                case "pink":
+                    return new SolidBrush(Color.Pink);
+                case "black":
+                    return new SolidBrush(Color.Black);
+                case "white":
+                    return new SolidBrush(Color.White);
+                case "gray":
+                    return new SolidBrush(Color.Gray);
+                case "brown":
+                    return new SolidBrush(Color.Brown);
+                case "cyan":
+                    return new SolidBrush(Color.Cyan);
+                case "magenta":
+                    return new SolidBrush(Color.Magenta);
+                // Add more cases for additional color names
+                default:
+                    return new SolidBrush(Color.Black);
             }
         }
     }

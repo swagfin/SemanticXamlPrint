@@ -85,7 +85,7 @@
 
 	<LineBreak/>
 	<LineBreak/>
-	<Data TextAlign="Center">This is a QR Code, We added TextAlign </Data>
+	<Data TextAlign="Center" FontWeight="Bold" Foreground="Blue">This is a QR Code and Bold BLUE Text</Data>
 	<QRCode Text="Hi, I am QR Code" Height="100" Width="100"/>
 
 </Template>

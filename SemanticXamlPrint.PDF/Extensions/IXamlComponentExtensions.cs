@@ -71,7 +71,22 @@ namespace SemanticXamlPrint.PDF
         public static XSolidBrush GetXSolidBrushFromColorString(string colorString)
         {
             if (string.IsNullOrEmpty(colorString)) return XBrushes.Black;
-            return Enum.TryParse(colorString?.Trim(), true, out XKnownColor xKnownColor) ? new XSolidBrush(XColor.FromKnownColor(xKnownColor)) : XBrushes.Black;
+            string colorCode = colorString.ToLower().Trim();
+            //support html colors e.g. #B56E22
+            if (colorCode.StartsWith("#") && colorCode.Length == 7) return GetHtmlColor(colorCode.Substring(1));
+            return Enum.TryParse(colorCode, true, out XKnownColor xKnownColor) ? new XSolidBrush(XColor.FromKnownColor(xKnownColor)) : XBrushes.Black;
+        }
+
+        private static XSolidBrush GetHtmlColor(string colorCode)
+        {
+            try
+            {
+                int r = int.Parse(colorCode.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+                int g = int.Parse(colorCode.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+                int b = int.Parse(colorCode.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+                return new XSolidBrush(XColor.FromArgb(r, g, b));
+            }
+            catch { return XBrushes.Black; }
         }
     }
     public class ComponentXDrawingFormatting

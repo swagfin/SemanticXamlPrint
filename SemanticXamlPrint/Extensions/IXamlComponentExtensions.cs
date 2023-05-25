@@ -136,7 +136,10 @@ namespace SemanticXamlPrint
         public static Brush GetSolidBrushFromColorString(string colorString)
         {
             if (string.IsNullOrEmpty(colorString)) return Brushes.Black;
-            switch (colorString.ToLower().Trim())
+            string colorCode = colorString.ToLower().Trim();
+            //support html colors e.g. #B56E22
+            if (colorCode.StartsWith("#") && colorCode.Length == 7) return GetHtmlColor(colorCode);
+            switch (colorCode)
             {
                 case "red":
                     return new SolidBrush(Color.Red);
@@ -168,6 +171,11 @@ namespace SemanticXamlPrint
                 default:
                     return new SolidBrush(Color.Black);
             }
+        }
+        private static Brush GetHtmlColor(string colorString)
+        {
+            try { return new SolidBrush(ColorTranslator.FromHtml(colorString)); }
+            catch { return new SolidBrush(Color.Black); }
         }
     }
     public class ComponentDrawingFormatting

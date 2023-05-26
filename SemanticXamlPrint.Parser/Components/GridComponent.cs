@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SemanticXamlPrint.Components
+namespace SemanticXamlPrint.Parser.Components
 {
     public class GridComponent : XamlComponentCommonProperties, IXamlComponent
     {

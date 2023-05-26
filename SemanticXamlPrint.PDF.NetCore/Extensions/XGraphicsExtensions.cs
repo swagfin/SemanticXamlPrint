@@ -1,5 +1,5 @@
-﻿using PdfSharp.Drawing;
-using PdfSharp.Drawing.Layout;
+﻿using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing.Layout;
 using SemanticXamlPrint.Parser.Components;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SemanticXamlPrint.PDF
+namespace SemanticXamlPrint.PDF.NetCore
 {
     public static class XGraphicsExtensions
     {

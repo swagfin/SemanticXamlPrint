@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SemanticXamlPrint.Components
+namespace SemanticXamlPrint.Parser.Components
 {
     public abstract class XamlComponentCommonProperties
     {

@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint", "Semant
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.Demo", "SemanticXamlPrint.Demo\SemanticXamlPrint.Demo.csproj", "{9794C3B4-6C4D-43BF-99A4-06FFF32C8157}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.PDF", "SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj", "{EDD4F357-04AD-4110-9735-BAB7BA480185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.PDF", "SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj", "{EDD4F357-04AD-4110-9735-BAB7BA480185}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.Parser", "SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj", "{92D0F46F-32F7-46C0-847E-150B0508E10D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.PDF.NetCore", "SemanticXamlPrint.PDF.NetCore\SemanticXamlPrint.PDF.NetCore.csproj", "{F502F41A-5A6D-4448-BFC3-DB426503A6D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.DemoNetCore", "SemanticXamlPrint.DemoNetCore\SemanticXamlPrint.DemoNetCore.csproj", "{674F57CA-1C9D-44A4-987B-0903C7AA008B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EDD4F357-04AD-4110-9735-BAB7BA480185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92D0F46F-32F7-46C0-847E-150B0508E10D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92D0F46F-32F7-46C0-847E-150B0508E10D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92D0F46F-32F7-46C0-847E-150B0508E10D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92D0F46F-32F7-46C0-847E-150B0508E10D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F502F41A-5A6D-4448-BFC3-DB426503A6D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F502F41A-5A6D-4448-BFC3-DB426503A6D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F502F41A-5A6D-4448-BFC3-DB426503A6D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F502F41A-5A6D-4448-BFC3-DB426503A6D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674F57CA-1C9D-44A4-987B-0903C7AA008B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674F57CA-1C9D-44A4-987B-0903C7AA008B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674F57CA-1C9D-44A4-987B-0903C7AA008B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674F57CA-1C9D-44A4-987B-0903C7AA008B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

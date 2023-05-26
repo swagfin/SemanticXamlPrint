@@ -1,4 +1,4 @@
-﻿using SemanticXamlPrint.Components;
+﻿using SemanticXamlPrint.Parser.Components;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -116,6 +116,7 @@ namespace SemanticXamlPrint
 
         public static int DrawStringAndReturnHeight(this Graphics graphics, string text, bool textWrap, ComponentDrawingFormatting cellFmt, float x, float y, float z)
         {
+            text = text ?? string.Empty;
             if (textWrap && (int)graphics.MeasureString(text, cellFmt.Font).Width > z)
             {
                 SizeF size = graphics.MeasureString(text, cellFmt.Font, (int)z);

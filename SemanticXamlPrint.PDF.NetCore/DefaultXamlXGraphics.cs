@@ -1,8 +1,8 @@
-﻿using PdfSharp.Drawing;
+﻿using PdfSharpCore.Drawing;
 using SemanticXamlPrint.Parser.Components;
 using System;
 
-namespace SemanticXamlPrint.PDF
+namespace SemanticXamlPrint.PDF.NetCore
 {
     public static class DefaultXamlXGraphics
     {

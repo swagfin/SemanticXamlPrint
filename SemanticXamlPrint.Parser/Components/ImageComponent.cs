@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SemanticXamlPrint.Components
+namespace SemanticXamlPrint.Parser.Components
 {
-    public class QRCodeComponent : IXamlComponent
+    public class ImageComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         //Component Attributes
-        public string Text { get; set; }
+        public string Source { get; set; } = null;
         public int Width { get; set; } = 0;
         public int Height { get; set; } = 0;
         public bool TrySetProperty(string propertyName, string value)
@@ -19,8 +19,8 @@ namespace SemanticXamlPrint.Components
             {
                 switch (propertyName)
                 {
-                    case "text":
-                        Text = value;
+                    case "source":
+                        Source = value?.Trim();
                         break;
                     case "width":
                         Width = (int.TryParse(value, out int width) && width > 0) ? width : 0;
@@ -36,13 +36,7 @@ namespace SemanticXamlPrint.Components
             }
             catch { return false; }
         }
-        public void AddChild(IXamlComponent child)
-        {
-            if (child?.Name == nameof(TextBlockComponent))
-            {
-                this.Text = (child.ToString()) ?? this.Text;
-            }
-        }
+        public void AddChild(IXamlComponent child) => throw new Exception($"property of type {Name} can not accept childrens");
     }
 
 }

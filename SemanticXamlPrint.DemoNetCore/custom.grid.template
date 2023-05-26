@@ -1,0 +1,96 @@
+﻿<Template font="Calibri" FontSize="10" MarginTop="10">
+
+
+	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" Align="Center">QTY</Data>
+			<Data Grid.Column="1" FontStyle="Bold">ITEM DESC.</Data>
+			<Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
+		</GridRow>
+	</Grid>
+
+	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">Chips with Vegetable Salad at a Discounted Price. To wrap text like this simply add TextWrap to True</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">HEINKEN</Data>
+			<Data Grid.Column="2" Align="Right">300.00</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0" Align="Center">1</Data>
+			<Data Grid.Column="1" TextWrap ="True">PILSNER</Data>
+			<Data Grid.Column="2" Align="Right">250.00</Data>
+		</GridRow>
+	</Grid>
+
+
+	<LineBreak/>
+	<LineBreak/>
+	<Data>More Advanced Grids Tests</Data>
+	<LineBreak/>
+	<Grid ColumnWidths="2*1">
+		<GridRow>
+			<Image Grid.Column="0" Source="logo.png" Width="100" Height="100" />
+			<Data Grid.Column="1"  TextWrap="True">Image is on the same row as this text but takes x2 size on the LEFT and this Text on the right</Data>
+		</GridRow>
+	</Grid>
+
+
+	<LineBreak/>
+	<LineBreak/>
+	<Data>A Grid Within A Grid</Data>
+	<LineBreak/>
+
+	<Grid ColumnWidths="1*1">
+
+		<GridRow>
+
+			<!--First Grid A -->
+			<Grid Grid.Column="0" ColumnWidths="1*1*1" BorderStyle="Solid">
+				<GridRow>
+					<Data Grid.Column="0" FontStyle="Bold">A 1</Data>
+					<Data Grid.Column="1" FontStyle="Bold">A 2</Data>
+					<Data Grid.Column="2" FontStyle="Bold" Align="Right">A 3</Data>
+				</GridRow>
+
+				<GridRow>
+					<Data Grid.Column="0">A Data 1</Data>
+					<Data Grid.Column="1">A Data 2</Data>
+					<Data Grid.Column="2" Align="Right">A Data 3</Data>
+				</GridRow>
+
+			</Grid>
+
+			<!--Second Grid B -->
+			<Grid Grid.Column="1" ColumnWidths="1*1*1" BorderStyle="Solid">
+				<GridRow>
+					<Data Grid.Column="0" FontStyle="Bold">B 1</Data>
+					<Data Grid.Column="1" FontStyle="Bold">B 2</Data>
+					<Data Grid.Column="2" FontStyle="Bold" Align="Right">B 3</Data>
+				</GridRow>
+				<GridRow>
+					<Data Grid.Column="0">B Data 1</Data>
+					<Data Grid.Column="1">B Data 2</Data>
+					<Data Grid.Column="2" Align="Right">B Data 3</Data>
+				</GridRow>
+			</Grid>
+
+		</GridRow>
+	</Grid>
+
+	<LineBreak/>
+	<LineBreak/>
+	<Data TextAlign="Center" FontWeight="Bold" Foreground="Blue">This is a QR Code and Bold BLUE Text</Data>
+	<QRCode Text="Hi, I am QR Code" Height="100" Width="100"/>
+
+	<LineBreak/>
+	<LineBreak/>
+	<LineBreak/>
+
+	<Data TextAlign="Center" Foreground="#B56E22">This has HTML Color Code #B56E22</Data>
+</Template>

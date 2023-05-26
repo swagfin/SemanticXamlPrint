@@ -1,32 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SemanticXamlPrint.Components
+namespace SemanticXamlPrint.Parser.Components
 {
-    public class ImageComponent : IXamlComponent
+    public class LineComponent : IXamlComponent
     {
         public string Name => Type.Name;
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         //Component Attributes
-        public string Source { get; set; } = null;
-        public int Width { get; set; } = 0;
-        public int Height { get; set; } = 0;
+        public string Style { get; set; } = null;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
             {
                 switch (propertyName)
                 {
-                    case "source":
-                        Source = value?.Trim();
-                        break;
-                    case "width":
-                        Width = (int.TryParse(value, out int width) && width > 0) ? width : 0;
-                        break;
-                    case "height":
-                        Height = (int.TryParse(value, out int height) && height > 0) ? height : 0;
+                    case "style":
+                        Style = value;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

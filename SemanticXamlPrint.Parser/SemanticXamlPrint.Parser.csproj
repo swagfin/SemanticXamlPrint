@@ -5,6 +5,23 @@
     <Version>3.3.2</Version>
     <AssemblyVersion>3.3.2.1</AssemblyVersion>
     <FileVersion>3.3.2.1</FileVersion>
+    <ApplicationIcon>SemanticXamlPrint.Parser.ico</ApplicationIcon>
+    <PackageIcon>SemanticXamlPrint.Parser.jpg</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SemanticXamlPrint.Parser.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="SemanticXamlPrint.Parser.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SemanticXamlPrint.Parser.jpg">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
 
 </Project>

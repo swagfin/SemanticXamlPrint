@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata>
+		<id>SemanticXamlPrintParser</id>
+		<version>3.3.2</version>
+		<title>SemanticXamlPrint.Parser</title>
+		<authors>Crudsoft Technologies</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<icon>SemanticXamlPrint.Parser.jpg</icon>
+		<projectUrl>https://github.com/swagfin/SemanticXamlPrint</projectUrl>
+		<description>Semantic XAML Printing Service. Parser and Printer</description>
+		<releaseNotes>A library that allows you to print by reading XAML like styling and converting them to Print Commands</releaseNotes>
+		<copyright>Copyright ©  2023</copyright>
+		<tags>Xaml Print XamlPrinting Printing PDF</tags>
+	</metadata>
+</package>

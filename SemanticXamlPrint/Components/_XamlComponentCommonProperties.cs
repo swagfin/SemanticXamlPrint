@@ -8,6 +8,7 @@ namespace SemanticXamlPrint.Components
         public string FontStyle { get; set; } = null;
         public int FontSize { get; set; } = 0;
         public string Align { get; set; } = null;
+        public string Color { get; set; } = null;
         public List<XamlComponentCustomProperty> CustomProperties { get; private set; } = new List<XamlComponentCustomProperty>();
         public bool SetCommonProperties(string propertyName, string value)
         {
@@ -21,11 +22,23 @@ namespace SemanticXamlPrint.Components
                     case "fontstyle":
                         FontStyle = value;
                         break;
+                    case "fontweight":
+                        FontStyle = value;
+                        break;
                     case "fontsize":
                         FontSize = int.TryParse(value, out int fontSize) ? fontSize : 0;
                         break;
                     case "align":
                         Align = value;
+                        break;
+                    case "textalign":
+                        Align = value;
+                        break;
+                    case "foreground":
+                        Color = value;
+                        break;
+                    case "color":
+                        Color = value;
                         break;
                     default:
                         return false;

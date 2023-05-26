@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.Demo", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.PDF", "SemanticXamlPrint.PDF\SemanticXamlPrint.PDF.csproj", "{EDD4F357-04AD-4110-9735-BAB7BA480185}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.Parser", "SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj", "{92D0F46F-32F7-46C0-847E-150B0508E10D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.Parser", "SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj", "{92D0F46F-32F7-46C0-847E-150B0508E10D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.PDF.NetCore", "SemanticXamlPrint.PDF.NetCore\SemanticXamlPrint.PDF.NetCore.csproj", "{F502F41A-5A6D-4448-BFC3-DB426503A6D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.PDF.NetCore", "SemanticXamlPrint.PDF.NetCore\SemanticXamlPrint.PDF.NetCore.csproj", "{F502F41A-5A6D-4448-BFC3-DB426503A6D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SemanticXamlPrint.DemoNetCore", "SemanticXamlPrint.DemoNetCore\SemanticXamlPrint.DemoNetCore.csproj", "{674F57CA-1C9D-44A4-987B-0903C7AA008B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SemanticXamlPrint.DemoNetCore", "SemanticXamlPrint.DemoNetCore\SemanticXamlPrint.DemoNetCore.csproj", "{674F57CA-1C9D-44A4-987B-0903C7AA008B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

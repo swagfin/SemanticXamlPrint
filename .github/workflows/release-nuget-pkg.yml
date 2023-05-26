@@ -37,4 +37,21 @@ jobs:
     - name: Pack nugets
       run: dotnet pack SemanticXamlPrint.PDF/SemanticXamlPrint.PDF.csproj -c Release --no-build --output .
     - name: Push to NuGet
-      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json  
+      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json
+      
+  publish_SemanticXamlPrint_PDF_NetCore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v1
+    - name: Build
+      run: dotnet build SemanticXamlPrint.PDF.NetCore/SemanticXamlPrint.PDF.NetCore.csproj -c Release
+    - name: Test
+      run: dotnet test SemanticXamlPrint.PDF.NetCore/SemanticXamlPrint.PDF.NetCore.csproj -c Release --no-build
+    - name: Pack nugets
+      run: dotnet pack SemanticXamlPrint.PDF.NetCore/SemanticXamlPrint.PDF.NetCore.csproj -c Release --no-build --output .
+    - name: Push to NuGet
+      run: dotnet nuget push "*.nupkg" --api-key ${{secrets.nuget_api_key}} --source https://api.nuget.org/v3/index.json      

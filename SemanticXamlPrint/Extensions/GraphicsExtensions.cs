@@ -98,11 +98,11 @@ namespace SemanticXamlPrint
                 //# Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
                 {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, currentY - y_before_grid);
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, (currentY - y_before_grid), gridComponent.BorderWidth);
                     float current_x = currentX;
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], currentY - y_before_grid);
+                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], (currentY - y_before_grid), gridComponent.BorderWidth);
                         current_x += columnWidths[colIndex];
                     }
                 }
@@ -181,10 +181,9 @@ namespace SemanticXamlPrint
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
             return (int)newHeight;
         }
-        public static int DrawRectangleAndReturnHeight(this Graphics graphics, DashStyle dashStyle, float x, float y, float z, float height)
+        public static int DrawRectangleAndReturnHeight(this Graphics graphics, DashStyle dashStyle, float x, float y, float z, float height, double lineWidth = 0.3)
         {
-
-            using (Pen pen = new Pen(Color.Black) { DashStyle = dashStyle })
+            using (Pen pen = new Pen(Color.Black, (float)lineWidth) { DashStyle = dashStyle })
             {
                 graphics.DrawRectangle(pen, x, y, z, height);
             }

@@ -6,10 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="custom.excessgrid.template" />
     <None Remove="custom.grid.template" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="custom.excessgrid.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="custom.grid.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

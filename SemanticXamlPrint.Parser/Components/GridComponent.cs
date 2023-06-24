@@ -10,6 +10,7 @@ namespace SemanticXamlPrint.Parser.Components
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         public string ColumnWidths { get; set; } = null;
         public string BorderStyle { get; set; }
+        public double BorderWidth { get; set; } = 0.3;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -22,6 +23,9 @@ namespace SemanticXamlPrint.Parser.Components
                         break;
                     case "borderstyle":
                         BorderStyle = value?.Trim();
+                        break;
+                    case "borderwidth":
+                        BorderWidth = (double.TryParse(value, out double width) && width > 0) ? width : 0.3;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

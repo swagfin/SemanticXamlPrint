@@ -99,11 +99,11 @@ namespace SemanticXamlPrint.PDF.NetCore
                 //# Check if Drawing Border
                 if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
                 {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, currentY - y_before_grid);
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, (currentY - y_before_grid), gridComponent.BorderWidth);
                     float current_x = currentX;
                     for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
                     {
-                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], currentY - y_before_grid);
+                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], (currentY - y_before_grid), gridComponent.BorderWidth);
                         current_x += columnWidths[colIndex];
                     }
                 }
@@ -191,9 +191,9 @@ namespace SemanticXamlPrint.PDF.NetCore
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
             return (int)newHeight;
         }
-        public static int DrawRectangleAndReturnHeight(this XGraphics gfx, XDashStyle dashStyle, double x, double y, double width, double height)
+        public static int DrawRectangleAndReturnHeight(this XGraphics gfx, XDashStyle dashStyle, double x, double y, double width, double height, double lineWidth = 0.3)
         {
-            XPen pen = new XPen(XColors.Black)
+            XPen pen = new XPen(XColors.Black, lineWidth)
             {
                 DashStyle = dashStyle
             };

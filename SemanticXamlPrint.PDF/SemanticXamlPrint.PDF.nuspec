@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>SemanticXamlPrintPDF</id>
-		<version>3.3.2</version>
+		<version>3.3.3</version>
 		<title>SemanticXamlPrint.PDF</title>
 		<authors>Crudsoft Technologies</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>

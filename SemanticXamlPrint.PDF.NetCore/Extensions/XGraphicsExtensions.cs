@@ -193,9 +193,10 @@ namespace SemanticXamlPrint.PDF.NetCore
         }
         public static int DrawRectangleAndReturnHeight(this XGraphics gfx, XDashStyle dashStyle, double x, double y, double width, double height)
         {
-            XPen pen = new XPen(XColors.Black)
+            XPen pen = new XPen(XColors.Black, 0.3)
             {
-                DashStyle = dashStyle
+                DashStyle = dashStyle,
+                Overprint = false
             };
             gfx.DrawRectangle(pen, x, y, width, height);
             return (int)height;

@@ -4,6 +4,7 @@ using SemanticXamlPrint.Parser.Components;
 using SemanticXamlPrint.PDF.NetCore;
 using System;
 using System.IO;
+using System.Text;
 
 namespace SemanticXamlPrint.DemoNetCore
 {
@@ -36,19 +37,22 @@ namespace SemanticXamlPrint.DemoNetCore
                 //}
                 ////####  PDF SHARP #####
 
-                //              var stringBuilder = new StringBuilder();
-                //              for (int i = 15; i < 100; i++)
-                //              {
-                //                  string template = @$"	<GridRow>
-                //	<Data Grid.Column=""0"" Align=""Center"">{i}</Data>
-                //	<Data Grid.Column=""1"" TextWrap=""True"">Product {i}</Data>
-                //	<Data Grid.Column=""2"" Align=""Right"">{100 + i}.00</Data>
-                //</GridRow>";
+                var stringBuilder = new StringBuilder();
+                for (int i = 1; i < 100; i++)
+                {
+                    string template = @$"<Grid ColumnWidths=""1*4*2"" BorderStyle=""Solid"">
+                <GridRow>
+                	<Data Grid.Column=""0"" Align=""Center"">{i}</Data>
+                	<Data Grid.Column=""1"" TextWrap=""True"">Product {i}</Data>
+                	<Data Grid.Column=""2"" Align=""Right"">{100 + i}.00</Data>
+                </GridRow>
+</Grid>
+";
 
-                //                  stringBuilder.Append(template);
-                //              }
+                    stringBuilder.Append(template);
+                }
 
-                //              string contents = stringBuilder.ToString();
+                string contents = stringBuilder.ToString();
 
                 //####  PDF SHARP #####
                 using (PdfDocument document = new PdfDocument())

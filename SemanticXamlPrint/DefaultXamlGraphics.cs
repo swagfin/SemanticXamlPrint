@@ -16,11 +16,11 @@ namespace SemanticXamlPrint
             TemplateComponent Template = (TemplateComponent)xamlComponent;
             ComponentDrawingFormatting TemplateFormatting = Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             float _currentLineY = yPositionDraw + Template.MarginTop;
+            double pageHeight = eventArgs.PageSettings.PaperSize.Height - 2 * Template.MarginTop;
             //Draw Root Component Children
             CurrentChildIndex = RequestedMorePage ? CurrentChildIndex : 0;
             for (int i = CurrentChildIndex; i < Template?.Children?.Count; i++)
             {
-                double pageHeight = eventArgs.PageSettings.PaperSize.Height - 2 * Template.MarginTop;
                 if (_currentLineY > pageHeight)
                 {
                     eventArgs.HasMorePages = true;

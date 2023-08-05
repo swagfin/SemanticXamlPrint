@@ -32,7 +32,7 @@ https://nuget.org/packages/SemanticXamlPrint
             printDocument.PrintPage += (obj, eventAgs) =>
             {
                 //Use SemanticXamlPrint Draw Extension 
-                eventAgs.Graphics.DrawXamlComponent(xamlComponent);
+		eventAgs.DrawXamlComponent(xamlComponent);
             };
             printDocument.Print();
 

@@ -2,9 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyVersion>3.3.3.1</AssemblyVersion>
-		<FileVersion>3.3.3.1</FileVersion>
-		<Version>3.3.3</Version>
+		<AssemblyVersion>4.0.1.1</AssemblyVersion>
+		<FileVersion>4.0.1.1</FileVersion>
+		<Version>4.0.1</Version>
 		<ApplicationIcon>SemanticXamlPrint.ico</ApplicationIcon>
 		<PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>

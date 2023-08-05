@@ -27,7 +27,7 @@ namespace SemanticXamlPrint.Demo
                 printDocument.PrintPage += (obj, eventAgs) =>
                 {
                     //Use Xaml Draw Extension to Print
-                    eventAgs.Graphics.DrawXamlComponent(xamlComponent);
+                    eventAgs.DrawXamlComponent(xamlComponent);
                 };
                 printDocument.Print();
                 //####  SYSTEM DRAWING #####

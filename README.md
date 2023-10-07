@@ -82,3 +82,59 @@ https://nuget.org/packages/SemanticXamlPrint
 
 ## Check out more examples on the Demo Project
 [SemanticXamlPrint.Demo](https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.Demo)
+
+## Supported Xaml Components
+
+### 1. Template
+
+```xaml
+<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+   <!--Other Components Here-->
+</Template>
+```
+
+### 2. Data
+```xaml
+<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">I like to Text Wrap</Data>
+```
+
+### 3. Image
+
+```xaml
+<Image Source="logo.png" Width="100" Height="100" />
+```
+
+### 4. Grid + GridRow
+
+```xaml
+<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
+	<GridRow>
+		<Data Grid.Column="0" FontStyle="Bold">Column 1</Data>
+		<Data Grid.Column="1" FontStyle="Bold">Column 2</Data>
+		<Data Grid.Column="2" FontStyle="Bold" Align="Right">Column 3</Data>
+	</GridRow>
+</Grid>
+```
+
+### 5. DataRow + DataRowCell
+
+```xaml
+<DataRow>
+	<DataRowCell FontStyle="Bold" X="0">ITEM DESC.</DataRowCell>
+	<DataRowCell FontStyle="Bold" X="120">RATE</DataRowCell>
+	<DataRowCell FontStyle="Bold" X="170">QTY</DataRowCell>
+	<DataRowCell FontStyle="Bold" X="220">AMOUNT</DataRowCell>
+</DataRow>
+```
+
+### 6. Line
+
+```xaml
+<Line Style="Dash" />
+```
+
+### 7. LineBreak
+
+```xaml
+<LineBreak/>
+```

@@ -1,4 +1,4 @@
-﻿<Template font="Calibri" FontSize="10">
+﻿<Template font="Calibri" FontSize="10" Document="A4">
 
 	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
 		<GridRow>

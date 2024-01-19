@@ -9,11 +9,10 @@ namespace SemanticXamlPrint.Parser.Components
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         //Component Attributes
-        public double MaxWidth { get; set; } = 0;
-        public double MarginTop { get; set; } = 10;
-        public double MarginLeft { get; set; } = 0;
-        public double MarginRight { get; set; } = 0;
-        public double MarginBottom { get; set; } = 0;
+        public float MarginTop { get; set; } = 10;
+        public float MarginLeft { get; set; } = 0;
+        public float MarginRight { get; set; } = 0;
+        public float MarginBottom { get; set; } = 0;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -21,20 +20,17 @@ namespace SemanticXamlPrint.Parser.Components
                 if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
-                    case "maxwidth":
-                        MaxWidth = (double.TryParse(value, out double maxWidth) && maxWidth > 0) ? maxWidth : 0;
-                        break;
                     case "marginleft":
-                        MarginLeft = (double.TryParse(value, out double marginLeft) && marginLeft > 0) ? marginLeft : 0;
+                        MarginLeft = (float.TryParse(value, out float marginLeft) && marginLeft > 0) ? marginLeft : 0;
                         break;
                     case "margintop":
-                        MarginTop = (double.TryParse(value, out double marginTop) && marginTop > 0) ? marginTop : 0;
+                        MarginTop = (float.TryParse(value, out float marginTop) && marginTop > 0) ? marginTop : 0;
                         break;
                     case "marginright":
-                        MarginRight = (double.TryParse(value, out double marginRight) && marginRight > 0) ? marginRight : 0;
+                        MarginRight = (float.TryParse(value, out float marginRight) && marginRight > 0) ? marginRight : 0;
                         break;
                     case "marginbottom":
-                        MarginBottom = (double.TryParse(value, out double marginBottom) && marginBottom > 0) ? marginBottom : 0;
+                        MarginBottom = (float.TryParse(value, out float marginBottom) && marginBottom > 0) ? marginBottom : 0;
                         break;
                     case "document":
                         if (value.Equals("A4", StringComparison.CurrentCultureIgnoreCase))

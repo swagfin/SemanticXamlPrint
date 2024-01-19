@@ -13,13 +13,13 @@ namespace SemanticXamlPrint
         {
             if (xamlComponent == null) return yPositionDraw;
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{xamlComponent.Name}]");
-            TemplateComponent Template = (TemplateComponent)xamlComponent;
-            ComponentDrawingFormatting TemplateFormatting = Template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
-            float _currentLineY = yPositionDraw + (float)Template.MarginTop;
-            double pageHeight = eventArgs.PageSettings.PaperSize.Height - Template.MarginBottom;
+            TemplateComponent template = (TemplateComponent)xamlComponent;
+            ComponentDrawingFormatting TemplateFormatting = template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
+            float _currentLineY = yPositionDraw + (float)template.MarginTop;
+            double pageHeight = eventArgs.PageSettings.PaperSize.Height - template.MarginBottom;
             //Draw Root Component Children
             CurrentChildIndex = RequestedMorePage ? CurrentChildIndex : 0;
-            for (int i = CurrentChildIndex; i < Template?.Children?.Count; i++)
+            for (int i = CurrentChildIndex; i < template?.Children?.Count; i++)
             {
                 if (_currentLineY > pageHeight)
                 {
@@ -32,7 +32,7 @@ namespace SemanticXamlPrint
                     eventArgs.HasMorePages = false;
                     RequestedMorePage = false;
                 }
-                _currentLineY = eventArgs.Graphics.DrawComponent(Template?.Children[i], TemplateFormatting, 0, _currentLineY, eventArgs.Graphics.VisibleClipBounds.Width);
+                _currentLineY = eventArgs.Graphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, eventArgs.Graphics.VisibleClipBounds.Width - (template.MarginLeft + template.MarginRight));
                 CurrentChildIndex++;
             }
             return _currentLineY;

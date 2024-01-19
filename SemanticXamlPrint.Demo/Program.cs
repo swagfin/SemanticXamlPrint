@@ -18,7 +18,7 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 //Get Template Contents
-                byte[] xamlFileBytes = File.ReadAllBytes("custom.data.template");
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.excessgrid.template");
                 //Use Default Parser 
                 IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
 
@@ -29,7 +29,6 @@ namespace SemanticXamlPrint.Demo
                     //Use Xaml Draw Extension to Print
                     eventAgs.DrawXamlComponent(xamlComponent);
                 };
-                printDocument.Print();
                 printDocument.Print();
                 //####  SYSTEM DRAWING #####
 

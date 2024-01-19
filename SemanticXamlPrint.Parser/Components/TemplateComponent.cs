@@ -9,8 +9,11 @@ namespace SemanticXamlPrint.Parser.Components
         public Type Type => this.GetType();
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         //Component Attributes
-        public int MaxWidth { get; set; } = 0;
-        public int MarginTop { get; set; } = 0;
+        public double MaxWidth { get; set; } = 0;
+        public double MarginTop { get; set; } = 0;
+        public double MarginLeft { get; set; } = 0;
+        public double MarginRight { get; set; } = 0;
+        public double MarginBottom { get; set; } = 0;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -19,10 +22,28 @@ namespace SemanticXamlPrint.Parser.Components
                 switch (propertyName)
                 {
                     case "maxwidth":
-                        MaxWidth = (int.TryParse(value, out int maxWidth) && maxWidth > 0) ? maxWidth : 0;
+                        MaxWidth = (double.TryParse(value, out double maxWidth) && maxWidth > 0) ? maxWidth : 0;
+                        break;
+                    case "marginleft":
+                        MarginLeft = (double.TryParse(value, out double marginLeft) && marginLeft > 0) ? marginLeft : 0;
                         break;
                     case "margintop":
-                        MarginTop = (int.TryParse(value, out int marginTop) && marginTop > 0) ? marginTop : 0;
+                        MarginTop = (double.TryParse(value, out double marginTop) && marginTop > 0) ? marginTop : 0;
+                        break;
+                    case "marginright":
+                        MarginRight = (double.TryParse(value, out double marginRight) && marginRight > 0) ? marginRight : 0;
+                        break;
+                    case "marginbottom":
+                        MarginBottom = (double.TryParse(value, out double marginBottom) && marginBottom > 0) ? marginBottom : 0;
+                        break;
+                    case "document":
+                        if (value.Equals("A4", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            this.MarginTop = 100;
+                            this.MarginBottom = 100;
+                            this.MarginLeft = 50;
+                            this.MarginRight = 50;
+                        }
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

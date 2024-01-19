@@ -1,5 +1,4 @@
-﻿using PdfSharp.Drawing;
-using PdfSharp.Pdf;
+﻿using PdfSharp.Pdf;
 using SemanticXamlPrint.Parser;
 using SemanticXamlPrint.Parser.Components;
 using SemanticXamlPrint.PDF;
@@ -36,12 +35,8 @@ namespace SemanticXamlPrint.Demo
                 //####  PDF SHARP #####
                 using (PdfDocument document = new PdfDocument())
                 {
-                    // Add a page to the document
-                    PdfPage page = document.AddPage();
-                    // Create a graphics object for the page
-                    XGraphics xgraphics = XGraphics.FromPdfPage(page);
                     //Use Xaml Draw Extension to Generate PDF
-                    xgraphics.DrawXamlComponent(xamlComponent);
+                    document.DrawXamlComponent(xamlComponent);
                     // Save the PDF document to a file
                     document.Save("output.pdf");
                 }

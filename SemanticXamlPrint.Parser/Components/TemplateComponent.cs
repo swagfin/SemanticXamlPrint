@@ -10,7 +10,7 @@ namespace SemanticXamlPrint.Parser.Components
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         //Component Attributes
         public double MaxWidth { get; set; } = 0;
-        public double MarginTop { get; set; } = 0;
+        public double MarginTop { get; set; } = 10;
         public double MarginLeft { get; set; } = 0;
         public double MarginRight { get; set; } = 0;
         public double MarginBottom { get; set; } = 0;

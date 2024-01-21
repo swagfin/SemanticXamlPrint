@@ -11,26 +11,26 @@ namespace SemanticXamlPrint.PDF.NetCore
         {
             if (xamlComponent == null) return yPositionDraw;
             if (xamlComponent.Type != typeof(TemplateComponent)) throw new Exception($"Root Component must be that of a [{nameof(TemplateComponent)}] but currently is: [{xamlComponent.Name}]");
-            TemplateComponent Template = (TemplateComponent)xamlComponent;
-            ComponentXDrawingFormatting TemplateFormatting = Template.GetPdfXDrawingProperties(XDefaults.Formatting) ?? throw new Exception("Default template properties are missing");
-            float _currentLineY = yPositionDraw + (float)Template.MarginTop;
+            TemplateComponent template = (TemplateComponent)xamlComponent;
+            ComponentXDrawingFormatting TemplateFormatting = template.GetPdfXDrawingProperties(XDefaults.Formatting) ?? throw new Exception("Default template properties are missing");
+            float _currentLineY = yPositionDraw + (float)template.MarginTop;
             //create default Page
             // Add a page to the document
             PdfPage page = document.AddPage();
             page.Orientation = pageOrientation;
             //Draw Root Component Children
-            for (int i = 0; i < Template?.Children?.Count; i++)
+            for (int i = 0; i < template?.Children?.Count; i++)
             {
-                double pageHeight = page.Height.Point - Template.MarginBottom;
+                double pageHeight = page.Height.Point - template.MarginBottom;
                 if (_currentLineY > pageHeight)
                 {
                     page = document.AddPage();
                     page.Orientation = pageOrientation;
-                    _currentLineY = yPositionDraw + (float)Template.MarginTop;
+                    _currentLineY = yPositionDraw + (float)template.MarginTop;
                 }
                 //Draw Component
                 using (XGraphics xgraphics = XGraphics.FromPdfPage(page))
-                    _currentLineY = xgraphics.DrawComponent(Template?.Children[i], TemplateFormatting, 0, _currentLineY, (float)xgraphics.PageSize.Width);
+                    _currentLineY = xgraphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, (float)xgraphics.PageSize.Width - (template.MarginLeft + template.MarginRight));
             }
             return _currentLineY;
         }

@@ -1,5 +1,4 @@
-﻿using PdfSharp.Drawing;
-using PdfSharp.Pdf;
+﻿using PdfSharp.Pdf;
 using SemanticXamlPrint.Parser;
 using SemanticXamlPrint.Parser.Components;
 using SemanticXamlPrint.PDF;
@@ -18,7 +17,7 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 //Get Template Contents
-                byte[] xamlFileBytes = File.ReadAllBytes("custom.data.template");
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.excessgrid.template");
                 //Use Default Parser 
                 IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
 
@@ -30,19 +29,14 @@ namespace SemanticXamlPrint.Demo
                     eventAgs.DrawXamlComponent(xamlComponent);
                 };
                 printDocument.Print();
-                printDocument.Print();
                 //####  SYSTEM DRAWING #####
 
 
                 //####  PDF SHARP #####
                 using (PdfDocument document = new PdfDocument())
                 {
-                    // Add a page to the document
-                    PdfPage page = document.AddPage();
-                    // Create a graphics object for the page
-                    XGraphics xgraphics = XGraphics.FromPdfPage(page);
                     //Use Xaml Draw Extension to Generate PDF
-                    xgraphics.DrawXamlComponent(xamlComponent);
+                    document.DrawXamlComponent(xamlComponent);
                     // Save the PDF document to a file
                     document.Save("output.pdf");
                 }

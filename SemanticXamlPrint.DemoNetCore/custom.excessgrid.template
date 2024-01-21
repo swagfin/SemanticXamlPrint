@@ -1,4 +1,4 @@
-﻿<Template font="Calibri" FontSize="10" MarginTop="10">
+﻿<Template font="Calibri" FontSize="10" Document="A4">
 
 	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
 		<GridRow>
@@ -706,8 +706,8 @@
 
 
 	<!--Templates with Many Grids -->
-	
-	
+
+
 	<LineBreak/>
 	<LineBreak/>
 	<Data>This Marks the End of the Document</Data>

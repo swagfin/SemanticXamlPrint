@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>SemanticXamlPrintPDFNetCore</id>
-		<version>4.0.1</version>
+		<version>4.0.2</version>
 		<title>SemanticXamlPrint.PDF.NetCore</title>
 		<authors>Crudsoft Technologies</authors>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>

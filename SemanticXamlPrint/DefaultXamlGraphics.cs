@@ -1,4 +1,5 @@
 using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Layout;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -41,6 +42,10 @@ namespace SemanticXamlPrint
             ComponentDrawingFormatting TemplateFormatting = template.GetSystemDrawingProperties(Defaults.Formatting) ?? throw new Exception("Default template properties are missing");
             float _currentLineY = yPositionDraw + (float)template.MarginTop;
             double pageHeight = eventArgs.PageSettings.PaperSize.Height - template.MarginBottom;
+            RenderLayoutContext layoutContext = new RenderLayoutContext
+            {
+                PageBottomY = (float)pageHeight
+            };
             PrintJobState state = GetPrintState(eventArgs.Graphics);
             //Draw Root Component Children
             state.CurrentChildIndex = state.RequestedMorePage ? state.CurrentChildIndex : 0;
@@ -57,7 +62,7 @@ namespace SemanticXamlPrint
                     eventArgs.HasMorePages = false;
                     state.RequestedMorePage = false;
                 }
-                _currentLineY = eventArgs.Graphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, eventArgs.Graphics.VisibleClipBounds.Width - (template.MarginLeft + template.MarginRight));
+                _currentLineY = eventArgs.Graphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, eventArgs.Graphics.VisibleClipBounds.Width - (template.MarginLeft + template.MarginRight), layoutContext);
                 state.CurrentChildIndex++;
             }
             RemovePrintState(eventArgs.Graphics);

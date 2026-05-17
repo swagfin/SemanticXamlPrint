@@ -33,5 +33,30 @@ namespace SemanticXamlPrint.Tests.Parser
 
             Assert.Contains("Invalid node name", exception.Message);
         }
+
+        [Fact]
+        public void Parse_WithGridMinHeight_MapsProperty()
+        {
+            string xml = "<Template><Grid ColumnWidths='1*1' MinHeight='240'><GridRow><Data Grid.Column='0'>A</Data><Data Grid.Column='1'>B</Data></GridRow></Grid></Template>";
+            byte[] bytes = Encoding.UTF8.GetBytes(xml);
+
+            IXamlComponent component = DefaultXamlParser.Parse(bytes);
+            GridComponent gridComponent = (GridComponent)component.Children[0];
+
+            Assert.Equal(240f, gridComponent.MinHeight);
+        }
+
+        [Fact]
+        public void Parse_WithGridFillRemaining_MapsHeightModeAndBottomReserve()
+        {
+            string xml = "<Template><Grid ColumnWidths='1*1' HeightMode='FillRemaining' BottomReserve='48'><GridRow><Data Grid.Column='0'>A</Data><Data Grid.Column='1'>B</Data></GridRow></Grid></Template>";
+            byte[] bytes = Encoding.UTF8.GetBytes(xml);
+
+            IXamlComponent component = DefaultXamlParser.Parse(bytes);
+            GridComponent gridComponent = (GridComponent)component.Children[0];
+
+            Assert.Equal("FillRemaining", gridComponent.HeightMode);
+            Assert.Equal(48f, gridComponent.BottomReserve);
+        }
     }
 }

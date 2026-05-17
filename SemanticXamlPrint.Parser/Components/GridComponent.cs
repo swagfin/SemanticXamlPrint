@@ -11,6 +11,9 @@ namespace SemanticXamlPrint.Parser.Components
         public string ColumnWidths { get; set; } = null;
         public string BorderStyle { get; set; }
         public double BorderWidth { get; set; } = 0.3;
+        public float MinHeight { get; set; } = 0;
+        public string HeightMode { get; set; } = null;
+        public float BottomReserve { get; set; } = 0;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -26,6 +29,16 @@ namespace SemanticXamlPrint.Parser.Components
                         break;
                     case "borderwidth":
                         BorderWidth = (double.TryParse(value, out double width) && width > 0) ? width : 0.3;
+                        break;
+                    case "minheight":
+                    case "height":
+                        MinHeight = (float.TryParse(value, out float minHeight) && minHeight > 0) ? minHeight : 0;
+                        break;
+                    case "heightmode":
+                        HeightMode = value?.Trim();
+                        break;
+                    case "bottomreserve":
+                        BottomReserve = (float.TryParse(value, out float bottomReserve) && bottomReserve > 0) ? bottomReserve : 0;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

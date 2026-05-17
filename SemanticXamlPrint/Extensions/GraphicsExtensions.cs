@@ -11,7 +11,7 @@ namespace SemanticXamlPrint
 {
     internal static class GraphicsExtensions
     {
-        private delegate float ComponentRenderer(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth);
+        private delegate float ComponentRenderer(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext);
 
         private static readonly Dictionary<Type, ComponentRenderer> Renderers = new Dictionary<Type, ComponentRenderer>
         {
@@ -24,20 +24,20 @@ namespace SemanticXamlPrint
             { typeof(GridComponent), RenderGrid }
         };
 
-        public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        public static float DrawComponent(this Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext = null)
         {
             float boundedMaxLayoutWidth = maxLayoutWidth == 0 ? graphics.VisibleClipBounds.Width : maxLayoutWidth;
             if (component == null) return currentY;
             if (!Renderers.TryGetValue(component.Type, out ComponentRenderer renderer)) return currentY;
-            return renderer(graphics, component, templateFormatting, currentX, currentY, boundedMaxLayoutWidth);
+            return renderer(graphics, component, templateFormatting, currentX, currentY, boundedMaxLayoutWidth, layoutContext);
         }
 
-        private static float RenderLineBreak(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderLineBreak(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             return currentY + 3;
         }
 
-        private static float RenderLine(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderLine(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             LineComponent lineComponent = (LineComponent)component;
             float newY = currentY + 3;
@@ -45,7 +45,7 @@ namespace SemanticXamlPrint
             return newY + 3;
         }
 
-        private static float RenderImage(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderImage(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             ImageComponent imageComponent = (ImageComponent)component;
             string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
@@ -56,20 +56,20 @@ namespace SemanticXamlPrint
             }
         }
 
-        private static float RenderQRCode(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderQRCode(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             QRCodeComponent qrCodeComponent = (QRCodeComponent)component;
             return currentY + graphics.DrawQRCodeCenteredAndReturnHeight(qrCodeComponent.Text, currentX, currentY, qrCodeComponent.Width, qrCodeComponent.Height, maxLayoutWidth);
         }
 
-        private static float RenderData(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderData(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             DataComponent dataComponent = (DataComponent)component;
             ComponentDrawingFormatting format = component.GetSystemDrawingProperties(templateFormatting);
             return currentY + graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, format, currentX, currentY, (int)maxLayoutWidth);
         }
 
-        private static float RenderCells(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderCells(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             CellsComponent cellsComponent = (CellsComponent)component;
             ComponentDrawingFormatting rowFormat = component.GetSystemDrawingProperties(templateFormatting);
@@ -87,7 +87,7 @@ namespace SemanticXamlPrint
             return currentY + additionalHeight;
         }
 
-        private static float RenderGrid(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private static float RenderGrid(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
         {
             GridComponent gridComponent = (GridComponent)component;
             ComponentDrawingFormatting gridFormat = component.GetSystemDrawingProperties(templateFormatting);
@@ -107,14 +107,19 @@ namespace SemanticXamlPrint
                     IXamlComponent componentUnderColumn = rowPlan.ComponentsByColumn[columnIndex];
                     if (componentUnderColumn != null)
                     {
-                        float newY = graphics.DrawComponent(componentUnderColumn, rowFormat, rowCurrentX, rowStartY, layoutPlan.ColumnWidths[columnIndex]);
+                        float newY = graphics.DrawComponent(componentUnderColumn, rowFormat, rowCurrentX, rowStartY, layoutPlan.ColumnWidths[columnIndex], layoutContext);
                         longestColumnY = (newY > longestColumnY) ? newY : longestColumnY;
                     }
                     rowCurrentX += layoutPlan.ColumnWidths[columnIndex];
                 }
             }
 
-            float currentGridY = longestColumnY;
+            float currentGridY = Math.Max(longestColumnY, yBeforeGrid + gridComponent.MinHeight);
+            if (!string.IsNullOrEmpty(gridComponent.HeightMode) && gridComponent.HeightMode.Equals("fillremaining", StringComparison.OrdinalIgnoreCase) && layoutContext != null)
+            {
+                float fillTargetY = layoutContext.PageBottomY - gridComponent.BottomReserve;
+                currentGridY = Math.Max(currentGridY, fillTargetY);
+            }
             if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
             {
                 graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, yBeforeGrid, (int)maxLayoutWidth, (currentGridY - yBeforeGrid), gridComponent.BorderWidth);

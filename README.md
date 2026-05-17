@@ -1,101 +1,152 @@
 # SemanticXamlPrint
 
-Simple Library to help you with creating receipts using simple Xaml like syntax. This library uses System.Drawing to generate and print receipts
+SemanticXamlPrint helps you build printable documents (receipts, invoices, reports) using a simple XML/XAML-like template.
 
-## Overview
+Instead of hardcoding drawing coordinates, you define your layout once and render it to:
+- `System.Drawing` print output
+- PDF (`PdfSharp`)
+- PDF for .NET Core (`PdfSharpCore`)
 
-* Generate a receipt i.e. Thermal 80mm receipt or A4 receipt
-* Uses Xaml like Syntax to generate a receipt template
+## Why Use It?
 
-## Install 
+- Fast template-driven document design
+- Great for thermal receipts and A4 layouts
+- Shared structure across Print and PDF outputs
+- Supports nested grids, text wrapping, images, QR codes, borders, and line breaks
+- Supports fixed-height or page-filling invoice item grids (A4-friendly)
 
-*NuGet Package*
-```
+## Install
+
+NuGet:
+
+```powershell
 Install-Package SemanticXamlPrint
 ```
+
+Package:
 https://nuget.org/packages/SemanticXamlPrint
 
-## Usage Example
+## Quick Integration Guide
 
-```cs
-    class Program
-    {
-        static void Main(string[] args)
-        {
+### 1. Create a template file
 
-            //Get Template Contents
-            byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
-            //Use SemanticXamlPrint Parser 
-            IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
+Example `invoice.template`:
 
-            PrintDocument printDocument = new PrintDocument();
-            printDocument.PrintPage += (obj, eventAgs) =>
-            {
-                //Use SemanticXamlPrint Draw Extension 
-		eventAgs.DrawXamlComponent(xamlComponent);
-            };
-            printDocument.Print();
-
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
-    }
-```
-
-## Results
-
-![Result](https://github.com/swagfin/SemanticXamlPrint/blob/a3a0b443bc8e1c7d3eb9ee6b9e9a92643a14901d/Screenshots/sample-grid.jpg)
-
-
-## File custom.grid.template
 ```xaml
-<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
+<Template Font="Calibri" FontSize="10" Document="A4" MarginTop="20" MarginBottom="20" MarginLeft="20" MarginRight="20">
 
-	<Grid ColumnWidths="1*4*2" BorderStyle="Solid">
-		<GridRow>
-			<Data Grid.Column="0" FontStyle="Bold" Align="Center">QTY</Data>
-			<Data Grid.Column="1" FontStyle="Bold">ITEM DESC.</Data>
-			<Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
-		</GridRow>
-	</Grid>
+  <Grid ColumnWidths="6*1.5*1.5*1.5" BorderStyle="Solid" HeightMode="FillRemaining" BottomReserve="120">
+    <GridRow>
+      <Data Grid.Column="0" FontStyle="Bold" Align="Center">DESCRIPTION</Data>
+      <Data Grid.Column="1" FontStyle="Bold" Align="Center">HOURS</Data>
+      <Data Grid.Column="2" FontStyle="Bold" Align="Center">RATE</Data>
+      <Data Grid.Column="3" FontStyle="Bold" Align="Center">AMOUNT</Data>
+    </GridRow>
 
-	<Grid ColumnWidths="1*4*2">
-		<GridRow>
-			<Data Grid.Column="0" Align="Center">1</Data>
-			<Data Grid.Column="1" TextWrap ="True">Chips with Vegetable Salad at a Discounted Price</Data>
-			<Data Grid.Column="2" Align="Right">250.00</Data>
-		</GridRow>
+    <GridRow>
+      <Data Grid.Column="0">Test Example</Data>
+      <Data Grid.Column="1" Align="Center">2</Data>
+      <Data Grid.Column="2" Align="Right">1,200</Data>
+      <Data Grid.Column="3" Align="Right">2,400</Data>
+    </GridRow>
+  </Grid>
 
-		<GridRow>
-			<Data Grid.Column="0" Align="Center">1</Data>
-			<Data Grid.Column="1" TextWrap ="True">HEINKEN</Data>
-			<Data Grid.Column="2" Align="Right">300.00</Data>
-		</GridRow>
-		<GridRow>
-			<Data Grid.Column="0" Align="Center">1</Data>
-			<Data Grid.Column="1" TextWrap ="True">PILSNER</Data>
-			<Data Grid.Column="2" Align="Right">250.00</Data>
-		</GridRow>
-	</Grid>
 </Template>
 ```
 
-## Check out more examples on the Demo Project
-[SemanticXamlPrint.Demo](https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.Demo)
+### 2. Parse the template
 
-## Supported Xaml Components
+```csharp
+byte[] xamlFileBytes = File.ReadAllBytes("invoice.template");
+IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
+```
+
+### 3. Render to your target
+
+PrintDocument (`System.Drawing`):
+
+```csharp
+PrintDocument printDocument = new PrintDocument();
+printDocument.PrintPage += (sender, eventArgs) =>
+{
+    eventArgs.DrawXamlComponent(xamlComponent);
+};
+printDocument.Print();
+```
+
+PDF (`SemanticXamlPrint.PDF`):
+
+```csharp
+using (PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument())
+{
+    document.DrawXamlComponent(xamlComponent);
+    document.Save("output.pdf");
+}
+```
+
+PDF .NET Core (`SemanticXamlPrint.PDF.NetCore`):
+
+```csharp
+using (PdfSharpCore.Pdf.PdfDocument document = new PdfSharpCore.Pdf.PdfDocument())
+{
+    document.DrawXamlComponent(xamlComponent);
+    document.Save("outputcore.pdf");
+}
+```
+
+## A4 Invoice Grid Stretch (Fill Remaining Page)
+
+For invoice designs where the items table should occupy the remaining page height:
+
+```xaml
+<Grid ColumnWidths="6*1.5*1.5*1.5" BorderStyle="Solid" HeightMode="FillRemaining" BottomReserve="120">
+  <!-- header + item rows -->
+</Grid>
+```
+
+Notes:
+- `HeightMode="FillRemaining"`: expands the grid down to page bottom
+- `BottomReserve="120"`: keeps free space for totals/footer/signature
+- `MinHeight="300"`: optional minimum grid height fallback
+
+## Usage Example (Basic Receipt)
+
+```csharp
+class Program
+{
+    static void Main(string[] args)
+    {
+        byte[] xamlFileBytes = File.ReadAllBytes("custom.grid.template");
+        IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
+
+        PrintDocument printDocument = new PrintDocument();
+        printDocument.PrintPage += (obj, eventArgs) =>
+        {
+            eventArgs.DrawXamlComponent(xamlComponent);
+        };
+        printDocument.Print();
+    }
+}
+```
+
+## Result
+
+![Result](https://github.com/swagfin/SemanticXamlPrint/blob/a3a0b443bc8e1c7d3eb9ee6b9e9a92643a14901d/Screenshots/sample-grid.jpg)
+
+## Supported Template Components
 
 ### 1. Template
 
 ```xaml
-<Template font="Calibri" FontSize="10" MaxWidth="290" MarginTop="10">
-   <!--Other Components Here-->
+<Template Font="Calibri" FontSize="10" MarginTop="10">
+   <!-- Components -->
 </Template>
 ```
 
 ### 2. Data
+
 ```xaml
-<Data FontStyle="Bold" FontSize="11" TextWrap ="True" Align="Center">I like to Text Wrap</Data>
+<Data FontStyle="Bold" FontSize="11" TextWrap="True" Align="Center">Centered wrapped text</Data>
 ```
 
 ### 3. Image
@@ -108,33 +159,129 @@ https://nuget.org/packages/SemanticXamlPrint
 
 ```xaml
 <Grid ColumnWidths="1*4*2" BorderStyle="Solid">
-	<GridRow>
-		<Data Grid.Column="0" FontStyle="Bold">Column 1</Data>
-		<Data Grid.Column="1" FontStyle="Bold">Column 2</Data>
-		<Data Grid.Column="2" FontStyle="Bold" Align="Right">Column 3</Data>
-	</GridRow>
+  <GridRow>
+    <Data Grid.Column="0" FontStyle="Bold">Column 1</Data>
+    <Data Grid.Column="1" FontStyle="Bold">Column 2</Data>
+    <Data Grid.Column="2" FontStyle="Bold" Align="Right">Column 3</Data>
+  </GridRow>
 </Grid>
 ```
 
-### 5. DataRow + DataRowCell
+### 5. Cells + Cell
 
 ```xaml
-<DataRow>
-	<DataRowCell FontStyle="Bold" X="0">ITEM DESC.</DataRowCell>
-	<DataRowCell FontStyle="Bold" X="120">RATE</DataRowCell>
-	<DataRowCell FontStyle="Bold" X="170">QTY</DataRowCell>
-	<DataRowCell FontStyle="Bold" X="220">AMOUNT</DataRowCell>
-</DataRow>
+<Cells>
+  <Cell FontStyle="Bold" X="0">ITEM DESC.</Cell>
+  <Cell FontStyle="Bold" X="120">RATE</Cell>
+  <Cell FontStyle="Bold" X="170">QTY</Cell>
+  <Cell FontStyle="Bold" X="220">AMOUNT</Cell>
+</Cells>
 ```
 
-### 6. Line
+### 6. QRCode
+
+```xaml
+<QRCode Text="https://example.com/invoice/1001" Width="100" Height="100" />
+```
+
+### 7. Line
 
 ```xaml
 <Line Style="Dash" />
 ```
 
-### 7. LineBreak
+### 8. LineBreak
 
 ```xaml
-<LineBreak/>
+<LineBreak />
+```
+
+## More Examples
+
+Demo projects:
+- https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.Demo
+- https://github.com/swagfin/SemanticXamlPrint/tree/master/SemanticXamlPrint.DemoNetCore
+
+## Starter Templates
+
+Use these as quick copy/paste starting points.
+
+### 1. Receipt (Thermal Style)
+
+```xaml
+<Template Font="Calibri" FontSize="10" MarginTop="10" MarginLeft="5" MarginRight="5">
+  <Data Align="Center" FontStyle="Bold" FontSize="12">MY STORE</Data>
+  <Data Align="Center">123 Main Street</Data>
+  <LineBreak />
+  <Line />
+  <Grid ColumnWidths="1*4*2">
+    <GridRow>
+      <Data Grid.Column="0" FontStyle="Bold">QTY</Data>
+      <Data Grid.Column="1" FontStyle="Bold">ITEM</Data>
+      <Data Grid.Column="2" FontStyle="Bold" Align="Right">AMOUNT</Data>
+    </GridRow>
+    <GridRow>
+      <Data Grid.Column="0">1</Data>
+      <Data Grid.Column="1" TextWrap="True">Coffee</Data>
+      <Data Grid.Column="2" Align="Right">3.50</Data>
+    </GridRow>
+  </Grid>
+  <Line />
+  <Data Align="Right" FontStyle="Bold">TOTAL: 3.50</Data>
+  <LineBreak />
+  <Data Align="Center">Thank you!</Data>
+</Template>
+```
+
+### 2. Invoice (A4, Fill Remaining Items Grid)
+
+```xaml
+<Template Font="Calibri" FontSize="10" Document="A4" MarginTop="20" MarginBottom="20" MarginLeft="20" MarginRight="20">
+  <Grid ColumnWidths="1*1">
+    <GridRow>
+      <Data Grid.Column="0" FontStyle="Bold" FontSize="16">[Your Company Name]</Data>
+      <Data Grid.Column="1" Align="Right" FontStyle="Bold" FontSize="18">INVOICE</Data>
+    </GridRow>
+  </Grid>
+  <LineBreak />
+  <Grid ColumnWidths="6*1.5*1.5*1.5" BorderStyle="Solid" HeightMode="FillRemaining" BottomReserve="120">
+    <GridRow>
+      <Data Grid.Column="0" FontStyle="Bold" Align="Center">DESCRIPTION</Data>
+      <Data Grid.Column="1" FontStyle="Bold" Align="Center">HOURS</Data>
+      <Data Grid.Column="2" FontStyle="Bold" Align="Center">RATE</Data>
+      <Data Grid.Column="3" FontStyle="Bold" Align="Center">AMOUNT</Data>
+    </GridRow>
+    <GridRow>
+      <Data Grid.Column="0">Test Example</Data>
+      <Data Grid.Column="1" Align="Center">2</Data>
+      <Data Grid.Column="2" Align="Right">1,200</Data>
+      <Data Grid.Column="3" Align="Right">2,400</Data>
+    </GridRow>
+  </Grid>
+  <Data Align="Right" FontStyle="Bold">TOTAL: 2,400</Data>
+</Template>
+```
+
+### 3. Report (Section + Summary)
+
+```xaml
+<Template Font="Calibri" FontSize="10" Document="A4" MarginTop="20" MarginBottom="20" MarginLeft="20" MarginRight="20">
+  <Data FontStyle="Bold" FontSize="14">Monthly Sales Report</Data>
+  <Data>Period: January 2026</Data>
+  <LineBreak />
+  <Grid ColumnWidths="3*2*2" BorderStyle="Solid">
+    <GridRow>
+      <Data Grid.Column="0" FontStyle="Bold">Category</Data>
+      <Data Grid.Column="1" FontStyle="Bold" Align="Right">Orders</Data>
+      <Data Grid.Column="2" FontStyle="Bold" Align="Right">Revenue</Data>
+    </GridRow>
+    <GridRow>
+      <Data Grid.Column="0">Beverages</Data>
+      <Data Grid.Column="1" Align="Right">120</Data>
+      <Data Grid.Column="2" Align="Right">4,800.00</Data>
+    </GridRow>
+  </Grid>
+  <LineBreak />
+  <Data Align="Right" FontStyle="Bold">Grand Total: 4,800.00</Data>
+</Template>
 ```

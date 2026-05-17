@@ -1,6 +1,7 @@
 ﻿using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
 using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Layout;
 using System;
 
 namespace SemanticXamlPrint.PDF.NetCore
@@ -30,7 +31,13 @@ namespace SemanticXamlPrint.PDF.NetCore
                 }
                 //Draw Component
                 using (XGraphics xgraphics = XGraphics.FromPdfPage(page))
-                    _currentLineY = xgraphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, (float)xgraphics.PageSize.Width - (template.MarginLeft + template.MarginRight));
+                {
+                    RenderLayoutContext layoutContext = new RenderLayoutContext
+                    {
+                        PageBottomY = (float)pageHeight
+                    };
+                    _currentLineY = xgraphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, (float)xgraphics.PageSize.Width - (template.MarginLeft + template.MarginRight), layoutContext);
+                }
             }
             return _currentLineY;
         }

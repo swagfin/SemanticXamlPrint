@@ -1,4 +1,4 @@
-﻿using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Components;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -31,7 +31,10 @@ namespace SemanticXamlPrint
                 string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
                 if (File.Exists(imageSource))
                 {
-                    currentY += graphics.DrawImageCenteredAndReturnHeight(Image.FromFile(imageSource), currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    using (Image image = Image.FromFile(imageSource))
+                    {
+                        currentY += graphics.DrawImageCenteredAndReturnHeight(image, currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    }
                 }
             }
             else if (component.Type == typeof(QRCodeComponent))
@@ -88,9 +91,9 @@ namespace SemanticXamlPrint
                         {
                             float new_y = graphics.DrawComponent(componentUnderColumn, rowFmt, current_x, current_y, columnWidths[colIndex]);
                             longest_column_y = (new_y > longest_column_y) ? new_y : longest_column_y;
-                            //Next Column Starting X co-ordinates
-                            current_x += columnWidths[colIndex];
                         }
+                        //Next Column Starting X co-ordinates
+                        current_x += columnWidths[colIndex];
                     }
                 }
                 //set Highest Column Height
@@ -175,7 +178,7 @@ namespace SemanticXamlPrint
         public static int DrawImageCenteredAndReturnHeight(this Graphics graphics, Image image, float x, float y, float maxWidth, float maxHeight, float maxLayoutWith)
         {
 
-            float newWidth = Math.Min(image.Height, maxWidth > 0 ? maxWidth : image.Width);
+            float newWidth = Math.Min(image.Width, maxWidth > 0 ? maxWidth : image.Width);
             float newHeight = Math.Min(image.Height, maxHeight > 0 ? maxHeight : image.Height);
             float centeredX = x + (maxLayoutWith - newWidth) / 2;
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);

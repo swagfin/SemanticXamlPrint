@@ -1,4 +1,4 @@
-﻿using PdfSharp.Drawing;
+using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using SemanticXamlPrint.Parser.Components;
 using System;
@@ -32,7 +32,10 @@ namespace SemanticXamlPrint.PDF
                 string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
                 if (File.Exists(imageSource))
                 {
-                    currentY += graphics.DrawImageCenteredAndReturnHeight(XImage.FromFile(imageSource), currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    using (XImage image = XImage.FromFile(imageSource))
+                    {
+                        currentY += graphics.DrawImageCenteredAndReturnHeight(image, currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
+                    }
                 }
             }
             else if (component.Type == typeof(QRCodeComponent))
@@ -89,9 +92,9 @@ namespace SemanticXamlPrint.PDF
                         {
                             float new_y = graphics.DrawComponent(componentUnderColumn, rowFmt, current_x, current_y, columnWidths[colIndex]);
                             longest_column_y = (new_y > longest_column_y) ? new_y : longest_column_y;
-                            //Next Column Starting X co-ordinates
-                            current_x += columnWidths[colIndex];
                         }
+                        //Next Column Starting X co-ordinates
+                        current_x += columnWidths[colIndex];
                     }
                 }
                 //set Highest Column Height
@@ -215,7 +218,10 @@ namespace SemanticXamlPrint.PDF
                 }
                 else
                 {
-                    lines.Add(currentLine.ToString().TrimEnd());
+                    if (currentLine.Length > 0)
+                    {
+                        lines.Add(currentLine.ToString().TrimEnd());
+                    }
                     currentLine.Clear();
                     currentLine.Append(string.Format("{0} ", word));
                 }

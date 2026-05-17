@@ -1,5 +1,5 @@
-﻿using SemanticXamlPrint.Parser.Components;
-using System;
+using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Factories;
 using System.Xml;
 
 namespace SemanticXamlPrint.Parser.Extensions
@@ -11,67 +11,35 @@ namespace SemanticXamlPrint.Parser.Extensions
         /// </summary>
         /// <param name="node"></param>
         /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="System.Exception"></exception>
         public static IXamlComponent CreateComponentFromXml(this XmlNode node)
         {
-            IXamlComponent component;
-            switch (node.Name?.ToLower()?.Trim())
-            {
-                case "template":
-                    component = new TemplateComponent();
-                    break;
-                case "image":
-                    component = new ImageComponent();
-                    break;
-                case "grid":
-                    component = new GridComponent();
-                    break;
-                case "gridrow":
-                    component = new GridRowComponent();
-                    break;
-                case "cells":
-                    component = new CellsComponent();
-                    break;
-                case "cell":
-                    component = new CellComponent();
-                    break;
-                case "qrcode":
-                    component = new QRCodeComponent();
-                    break;
-                case "data":
-                    component = new DataComponent();
-                    break;
-                case "line":
-                    component = new LineComponent();
-                    break;
-                case "linebreak":
-                    component = new LineBreakComponent();
-                    break;
-                case "#text":
-                    component = new TextBlockComponent(node.Value);
-                    break;
-                case "#comment":
-                    return null;
-                default:
-                    throw new Exception($"Invalid node name {node.Name}");
-            }
+            IXamlComponent component = XamlComponentFactory.Create(node.Name, node.Value);
+            if (component == null) return null;
+
             // parse attributes
             if (node?.Attributes != null)
+            {
                 foreach (XmlAttribute attribute in node.Attributes)
                 {
                     _ = component.TrySetProperty(attribute.Name?.ToLower()?.Trim(), attribute.Value);
                 }
+            }
+
             // parse child nodes
             if (node?.ChildNodes != null)
+            {
                 foreach (XmlNode childNode in node.ChildNodes)
                 {
                     IXamlComponent childObject = childNode.CreateComponentFromXml();
                     if (childObject != null)
                     {
-                        if (childObject.Type == typeof(TemplateComponent)) throw new Exception($"{nameof(TemplateComponent)} can NOT be a child class");
+                        if (childObject.Type == typeof(TemplateComponent)) throw new System.Exception($"{nameof(TemplateComponent)} can NOT be a child class");
                         component.AddChild(childObject);
                     }
                 }
+            }
+
             return component;
         }
     }

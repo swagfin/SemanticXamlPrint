@@ -13,6 +13,7 @@ namespace SemanticXamlPrint.Parser.Components
         public float MarginLeft { get; set; } = 0;
         public float MarginRight { get; set; } = 0;
         public float MarginBottom { get; set; } = 0;
+        public bool RepeatFooter { get; set; } = false;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
@@ -40,6 +41,9 @@ namespace SemanticXamlPrint.Parser.Components
                             this.MarginLeft = 50;
                             this.MarginRight = 50;
                         }
+                        break;
+                    case "repeatfooter":
+                        RepeatFooter = bool.TryParse(value, out bool repeatFooter) && repeatFooter;
                         break;
                     default:
                         CustomProperties.AddCustomProperty(propertyName, value);

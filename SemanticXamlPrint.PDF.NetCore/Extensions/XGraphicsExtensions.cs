@@ -67,7 +67,7 @@ namespace SemanticXamlPrint.PDF.NetCore
         {
             DataComponent dataComponent = (DataComponent)component;
             ComponentXDrawingFormatting format = component.GetPdfXDrawingProperties(templateFormatting);
-            return currentY + graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, format, currentX, currentY, (int)maxLayoutWidth);
+            return currentY + graphics.DrawStyledTextBlockAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, dataComponent, format, currentX, currentY, (int)maxLayoutWidth);
         }
 
         private static float RenderCells(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
@@ -82,7 +82,7 @@ namespace SemanticXamlPrint.PDF.NetCore
                 float x = (cell.X <= 0) ? 0f : cell.X;
                 float y = (cell.Y <= 0) ? currentY : cell.Y;
                 float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
-                int textHeight = graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFormat, x, y, z);
+                int textHeight = graphics.DrawStyledTextBlockAndReturnHeight(cell.Text, cell.TextWrap, cell, cellFormat, x, y, z);
                 additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
             }
             return currentY + additionalHeight;
@@ -223,6 +223,37 @@ namespace SemanticXamlPrint.PDF.NetCore
                 lines.Add(currentLine.ToString().TrimEnd());
             }
             return lines.ToArray();
+        }
+
+        private static int DrawStyledTextBlockAndReturnHeight(this XGraphics graphics, string text, bool textWrap, XamlComponentCommonProperties styleComponent, ComponentXDrawingFormatting format, double x, double y, double width)
+        {
+            double paddingLeft = styleComponent?.PaddingLeft ?? 0;
+            double paddingTop = styleComponent?.PaddingTop ?? 0;
+            double paddingRight = styleComponent?.PaddingRight ?? 0;
+            double paddingBottom = styleComponent?.PaddingBottom ?? 0;
+            double innerWidth = Math.Max(1, width - paddingLeft - paddingRight);
+            int textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+            int totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+
+            if (!string.IsNullOrEmpty(styleComponent?.Background))
+            {
+                XSolidBrush backgroundBrush = XamlComponentFormattingExtensions.GetXSolidBrushFromColorString(styleComponent.Background);
+                graphics.DrawRectangle(backgroundBrush, x, y, width, totalHeight);
+                textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+                totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+            }
+
+            if (!string.IsNullOrEmpty(styleComponent?.BorderSides) && styleComponent.BorderWidth > 0)
+            {
+                XSolidBrush borderBrush = string.IsNullOrEmpty(styleComponent.BorderColor) ? XBrushes.Black : XamlComponentFormattingExtensions.GetXSolidBrushFromColorString(styleComponent.BorderColor);
+                XPen pen = new XPen(borderBrush.Color, styleComponent.BorderWidth);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "top")) graphics.DrawLine(pen, x, y, x + width, y);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "right")) graphics.DrawLine(pen, x + width, y, x + width, y + totalHeight);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "bottom")) graphics.DrawLine(pen, x, y + totalHeight, x + width, y + totalHeight);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "left")) graphics.DrawLine(pen, x, y, x, y + totalHeight);
+            }
+
+            return totalHeight;
         }
     }
 }

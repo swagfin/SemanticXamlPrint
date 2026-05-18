@@ -66,7 +66,7 @@ namespace SemanticXamlPrint
         {
             DataComponent dataComponent = (DataComponent)component;
             ComponentDrawingFormatting format = component.GetSystemDrawingProperties(templateFormatting);
-            return currentY + graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, format, currentX, currentY, (int)maxLayoutWidth);
+            return currentY + graphics.DrawStyledTextBlockAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, dataComponent, format, currentX, currentY, (int)maxLayoutWidth);
         }
 
         private static float RenderCells(Graphics graphics, IXamlComponent component, ComponentDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
@@ -81,7 +81,7 @@ namespace SemanticXamlPrint
                 float x = (cell.X <= 0) ? 0f : cell.X;
                 float y = (cell.Y <= 0) ? currentY : cell.Y;
                 float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
-                int textHeight = graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFormat, x, y, z);
+                int textHeight = graphics.DrawStyledTextBlockAndReturnHeight(cell.Text, cell.TextWrap, cell, cellFormat, x, y, z);
                 additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
             }
             return currentY + additionalHeight;
@@ -185,6 +185,45 @@ namespace SemanticXamlPrint
                 graphics.DrawRectangle(pen, x, y, z, height);
             }
             return (int)height;
+        }
+
+        private static int DrawStyledTextBlockAndReturnHeight(this Graphics graphics, string text, bool textWrap, XamlComponentCommonProperties styleComponent, ComponentDrawingFormatting format, float x, float y, float width)
+        {
+            float paddingLeft = styleComponent?.PaddingLeft ?? 0;
+            float paddingTop = styleComponent?.PaddingTop ?? 0;
+            float paddingRight = styleComponent?.PaddingRight ?? 0;
+            float paddingBottom = styleComponent?.PaddingBottom ?? 0;
+            float innerWidth = Math.Max(1, width - paddingLeft - paddingRight);
+            int textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+            int totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+
+            if (!string.IsNullOrEmpty(styleComponent?.Background))
+            {
+                using (Brush backgroundBrush = XamlComponentFormattingExtensions.GetSolidBrushFromColorString(styleComponent.Background))
+                {
+                    graphics.FillRectangle(backgroundBrush, x, y, width, totalHeight);
+                }
+                textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+                totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+            }
+
+            if (!string.IsNullOrEmpty(styleComponent?.BorderSides) && styleComponent.BorderWidth > 0)
+            {
+                Color borderColor = Color.Black;
+                if (!string.IsNullOrEmpty(styleComponent.BorderColor))
+                {
+                    try { borderColor = ColorTranslator.FromHtml(styleComponent.BorderColor); } catch { borderColor = Color.Black; }
+                }
+                using (Pen pen = new Pen(borderColor, styleComponent.BorderWidth))
+                {
+                    if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "top")) graphics.DrawLine(pen, x, y, x + width, y);
+                    if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "right")) graphics.DrawLine(pen, x + width, y, x + width, y + totalHeight);
+                    if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "bottom")) graphics.DrawLine(pen, x, y + totalHeight, x + width, y + totalHeight);
+                    if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "left")) graphics.DrawLine(pen, x, y, x, y + totalHeight);
+                }
+            }
+
+            return totalHeight;
         }
     }
 }

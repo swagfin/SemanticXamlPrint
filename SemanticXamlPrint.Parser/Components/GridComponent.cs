@@ -10,15 +10,16 @@ namespace SemanticXamlPrint.Parser.Components
         public List<IXamlComponent> Children { get; private set; } = new List<IXamlComponent>();
         public string ColumnWidths { get; set; } = null;
         public string BorderStyle { get; set; }
-        public double BorderWidth { get; set; } = 0.3;
+        public new double BorderWidth { get; set; } = 0.3;
         public float MinHeight { get; set; } = 0;
         public string HeightMode { get; set; } = null;
         public float BottomReserve { get; set; } = 0;
+        public bool RepeatHeaderOnPageBreak { get; set; } = false;
+        public int HeaderRows { get; set; } = 1;
         public bool TrySetProperty(string propertyName, string value)
         {
             try
             {
-                if (base.SetCommonProperties(propertyName, value)) return true;
                 switch (propertyName)
                 {
                     case "columnwidths":
@@ -40,7 +41,14 @@ namespace SemanticXamlPrint.Parser.Components
                     case "bottomreserve":
                         BottomReserve = (float.TryParse(value, out float bottomReserve) && bottomReserve > 0) ? bottomReserve : 0;
                         break;
+                    case "repeatheaderonpagebreak":
+                        RepeatHeaderOnPageBreak = bool.TryParse(value, out bool repeatHeaderOnPageBreak) && repeatHeaderOnPageBreak;
+                        break;
+                    case "headerrows":
+                        HeaderRows = (int.TryParse(value, out int headerRows) && headerRows > 0) ? headerRows : 1;
+                        break;
                     default:
+                        if (base.SetCommonProperties(propertyName, value)) return true;
                         CustomProperties.AddCustomProperty(propertyName, value);
                         break;
                 }

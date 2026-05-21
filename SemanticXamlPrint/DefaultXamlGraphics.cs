@@ -9,7 +9,7 @@ namespace SemanticXamlPrint
 {
     public static class DefaultXamlGraphics
     {
-        private static readonly Dictionary<Graphics, PrintJobState> PrintStates = new Dictionary<Graphics, PrintJobState>();
+        private static readonly Dictionary<IXamlComponent, PrintJobState> PrintStates = new Dictionary<IXamlComponent, PrintJobState>();
 
         private class PrintJobState
         {
@@ -17,20 +17,20 @@ namespace SemanticXamlPrint
             public bool RequestedMorePage { get; set; }
         }
 
-        private static PrintJobState GetPrintState(Graphics graphics)
+        private static PrintJobState GetPrintState(IXamlComponent xamlComponent)
         {
-            if (graphics == null) return new PrintJobState();
-            if (PrintStates.TryGetValue(graphics, out PrintJobState state)) return state;
+            if (xamlComponent == null) return new PrintJobState();
+            if (PrintStates.TryGetValue(xamlComponent, out PrintJobState state)) return state;
             PrintJobState newState = new PrintJobState();
-            PrintStates[graphics] = newState;
+            PrintStates[xamlComponent] = newState;
             return newState;
         }
 
-        private static void RemovePrintState(Graphics graphics)
+        private static void RemovePrintState(IXamlComponent xamlComponent)
         {
-            if (graphics != null)
+            if (xamlComponent != null)
             {
-                _ = PrintStates.Remove(graphics);
+                _ = PrintStates.Remove(xamlComponent);
             }
         }
 
@@ -46,7 +46,7 @@ namespace SemanticXamlPrint
             {
                 PageBottomY = (float)pageHeight
             };
-            PrintJobState state = GetPrintState(eventArgs.Graphics);
+            PrintJobState state = GetPrintState(xamlComponent);
             //Draw Root Component Children
             state.CurrentChildIndex = state.RequestedMorePage ? state.CurrentChildIndex : 0;
             for (int i = state.CurrentChildIndex; i < template?.Children?.Count; i++)
@@ -65,7 +65,7 @@ namespace SemanticXamlPrint
                 _currentLineY = eventArgs.Graphics.DrawComponent(template?.Children[i], TemplateFormatting, template.MarginLeft, _currentLineY, eventArgs.Graphics.VisibleClipBounds.Width - (template.MarginLeft + template.MarginRight), layoutContext);
                 state.CurrentChildIndex++;
             }
-            RemovePrintState(eventArgs.Graphics);
+            RemovePrintState(xamlComponent);
             return _currentLineY;
         }
 

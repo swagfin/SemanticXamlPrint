@@ -17,7 +17,7 @@ namespace SemanticXamlPrint.Demo
             try
             {
                 //Get Template Contents
-                byte[] xamlFileBytes = File.ReadAllBytes("custom.A4.template");
+                byte[] xamlFileBytes = File.ReadAllBytes("custom.excessgrid.template");
                 //Use Default Parser 
                 IXamlComponent xamlComponent = DefaultXamlParser.Parse(xamlFileBytes);
 

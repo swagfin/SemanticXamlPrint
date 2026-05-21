@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<ApplicationIcon>SemanticXamlPrint.PDF.ico</ApplicationIcon>
 		<Version>4.0.2</Version>
 		<AssemblyVersion>4.0.2.1</AssemblyVersion>
 		<FileVersion>4.0.2.1</FileVersion>
@@ -11,27 +10,19 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="SemanticXamlPrint.PDF.ico" />
+		<PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
+		<PackageReference Include="QRCoder" Version="1.4.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Include="SemanticXamlPrint.PDF.ico" />
+		<ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="PdfSharp.netstandard" Version="1.3.2" />
-	  <PackageReference Include="QRCoder" Version="1.4.3" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="SemanticXamlPrint.PDF.jpg">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
+		<None Update="SemanticXamlPrint.PDF.jpg">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
 	</ItemGroup>
 
 </Project>

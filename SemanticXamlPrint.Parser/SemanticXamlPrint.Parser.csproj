@@ -1,27 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.2</Version>
-    <AssemblyVersion>4.0.2.1</AssemblyVersion>
-    <FileVersion>4.0.2.1</FileVersion>
-    <ApplicationIcon>SemanticXamlPrint.Parser.ico</ApplicationIcon>
-    <PackageIcon>SemanticXamlPrint.Parser.jpg</PackageIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<Version>4.0.2</Version>
+		<AssemblyVersion>4.0.2.1</AssemblyVersion>
+		<FileVersion>4.0.2.1</FileVersion>
+		<PackageIcon>SemanticXamlPrint.Parser.jpg</PackageIcon>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="SemanticXamlPrint.Parser.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="SemanticXamlPrint.Parser.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="SemanticXamlPrint.Parser.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="SemanticXamlPrint.Parser.jpg">
-      <PackagePath>\</PackagePath>
-      <Pack>True</Pack>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="SemanticXamlPrint.Parser.jpg">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+	</ItemGroup>
 
 </Project>

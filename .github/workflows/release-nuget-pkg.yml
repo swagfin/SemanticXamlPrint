@@ -10,9 +10,9 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
     - name: Build
       run: dotnet build SemanticXamlPrint/SemanticXamlPrint.csproj -c Release
     - name: Test
@@ -27,9 +27,9 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
     - name: Build
       run: dotnet build SemanticXamlPrint.Parser/SemanticXamlPrint.Parser.csproj -c Release
     - name: Test
@@ -44,9 +44,9 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
     - name: Build
       run: dotnet build SemanticXamlPrint.PDF/SemanticXamlPrint.PDF.csproj -c Release
     - name: Test
@@ -61,9 +61,9 @@ jobs:
     timeout-minutes: 5
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v5
     - name: Build
       run: dotnet build SemanticXamlPrint.PDF.NetCore/SemanticXamlPrint.PDF.NetCore.csproj -c Release
     - name: Test

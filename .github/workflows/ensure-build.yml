@@ -1,13 +1,11 @@
-name: .NET Ensure Build
+name: .NET Ensure Build on PR
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
 jobs:
-  build:
+  ensure_build:
     runs-on: ubuntu-latest
 
     steps:

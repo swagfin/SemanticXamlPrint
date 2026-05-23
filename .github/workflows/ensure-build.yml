@@ -18,9 +18,9 @@ jobs:
         with:
           dotnet-version: 9.0.x
           
-    - name: Restore Nuget Packages
-      run: dotnet restore SemanticXamlPrint/SemanticXamlPrint.csproj
-    - name: Build Project
-      run: dotnet build SemanticXamlPrint/SemanticXamlPrint.csproj --no-restore
-    - name: Test
-      run: dotnet test SemanticXamlPrint/SemanticXamlPrint.csproj --no-build --verbosity normal
+      - name: Restore Nuget Packages
+        run: dotnet restore SemanticXamlPrint/SemanticXamlPrint.csproj
+      - name: Build Project
+        run: dotnet build SemanticXamlPrint/SemanticXamlPrint.csproj --no-restore
+      - name: Test
+        run: dotnet test SemanticXamlPrint/SemanticXamlPrint.csproj --no-build --verbosity normal

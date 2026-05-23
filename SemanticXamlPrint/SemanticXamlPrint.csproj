@@ -2,9 +2,9 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyVersion>4.0.2.1</AssemblyVersion>
-		<FileVersion>4.0.2.1</FileVersion>
-		<Version>4.0.2</Version>
+		<Version>4.1.0</Version>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
 		<PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

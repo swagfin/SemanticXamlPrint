@@ -1,0 +1,36 @@
+﻿<Template Font="Calibri" FontSize="10" Document="A4">
+
+	<Grid ColumnWidths="6*2*1*1" BorderStyle="Solid">
+		<GridRow>
+			<Data Grid.Column="0" FontStyle="Bold" Align="Center">DESCRIPTION</Data>
+			<Data Grid.Column="1" FontStyle="Bold" Align="Center">HOURS</Data>
+			<Data Grid.Column="2" FontStyle="Bold" Align="Center">RATE</Data>
+			<Data Grid.Column="3" FontStyle="Bold" Align="Center">AMOUNT</Data>
+		</GridRow>
+	</Grid>
+
+	<Grid ColumnWidths="6*2*1*1" BorderStyle="Solid" HeightMode="FillRemaining" BottomReserve="120">
+		<GridRow>
+			<Data Grid.Column="0">Test Example</Data>
+			<Data Grid.Column="1" Align="Center">2</Data>
+			<Data Grid.Column="2" Align="Right">1,200</Data>
+			<Data Grid.Column="3" Align="Right">2,400</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0">Yet Another Test Item</Data>
+			<Data Grid.Column="1" Align="Center">1</Data>
+			<Data Grid.Column="2" Align="Right">500</Data>
+			<Data Grid.Column="3" Align="Right">500</Data>
+		</GridRow>
+		<GridRow>
+			<Data Grid.Column="0">YARP Test</Data>
+			<Data Grid.Column="1" Align="Center">2</Data>
+			<Data Grid.Column="2" Align="Right">2,000</Data>
+			<Data Grid.Column="3" Align="Right">4,000</Data>
+		</GridRow>
+	</Grid>
+
+	<LineBreak/>
+	<Data TextWrap ="True" FontStyle="Bold" Align="Center">Powered By SemanticXamlPrint</Data>
+
+</Template>

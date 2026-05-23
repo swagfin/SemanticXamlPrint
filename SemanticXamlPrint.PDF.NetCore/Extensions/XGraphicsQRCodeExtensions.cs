@@ -1,4 +1,4 @@
-﻿using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing;
 using QRCoder;
 using System;
 using System.IO;
@@ -19,10 +19,13 @@ namespace SemanticXamlPrint.PDF.NetCore
                 {
                     qrCodeImage.Save(stream, new SixLabors.ImageSharp.Formats.Png.PngEncoder());
                     byte[] streamBytes = stream.ToArray();
-                    float newWidth = Math.Min(qrCodeImage.Height, maxWidth > 0 ? maxWidth : qrCodeImage.Width);
+                    float newWidth = Math.Min(qrCodeImage.Width, maxWidth > 0 ? maxWidth : qrCodeImage.Width);
                     float newHeight = Math.Min(qrCodeImage.Height, maxHeight > 0 ? maxHeight : qrCodeImage.Height);
                     float centeredX = x + (maxLayoutWith - newWidth) / 2;
-                    graphics.DrawImage(XImage.FromStream(() => { return new MemoryStream(streamBytes); }), centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
+                    using (XImage image = XImage.FromStream(() => { return new MemoryStream(streamBytes); }))
+                    {
+                        graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
+                    }
                     return (int)newHeight;
                 }
             }

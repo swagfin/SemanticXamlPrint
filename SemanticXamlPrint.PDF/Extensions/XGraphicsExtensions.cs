@@ -1,6 +1,7 @@
-﻿using PdfSharp.Drawing;
+using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using SemanticXamlPrint.Parser.Components;
+using SemanticXamlPrint.Parser.Layout;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,108 +12,125 @@ namespace SemanticXamlPrint.PDF
 {
     public static class XGraphicsExtensions
     {
-        public static float DrawComponent(this XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting TemplateFormatting, float currentX, float currentY, float maxLayoutWidth)
+        private delegate float ComponentRenderer(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext);
+
+        private static readonly Dictionary<Type, ComponentRenderer> Renderers = new Dictionary<Type, ComponentRenderer>
         {
-            maxLayoutWidth = maxLayoutWidth == 0 ? (float)graphics.PageSize.Width : maxLayoutWidth;
-            //Draw
-            if (component.Type == typeof(LineBreakComponent))
+            { typeof(LineBreakComponent), RenderLineBreak },
+            { typeof(LineComponent), RenderLine },
+            { typeof(ImageComponent), RenderImage },
+            { typeof(QRCodeComponent), RenderQRCode },
+            { typeof(DataComponent), RenderData },
+            { typeof(CellsComponent), RenderCells },
+            { typeof(GridComponent), RenderGrid }
+        };
+
+        public static float DrawComponent(this XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext = null)
+        {
+            float boundedMaxLayoutWidth = maxLayoutWidth == 0 ? (float)graphics.PageSize.Width : maxLayoutWidth;
+            if (component == null) return currentY;
+            if (!Renderers.TryGetValue(component.Type, out ComponentRenderer renderer)) return currentY;
+            return renderer(graphics, component, templateFormatting, currentX, currentY, boundedMaxLayoutWidth, layoutContext);
+        }
+
+        private static float RenderLineBreak(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            return currentY + 3;
+        }
+
+        private static float RenderLine(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            LineComponent lineComponent = (LineComponent)component;
+            float newY = currentY + 3;
+            newY += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, newY, (int)maxLayoutWidth);
+            return newY + 3;
+        }
+
+        private static float RenderImage(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            ImageComponent imageComponent = (ImageComponent)component;
+            string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
+            if (!File.Exists(imageSource)) return currentY;
+            using (XImage image = XImage.FromFile(imageSource))
             {
-                currentY += 3;
+                return currentY + graphics.DrawImageCenteredAndReturnHeight(image, currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
             }
-            else if (component.Type == typeof(LineComponent))
+        }
+
+        private static float RenderQRCode(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            QRCodeComponent qrCodeComponent = (QRCodeComponent)component;
+            return currentY + graphics.DrawQRCodeCenteredAndReturnHeight(qrCodeComponent.Text, currentX, currentY, qrCodeComponent.Width, qrCodeComponent.Height, maxLayoutWidth);
+        }
+
+        private static float RenderData(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            DataComponent dataComponent = (DataComponent)component;
+            ComponentXDrawingFormatting format = component.GetPdfXDrawingProperties(templateFormatting);
+            return currentY + graphics.DrawStyledTextBlockAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, dataComponent, format, currentX, currentY, (int)maxLayoutWidth);
+        }
+
+        private static float RenderCells(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            CellsComponent cellsComponent = (CellsComponent)component;
+            ComponentXDrawingFormatting rowFormat = component.GetPdfXDrawingProperties(templateFormatting);
+            List<CellComponent> dataRowCells = cellsComponent.Children?.Where(element => element.Type == typeof(CellComponent)).Select(validElement => (CellComponent)validElement).ToList();
+            int additionalHeight = 0;
+            foreach (CellComponent cell in dataRowCells)
             {
-                LineComponent lineComponent = (LineComponent)component;
-                currentY += 3;
-                currentY += graphics.DrawlLineAndReturnHeight(lineComponent.Style.ToDashStyle(), currentX, currentY, (int)maxLayoutWidth);
-                currentY += 3;
+                ComponentXDrawingFormatting cellFormat = cell.GetPdfXDrawingProperties(rowFormat);
+                float x = (cell.X <= 0) ? 0f : cell.X;
+                float y = (cell.Y <= 0) ? currentY : cell.Y;
+                float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
+                int textHeight = graphics.DrawStyledTextBlockAndReturnHeight(cell.Text, cell.TextWrap, cell, cellFormat, x, y, z);
+                additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
             }
-            else if (component.Type == typeof(ImageComponent))
+            return currentY + additionalHeight;
+        }
+
+        private static float RenderGrid(XGraphics graphics, IXamlComponent component, ComponentXDrawingFormatting templateFormatting, float currentX, float currentY, float maxLayoutWidth, RenderLayoutContext layoutContext)
+        {
+            GridComponent gridComponent = (GridComponent)component;
+            ComponentXDrawingFormatting gridFormat = component.GetPdfXDrawingProperties(templateFormatting);
+            GridLayoutPlan layoutPlan = GridLayoutPlanner.Build(gridComponent, maxLayoutWidth);
+
+            float yBeforeGrid = currentY;
+            float longestColumnY = currentY;
+            foreach (GridRowLayoutPlan rowPlan in layoutPlan.Rows)
             {
-                ImageComponent imageComponent = (ImageComponent)component;
-                string imageSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, imageComponent.Source ?? "default.png");
-                if (File.Exists(imageSource))
+                float rowStartY = longestColumnY;
+                float rowCurrentX = currentX;
+                ComponentXDrawingFormatting rowFormat = rowPlan.Row.GetPdfXDrawingProperties(gridFormat);
+
+                for (int columnIndex = 0; columnIndex < layoutPlan.ColumnWidths.Count; columnIndex++)
                 {
-                    currentY += graphics.DrawImageCenteredAndReturnHeight(XImage.FromFile(imageSource), currentX, currentY, imageComponent.Width, imageComponent.Height, maxLayoutWidth);
-                }
-            }
-            else if (component.Type == typeof(QRCodeComponent))
-            {
-                QRCodeComponent qRCodeComponent = (QRCodeComponent)component;
-                currentY += graphics.DrawQRCodeCenteredAndReturnHeight(qRCodeComponent.Text, currentX, currentY, qRCodeComponent.Width, qRCodeComponent.Height, maxLayoutWidth);
-            }
-            else if (component.Type == typeof(DataComponent))
-            {
-                DataComponent dataComponent = (DataComponent)component;
-                ComponentXDrawingFormatting fmt = component.GetPdfXDrawingProperties(TemplateFormatting);
-                //Draw Data Component
-                currentY += graphics.DrawStringAndReturnHeight(dataComponent.Text, dataComponent.TextWrap, fmt, currentX, currentY, (int)maxLayoutWidth);
-            }
-            else if (component.Type == typeof(CellsComponent))
-            {
-                CellsComponent dataRowComponent = (CellsComponent)component;
-                ComponentXDrawingFormatting rowfmt = component.GetPdfXDrawingProperties(TemplateFormatting);
-                //Get all Children of DataRowCells
-                List<CellComponent> dataRowCells = dataRowComponent.Children?.Where(element => element.Type == typeof(CellComponent)).Select(validElement => (CellComponent)validElement).ToList();
-                int additionalHeight = 0;
-                foreach (CellComponent cell in dataRowCells)
-                {
-                    ComponentXDrawingFormatting cellFmt = cell.GetPdfXDrawingProperties(rowfmt);
-                    //Set RowCell Location
-                    float x = (cell.X <= 0) ? 0f : cell.X;
-                    float y = (cell.Y <= 0) ? currentY : cell.Y;
-                    float z = (cell.Z <= 0) ? (int)maxLayoutWidth : cell.Z;
-                    //Write String 
-                    int textHeight = graphics.DrawStringAndReturnHeight(cell.Text, cell.TextWrap, cellFmt, x, y, z);
-                    additionalHeight = (textHeight > additionalHeight) ? textHeight : additionalHeight;
-                }
-                //Add Line Height
-                currentY += additionalHeight;
-            }
-            else if (component.Type == typeof(GridComponent))
-            {
-                GridComponent gridComponent = (GridComponent)component;
-                ComponentXDrawingFormatting gridfmt = component.GetPdfXDrawingProperties(TemplateFormatting);
-                List<int> columnWidths = graphics.GetDivideColumnWidths(gridComponent.ColumnWidths, maxLayoutWidth);
-                float y_before_grid = currentY;
-                float longest_column_y = currentY;
-                //Get Grid Rows
-                List<GridRowComponent> gridRows = gridComponent.Children?.Where(element => element.Type == typeof(GridRowComponent)).Select(validElement => (GridRowComponent)validElement).ToList();
-                foreach (GridRowComponent row in gridRows)
-                {
-                    float current_y = longest_column_y;
-                    float current_x = currentX;
-                    ComponentXDrawingFormatting rowFmt = row.GetPdfXDrawingProperties(gridfmt);
-                    for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
+                    IXamlComponent componentUnderColumn = rowPlan.ComponentsByColumn[columnIndex];
+                    if (componentUnderColumn != null)
                     {
-                        IXamlComponent componentUnderColumn = row.Children?.FirstOrDefault(x => x.CustomProperties.IsPropertyExistsWithValue("grid.column", colIndex.ToString()));
-                        if (componentUnderColumn != null)
-                        {
-                            float new_y = graphics.DrawComponent(componentUnderColumn, rowFmt, current_x, current_y, columnWidths[colIndex]);
-                            longest_column_y = (new_y > longest_column_y) ? new_y : longest_column_y;
-                            //Next Column Starting X co-ordinates
-                            current_x += columnWidths[colIndex];
-                        }
+                        float newY = graphics.DrawComponent(componentUnderColumn, rowFormat, rowCurrentX, rowStartY, layoutPlan.ColumnWidths[columnIndex], layoutContext);
+                        longestColumnY = (newY > longestColumnY) ? newY : longestColumnY;
                     }
-                }
-                //set Highest Column Height
-                currentY = longest_column_y;
-                //# Check if Drawing Border
-                if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
-                {
-                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, y_before_grid, (int)maxLayoutWidth, (currentY - y_before_grid), gridComponent.BorderWidth);
-                    float current_x = currentX;
-                    for (int colIndex = 0; colIndex < columnWidths.Count; colIndex++)
-                    {
-                        graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), current_x, y_before_grid, columnWidths[colIndex], (currentY - y_before_grid), gridComponent.BorderWidth);
-                        current_x += columnWidths[colIndex];
-                    }
+                    rowCurrentX += layoutPlan.ColumnWidths[columnIndex];
                 }
             }
-            else
+
+            float currentGridY = Math.Max(longestColumnY, yBeforeGrid + gridComponent.MinHeight);
+            if (!string.IsNullOrEmpty(gridComponent.HeightMode) && gridComponent.HeightMode.Equals("fillremaining", StringComparison.OrdinalIgnoreCase) && layoutContext != null)
             {
-                //unknown Component
+                float fillTargetY = layoutContext.PageBottomY - gridComponent.BottomReserve;
+                currentGridY = Math.Max(currentGridY, fillTargetY);
             }
-            return currentY;
+            if (!string.IsNullOrEmpty(gridComponent.BorderStyle))
+            {
+                graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), currentX, yBeforeGrid, (int)maxLayoutWidth, (currentGridY - yBeforeGrid), gridComponent.BorderWidth);
+                float borderCurrentX = currentX;
+                for (int columnIndex = 0; columnIndex < layoutPlan.ColumnWidths.Count; columnIndex++)
+                {
+                    graphics.DrawRectangleAndReturnHeight(gridComponent.BorderStyle.ToDashStyle(), borderCurrentX, yBeforeGrid, layoutPlan.ColumnWidths[columnIndex], (currentGridY - yBeforeGrid), gridComponent.BorderWidth);
+                    borderCurrentX += layoutPlan.ColumnWidths[columnIndex];
+                }
+            }
+            return currentGridY;
         }
 
         public static int DrawStringAndReturnHeight(this XGraphics gfx, string text, bool textWrap, ComponentXDrawingFormatting cellFmt, double x, double y, double z)
@@ -121,7 +139,6 @@ namespace SemanticXamlPrint.PDF
             XFont font = cellFmt.Font;
             XStringFormat stringFormat = cellFmt.StringFormat;
             XBrush brush = cellFmt.Brush;
-            //Check wrap
             if (textWrap && gfx.MeasureString(text, font).Width > z)
             {
                 string[] lines = SplitTextIntoLines(gfx, text, font, z);
@@ -135,43 +152,20 @@ namespace SemanticXamlPrint.PDF
                 }
                 return (int)totalHeight;
             }
-            else
-            {
-                XRect layoutRect = new XRect(x + 2, y, (z - 4), gfx.MeasureString(text, font).Height);
-                gfx.DrawString(text, font, brush, layoutRect, stringFormat);
-                return (int)layoutRect.Height;
-            }
-        }
 
+            XRect layoutRect = new XRect(x + 2, y, (z - 4), gfx.MeasureString(text, font).Height);
+            gfx.DrawString(text, font, brush, layoutRect, stringFormat);
+            return (int)layoutRect.Height;
+        }
 
         public static List<int> GetDivideColumnWidths(this XGraphics graphics, string pattern, float maxLayoutWith)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(pattern)) return GetDivideColumnWidths(graphics, 1, maxLayoutWith);
-                List<int> columnWidths = new List<int>();
-                int total = pattern.Split(new char[] { '*' }, StringSplitOptions.RemoveEmptyEntries).Sum(p => Convert.ToInt32(p));
-                if (total < 1) return GetDivideColumnWidths(graphics, 1, maxLayoutWith);
-                int remainingWidth = (int)maxLayoutWith;
-                foreach (string s in pattern.Split('*'))
-                {
-                    int w = (int)Math.Round((double)remainingWidth / total * Convert.ToInt32(s));
-                    columnWidths.Add(w);
-                    remainingWidth -= w;
-                    total -= Convert.ToInt32(s);
-                }
-                return columnWidths;
-            }
-            catch { return GetDivideColumnWidths(graphics, 1, maxLayoutWith); }
+            return ColumnWidthCalculator.Calculate(pattern, maxLayoutWith);
         }
+
         public static List<int> GetDivideColumnWidths(this XGraphics graphics, int columns, float maxLayoutWith)
         {
-            columns = columns <= 0 ? 1 : columns;
-            int evenColumnWidth = (int)maxLayoutWith / columns;
-            List<int> columnWidths = new List<int>();
-            for (var i = 0; i < columns; i += 1)
-                columnWidths.Add(evenColumnWidth);
-            return columnWidths;
+            return ColumnWidthCalculator.Calculate(columns, maxLayoutWith);
         }
 
         public static int DrawlLineAndReturnHeight(this XGraphics graphics, XDashStyle dashStyle, float x, float y, float z)
@@ -183,6 +177,7 @@ namespace SemanticXamlPrint.PDF
             graphics.DrawLine(pen, x, y, z, y);
             return 1;
         }
+
         public static int DrawImageCenteredAndReturnHeight(this XGraphics graphics, XImage image, double x, double y, double maxWidth, double maxHeight, double maxLayoutWidth)
         {
             double newWidth = Math.Min(image.PixelWidth, maxWidth > 0 ? maxWidth : image.PixelWidth);
@@ -191,6 +186,7 @@ namespace SemanticXamlPrint.PDF
             graphics.DrawImage(image, centeredX > 0 ? centeredX : x, y, newWidth, newHeight);
             return (int)newHeight;
         }
+
         public static int DrawRectangleAndReturnHeight(this XGraphics gfx, XDashStyle dashStyle, double x, double y, double width, double height, double lineWidth = 0.3)
         {
             XPen pen = new XPen(XColors.Black, lineWidth)
@@ -200,7 +196,6 @@ namespace SemanticXamlPrint.PDF
             gfx.DrawRectangle(pen, x, y, width, height);
             return (int)height;
         }
-
 
         private static string[] SplitTextIntoLines(XGraphics gfx, string text, XFont font, double maxWidth)
         {
@@ -215,7 +210,10 @@ namespace SemanticXamlPrint.PDF
                 }
                 else
                 {
-                    lines.Add(currentLine.ToString().TrimEnd());
+                    if (currentLine.Length > 0)
+                    {
+                        lines.Add(currentLine.ToString().TrimEnd());
+                    }
                     currentLine.Clear();
                     currentLine.Append(string.Format("{0} ", word));
                 }
@@ -225,6 +223,37 @@ namespace SemanticXamlPrint.PDF
                 lines.Add(currentLine.ToString().TrimEnd());
             }
             return lines.ToArray();
+        }
+
+        private static int DrawStyledTextBlockAndReturnHeight(this XGraphics graphics, string text, bool textWrap, XamlComponentCommonProperties styleComponent, ComponentXDrawingFormatting format, double x, double y, double width)
+        {
+            double paddingLeft = styleComponent?.PaddingLeft ?? 0;
+            double paddingTop = styleComponent?.PaddingTop ?? 0;
+            double paddingRight = styleComponent?.PaddingRight ?? 0;
+            double paddingBottom = styleComponent?.PaddingBottom ?? 0;
+            double innerWidth = Math.Max(1, width - paddingLeft - paddingRight);
+            int textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+            int totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+
+            if (!string.IsNullOrEmpty(styleComponent?.Background))
+            {
+                XSolidBrush backgroundBrush = XamlComponentFormattingExtensions.GetXSolidBrushFromColorString(styleComponent.Background);
+                graphics.DrawRectangle(backgroundBrush, x, y, width, totalHeight);
+                textHeight = graphics.DrawStringAndReturnHeight(text, textWrap, format, x + paddingLeft, y + paddingTop, innerWidth);
+                totalHeight = (int)(textHeight + paddingTop + paddingBottom);
+            }
+
+            if (!string.IsNullOrEmpty(styleComponent?.BorderSides) && styleComponent.BorderWidth > 0)
+            {
+                XSolidBrush borderBrush = string.IsNullOrEmpty(styleComponent.BorderColor) ? XBrushes.Black : XamlComponentFormattingExtensions.GetXSolidBrushFromColorString(styleComponent.BorderColor);
+                XPen pen = new XPen(borderBrush.Color, styleComponent.BorderWidth);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "top")) graphics.DrawLine(pen, x, y, x + width, y);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "right")) graphics.DrawLine(pen, x + width, y, x + width, y + totalHeight);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "bottom")) graphics.DrawLine(pen, x, y + totalHeight, x + width, y + totalHeight);
+                if (XamlComponentFormattingExtensions.HasBorderSide(styleComponent.BorderSides, "left")) graphics.DrawLine(pen, x, y, x, y + totalHeight);
+            }
+
+            return totalHeight;
         }
     }
 }

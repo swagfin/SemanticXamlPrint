@@ -1,6 +1,7 @@
-﻿using PdfSharp.Drawing;
+using PdfSharp.Drawing;
 using SemanticXamlPrint.Parser.Components;
 using System;
+using System.Linq;
 
 namespace SemanticXamlPrint.PDF
 {
@@ -72,7 +73,6 @@ namespace SemanticXamlPrint.PDF
         {
             if (string.IsNullOrEmpty(colorString)) return XBrushes.Black;
             string colorCode = colorString.ToLower().Trim();
-            //support html colors e.g. #B56E22
             if (colorCode.StartsWith("#") && colorCode.Length == 7) return GetHtmlColor(colorCode.Substring(1));
             return Enum.TryParse(colorCode, true, out XKnownColor xKnownColor) ? new XSolidBrush(XColor.FromKnownColor(xKnownColor)) : XBrushes.Black;
         }
@@ -87,6 +87,15 @@ namespace SemanticXamlPrint.PDF
                 return new XSolidBrush(XColor.FromArgb(r, g, b));
             }
             catch { return XBrushes.Black; }
+        }
+
+        public static bool HasBorderSide(string borderSides, string side)
+        {
+            if (string.IsNullOrWhiteSpace(borderSides)) return false;
+            string normalized = borderSides.Trim().ToLowerInvariant();
+            if (normalized == "all") return true;
+            string[] tokens = normalized.Split(new char[] { ',', '|', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return tokens.Contains(side.ToLowerInvariant());
         }
     }
     public class ComponentXDrawingFormatting

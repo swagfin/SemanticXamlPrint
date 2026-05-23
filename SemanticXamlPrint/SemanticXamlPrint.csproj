@@ -2,18 +2,13 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<AssemblyVersion>4.0.2.1</AssemblyVersion>
-		<FileVersion>4.0.2.1</FileVersion>
-		<Version>4.0.2</Version>
-		<ApplicationIcon>SemanticXamlPrint.ico</ApplicationIcon>
+		<Version>4.1.0</Version>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
 		<PackageIcon>SemanticXamlPrint.jpg</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Content Include="SemanticXamlPrint.ico" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\README.md">
@@ -29,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
+		<ProjectReference Include="..\SemanticXamlPrint.Parser\SemanticXamlPrint.Parser.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
